@@ -3,3 +3,6 @@ spring:
     import:
       - classpath:/core-mybatis-application.yml
       - classpath:/core-redis-application.yml
+
+test:
+  name: service-core-application.yml
