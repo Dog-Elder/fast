@@ -7,13 +7,12 @@
     <parent>
         <groupId>com.fast</groupId>
         <artifactId>fast-core</artifactId>
-        <version>${revision}</version>
+        <version>1.0.0</version>
     </parent>
 
-    <groupId>com.fast</groupId>
     <artifactId>fast-starter-redis</artifactId>
-    <version>${revision}</version>
-
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -23,7 +22,7 @@
         <dependency>
             <groupId>com.fast</groupId>
             <artifactId>fast-starter-common</artifactId>
-            <version>${revision}</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 </project>

@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
-    <insert id="insertSysSetValue" parameterType="SysSetValue" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSysSetValue" parameterType="com.fast.service.entity.sys.SysSetValue" useGeneratedKeys="true" keyProperty="id">
         insert into sys_set_value
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="setCode != null and setCode != ''">set_code,</if>
@@ -79,7 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateSysSetValue" parameterType="SysSetValue">
+    <update id="updateSysSetValue" parameterType="com.fast.service.entity.sys.SysSetValue">
         update sys_set_value
         <trim prefix="SET" suffixOverrides=",">
             <if test="setCode != null and setCode != ''">set_code = #{setCode},</if>

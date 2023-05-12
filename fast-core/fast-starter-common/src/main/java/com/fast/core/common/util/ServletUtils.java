@@ -121,7 +121,7 @@ public class ServletUtils
         }
 
         String uri = request.getRequestURI();
-        if (SUtil.inStringIgnoreCase(uri, ".json", ".xml"))
+        if (com.fast.core.common.util.SUtil.inStringIgnoreCase(uri, ".json", ".xml"))
         {
             return true;
         }

@@ -1,4 +1,4 @@
-//package com.fast.core.common.util;
+package com.fast.core.common.util;//package com.fast.core.common.util;
 //
 //
 //import com.fast.core.common.exception.CustomException;

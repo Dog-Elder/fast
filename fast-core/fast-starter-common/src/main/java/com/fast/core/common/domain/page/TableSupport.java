@@ -13,9 +13,9 @@ public class TableSupport
     /**
      * 封装分页对象
      */
-    public static PageDomain getPageDomain()
+    public static com.fast.core.common.domain.page.PageDomain getPageDomain()
     {
-        PageDomain pageDomain = new PageDomain();
+        com.fast.core.common.domain.page.PageDomain pageDomain = new com.fast.core.common.domain.page.PageDomain();
         pageDomain.setPageNum(ServletUtils.getParameterToInt(Constants.PAGE_NUM));
         pageDomain.setPageSize(ServletUtils.getParameterToInt(Constants.PAGE_SIZE));
         pageDomain.setOrderByColumn(ServletUtils.getParameter(Constants.ORDER_BY_COLUMN));

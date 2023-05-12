@@ -26,7 +26,7 @@
         select id, set_code, set_parent_code, set_name, set_state, set_page, set_describe, del_flag, create_by, create_time, update_by, update_time, version, remark, set_operate from sys_set
     </sql>
 
-    <select id="selectSysSetList" parameterType="SysSet" resultMap="SysSetResult">
+    <select id="selectSysSetList" parameterType="com.fast.service.entity.sys.SysSet" resultMap="SysSetResult">
         <include refid="selectSysSetVo"/>
         <where>
             del_flag = '0'
@@ -46,7 +46,7 @@
         where id = #{id}
     </select>
 
-    <insert id="insertSysSet" parameterType="SysSet" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSysSet" parameterType="com.fast.service.entity.sys.SysSet" useGeneratedKeys="true" keyProperty="id">
         insert into sys_set
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="setCode != null and setCode != ''">set_code,</if>
@@ -82,7 +82,7 @@
         </trim>
     </insert>
 
-    <update id="updateSysSet" parameterType="SysSet">
+    <update id="updateSysSet" parameterType="com.fast.service.entity.sys.SysSet">
         update sys_set
         <trim prefix="SET" suffixOverrides=",">
             <if test="setCode != null and setCode != ''">set_code = #{setCode},</if>

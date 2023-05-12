@@ -26,7 +26,7 @@ public class LogUtil {
      * desc 等价于：info(String.format(format, args))
      **/
     public static void info(String format, Object... args) {
-        if (Util.isIdea()) {
+        if (com.fast.core.common.util.Util.isIdea()) {
             info(String.format(format, args));
         }
     }
@@ -39,13 +39,13 @@ public class LogUtil {
      * 传入类名，打印Throwable异常信息
      */
     public static void info(Class<?> clazz, Throwable e) {
-        if (Util.isIdea()) {
+        if (com.fast.core.common.util.Util.isIdea()) {
             LogFactory.getLog(clazz).info(e.getMessage(), e);
         }
     }
 
     public static void info(String msg, Throwable e) {
-        if (Util.isIdea()) {
+        if (com.fast.core.common.util.Util.isIdea()) {
             LogFactory.getLog(new CurrentClassGetter().getCurrentClass()).info(msg, e);
         }
     }
@@ -55,7 +55,7 @@ public class LogUtil {
      * 打印Throwable异常信息
      */
     public static void info(Throwable e) {
-        if (Util.isIdea()) {
+        if (com.fast.core.common.util.Util.isIdea()) {
             LogFactory.getLog(new CurrentClassGetter().getCurrentClass()).info(e.getMessage(), e);
         }
     }
@@ -64,7 +64,7 @@ public class LogUtil {
      * 打印自定义信息
      */
     public static void info(String msg) {
-        if (Util.isIdea()) {
+        if (com.fast.core.common.util.Util.isIdea()) {
             LogFactory.getLog(new CurrentClassGetter().getCurrentClass()).info(msg);
         }
     }

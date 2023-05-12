@@ -11,7 +11,7 @@ import java.util.List;
 public class WebUtil {
 
     public static R dealError(Object target, FieldError fieldError) {
-        String message = fieldError == null ? Com.UnknownErr : fieldError.getDefaultMessage();
+        String message = fieldError == null ? com.fast.core.common.util.Com.UnknownErr : fieldError.getDefaultMessage();
         if (StringUtils.isNotBlank(message) && message.contains("{display}")) {
             if (target == null) {
                 return R.error(Com.UnknownErr);
@@ -57,7 +57,7 @@ public class WebUtil {
     public static Field getField(Object target, String property) {
         if (target instanceof List<?>) {
             List<?> targets = (List<?>) target;
-            return RUtil.getField(targets.get(0).getClass(), property);
+            return com.fast.core.common.util.RUtil.getField(targets.get(0).getClass(), property);
         }
         return RUtil.getField(target.getClass(), property);
     }

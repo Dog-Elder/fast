@@ -1,4 +1,4 @@
-//package com.fast.core.common.domain.domain;
+package com.fast.core.common.domain.domain;//package com.fast.core.common.domain.domain;
 //
 //import com.fast.core.common.validate.annotation.Display;
 //import com.fasterxml.jackson.annotation.JsonInclude;

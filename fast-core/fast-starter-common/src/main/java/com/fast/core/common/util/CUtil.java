@@ -50,7 +50,7 @@ public class CUtil {
      * @return true：为空 false：非空
      */
     public static boolean isEmpty(Object[] objects) {
-        return Util.isNull(objects) || (objects.length == 0);
+        return com.fast.core.common.util.Util.isNull(objects) || (objects.length == 0);
     }
 
     /**
@@ -283,7 +283,7 @@ public class CUtil {
         }
 
         Class<?> clazz = data.get(0).getClass();
-        final Method getter = ReflectUtil.getMethod(clazz, "get"+SUtil.upperCase(orderField));
+        final Method getter = ReflectUtil.getMethod(clazz, "get"+ SUtil.upperCase(orderField));
         if (getter == null) {
             return data;
         }

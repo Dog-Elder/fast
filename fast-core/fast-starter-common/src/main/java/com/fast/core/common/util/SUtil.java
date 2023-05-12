@@ -43,7 +43,7 @@ public class SUtil extends org.apache.commons.lang3.StringUtils {
      * @return true：为空 false：非空
      */
     public static boolean isEmpty(String str) {
-        return Util.isNull(str) || NULLSTR.equals(str.trim());
+        return com.fast.core.common.util.Util.isNull(str) || NULLSTR.equals(str.trim());
     }
 
     /**
@@ -53,7 +53,7 @@ public class SUtil extends org.apache.commons.lang3.StringUtils {
      * @param msg String 返回的消息
      */
     public static void isEmpty(String str,String msg) {
-        if (Util.isNull(str) || NULLSTR.equals(str.trim())) {
+        if (com.fast.core.common.util.Util.isNull(str) || NULLSTR.equals(str.trim())) {
             throw new CustomException(msg);
         }
     }

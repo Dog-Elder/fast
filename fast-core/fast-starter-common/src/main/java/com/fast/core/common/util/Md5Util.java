@@ -43,7 +43,7 @@ public class Md5Util {
         if (srcPass.length() > md5Pass.length()) {
             throw new CustomException("参数异位");
         }
-        if (SUtil.isEmpty(srcPass) || SUtil.isEmpty(md5Pass)) {
+        if (com.fast.core.common.util.SUtil.isEmpty(srcPass) || SUtil.isEmpty(md5Pass)) {
             throw new CustomException("密码错误");
         }
         try {

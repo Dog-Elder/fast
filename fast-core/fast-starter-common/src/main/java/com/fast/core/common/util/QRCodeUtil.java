@@ -72,7 +72,7 @@ public class QRCodeUtil {
      * @return: void
      **/
     public static void byQrCodeDownloadFile(String path, String savePath, String filename, String suffix,boolean network) {
-        if (SUtil.isEmpty(suffix)) {
+        if (com.fast.core.common.util.SUtil.isEmpty(suffix)) {
             throw new CustomException("文件后缀为空");
         }
         if (SUtil.isEmpty(savePath)) {

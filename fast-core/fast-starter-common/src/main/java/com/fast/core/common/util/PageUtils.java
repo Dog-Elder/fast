@@ -25,7 +25,7 @@ public class PageUtils extends PageHelper {
         PageDomain pageDomain = TableSupport.buildPageRequest();
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
-        if (Util.isNotNull(pageNum) && Util.isNotNull(pageSize)) {
+        if (com.fast.core.common.util.Util.isNotNull(pageNum) && com.fast.core.common.util.Util.isNotNull(pageSize)) {
             //最多不能超过1000条查询
             if (pageSize > 1000) {
                 pageSize = 1000;
@@ -43,7 +43,7 @@ public class PageUtils extends PageHelper {
         PageDomain pageDomain = TableSupport.buildPageRequest();
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
-        if (Util.isNotNull(pageNum) && Util.isNotNull(pageSize)) {
+        if (com.fast.core.common.util.Util.isNotNull(pageNum) && com.fast.core.common.util.Util.isNotNull(pageSize)) {
             //最多不能超过1000条查询
             if (pageSize > 1000) {
                 pageDomain.setPageSize(1000);
@@ -64,13 +64,13 @@ public class PageUtils extends PageHelper {
             page.setPageNum(pageList.getPageNum());
             page.setPages(pageList.getPages());
             page.setPageSize(pageList.getPageSize());
-            page.addAll(CUtil.copy(sourceList, targetClazz));
+            page.addAll(com.fast.core.common.util.CUtil.copy(sourceList, targetClazz));
             return page;
         } else {
-            if (Util.isNull(sourceList)) {
+            if (com.fast.core.common.util.Util.isNull(sourceList)) {
                 return new ArrayList<>();
             }
-            return CUtil.copy(sourceList, targetClazz);
+            return com.fast.core.common.util.CUtil.copy(sourceList, targetClazz);
         }
     }
 
@@ -87,7 +87,7 @@ public class PageUtils extends PageHelper {
      * System.out.println("页数 = " + totalPage);
      **/
     public static <T> List<T> createPage(List<T> list, Integer pageNum, Integer pageSize) {
-        if (Util.isNull(pageNum) || Util.isNull(pageSize)) {
+        if (com.fast.core.common.util.Util.isNull(pageNum) || Util.isNull(pageSize)) {
             return list;
         }
         Page<T> page = new Page<>();
@@ -131,8 +131,8 @@ public class PageUtils extends PageHelper {
         PageDomain pageDomain = getPage();
         String orderBy2 = pageDomain.getOrderBy2();
         String orderDirections = pageDomain.orderByColumngetIsAsc();
-        if (SUtil.isNotBlank(orderBy2) && SUtil.isNotBlank(orderDirections)) {
-            CUtil.sort(list,orderBy2,orderDirections);
+        if (com.fast.core.common.util.SUtil.isNotBlank(orderBy2) && SUtil.isNotBlank(orderDirections)) {
+            com.fast.core.common.util.CUtil.sort(list,orderBy2,orderDirections);
         }
         return createPage(list, pageDomain.getPageNum(), pageDomain.getPageSize());
     }
