@@ -1,6 +1,7 @@
 package com.fast.service.controller;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.fast.core.util.FastRedis;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,11 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("/test")
+@RequiredArgsConstructor
 public class TestControlelr {
-    @Value("${test.name}")
-    String name;
+    private final FastRedis fastRedis;
+
     @GetMapping
-    public void test(){
-        System.out.println("name = " + name);
+    public String test() {
+        String string = fastRedis.getString("111");
+        System.out.println("string = " + string);
+
+        return "ok";
     }
 }
