@@ -88,6 +88,22 @@ public class BaseEntity implements Serializable {
         return params;
     }
 
+    public String getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public LocalDateTime getCreateTime() {
         return createTime;
     }

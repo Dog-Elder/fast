@@ -9,14 +9,18 @@
         <artifactId>fast</artifactId>
         <version>${revision}</version>
     </parent>
+
     <packaging>pom</packaging>
     <artifactId>fast-core</artifactId>
+    <version>${revision}</version>
 
     <modules>
         <module>fast-core-boot</module>
         <module>fast-starter-common</module>
         <module>fast-starter-mybatis-plus</module>
         <module>fast-starter-log</module>
+        <module>fast-starter-redis</module>
+        <module>fast-starter-datasource</module>
     </modules>
 
 </project>

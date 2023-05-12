@@ -11,6 +11,8 @@
     </parent>
 
     <artifactId>fast-core-boot</artifactId>
+    <version>${revision}</version>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- SpringBoot Web容器 -->
@@ -28,6 +30,11 @@
             <groupId>com.fast</groupId>
             <artifactId>fast-starter-common</artifactId>
             <version>${revision}</version>
+        </dependency>
+        <!--Druid-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 

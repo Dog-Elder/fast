@@ -14,5 +14,11 @@
     <artifactId>fast-service-common</artifactId>
     <version>${revision}</version>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.fast</groupId>
+            <artifactId>fast-service-core</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
 </project>

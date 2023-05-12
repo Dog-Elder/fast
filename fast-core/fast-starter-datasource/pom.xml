@@ -10,25 +10,15 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>fast-starter-mybatis-plus</artifactId>
+    <groupId>com.fast</groupId>
+    <artifactId>fast-starter-datasource</artifactId>
     <version>${revision}</version>
-    <packaging>jar</packaging>
 
     <dependencies>
-        <!-- import lombok -->
+        <!-- Mysql驱动包 -->
         <dependency>
-            <groupId>com.fast</groupId>
-            <artifactId>fast-starter-common</artifactId>
-            <version>${revision}</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
-
-        <!--mybatis-plus-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-
-
     </dependencies>
-
 </project>

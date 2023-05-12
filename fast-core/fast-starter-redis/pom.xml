@@ -10,25 +10,20 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>fast-starter-mybatis-plus</artifactId>
+    <groupId>com.fast</groupId>
+    <artifactId>fast-starter-redis</artifactId>
     <version>${revision}</version>
-    <packaging>jar</packaging>
+
 
     <dependencies>
-        <!-- import lombok -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.fast</groupId>
             <artifactId>fast-starter-common</artifactId>
             <version>${revision}</version>
         </dependency>
-
-        <!--mybatis-plus-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-
-
     </dependencies>
-
 </project>

@@ -1,11 +1,13 @@
 # mybatis-plus配置
 mybatis-plus:
   # Mapper.xml 文件位置 Maven 多模块项目的扫描路径需以 classpath*: 开头
-  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  mapperLocations:
+    - classpath*:mapper/**/*Mapper.xml
+    - classpath*:mapper/*Mapper.xml
   #  #MyBaits 别名包扫描路径，通过该属性可以给包中的类注册别名 实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.xxxxx.domain
+  typeAliasesPackage: com.fast.service.entity.sys
   #  #通过父类（或实现接口）的方式来限定扫描实体
-  #  typeAliasesSuperType: com.vanhr.user.dao.entity.baseEntity
+  typeAliasesSuperType: com.fast.core.mybatis.base.model.BaseEntity
   #  #枚举类 扫描路径 如果配置了该属性，会将路径下的枚举类进行注入，让实体类字段能够简单快捷的使用枚举属性
 #  typeEnumsPackage: com.xxxxx.common.enums.*
   #  #启动时是否检查 MyBatis XML 文件的存在，默认不检查 仅限spring boot 使用

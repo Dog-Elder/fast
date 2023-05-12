@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fast.service.dao.SysSetMapper">
+
+    <resultMap type="com.fast.service.entity.sys.SysSet" id="SysSetResult">
+        <result property="id" column="id"/>
+        <result property="setCode" column="set_code"/>
+        <result property="setParentCode" column="set_parent_code"/>
+        <result property="setName" column="set_name"/>
+        <result property="setState" column="set_state"/>
+        <result property="setPage" column="set_page"/>
+        <result property="setDescribe" column="set_describe"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="version" column="version"/>
+        <result property="remark" column="remark"/>
+        <result property="setOperate" column="set_operate"/>
+    </resultMap>
+
+    <sql id="selectSysSetVo">
+        select id, set_code, set_parent_code, set_name, set_state, set_page, set_describe, del_flag, create_by, create_time, update_by, update_time, version, remark, set_operate from sys_set
+    </sql>
+
+    <select id="selectSysSetList" parameterType="SysSet" resultMap="SysSetResult">
+        <include refid="selectSysSetVo"/>
+        <where>
+            del_flag = '0'
+            <if test="setCode != null  and setCode != ''">and set_code = #{setCode}</if>
+            <if test="setParentCode != null  and setParentCode != ''">and set_parent_code = #{setParentCode}</if>
+            <if test="setName != null  and setName != ''">and set_name like concat('%', #{setName}, '%')</if>
+            <if test="setState != null  and setState != ''">and set_state = #{setState}</if>
+            <if test="setPage != null  and setPage != ''">and set_page = #{setPage}</if>
+            <if test="setDescribe != null  and setDescribe != ''">and set_describe = #{setDescribe}</if>
+            <if test="version != null ">and version = #{version}</if>
+            <if test="setOperate != null  and setOperate != ''">and set_operate = #{setOperate}</if>
+        </where>
+    </select>
+
+    <select id="selectSysSetById" parameterType="Long" resultMap="SysSetResult">
+        <include refid="selectSysSetVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysSet" parameterType="SysSet" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_set
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="setCode != null and setCode != ''">set_code,</if>
+            <if test="setParentCode != null and setParentCode != ''">set_parent_code,</if>
+            <if test="setName != null and setName != ''">set_name,</if>
+            <if test="setState != null and setState != ''">set_state,</if>
+            <if test="setPage != null and setPage != ''">set_page,</if>
+            <if test="setDescribe != null">set_describe,</if>
+            <if test="delFlag != null and delFlag != ''">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="version != null">version,</if>
+            <if test="remark != null">remark,</if>
+            <if test="setOperate != null and setOperate != ''">set_operate,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="setCode != null and setCode != ''">#{setCode},</if>
+            <if test="setParentCode != null and setParentCode != ''">#{setParentCode},</if>
+            <if test="setName != null and setName != ''">#{setName},</if>
+            <if test="setState != null and setState != ''">#{setState},</if>
+            <if test="setPage != null and setPage != ''">#{setPage},</if>
+            <if test="setDescribe != null">#{setDescribe},</if>
+            <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="version != null">#{version},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="setOperate != null and setOperate != ''">#{setOperate},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysSet" parameterType="SysSet">
+        update sys_set
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="setCode != null and setCode != ''">set_code = #{setCode},</if>
+            <if test="setParentCode != null and setParentCode != ''">set_parent_code = #{setParentCode},</if>
+            <if test="setName != null and setName != ''">set_name = #{setName},</if>
+            <if test="setState != null and setState != ''">set_state = #{setState},</if>
+            <if test="setPage != null and setPage != ''">set_page = #{setPage},</if>
+            <if test="setDescribe != null">set_describe = #{setDescribe},</if>
+            <if test="delFlag != null and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="setOperate != null and setOperate != ''">set_operate = #{setOperate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysSetById" parameterType="Long">
+        delete from sys_set where id = #{id}
+    </delete>
+
+    <delete id="deleteSysSetByIds" parameterType="String">
+        delete from sys_set where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
