@@ -37,7 +37,6 @@ public class SysSetValue extends BaseVersionEntity {
      * id
      */
     @Display("id")
-    @TableField("`id`")
     @NotNull(message = Com.Require, groups = {Update.class})
     private Long id;
 
