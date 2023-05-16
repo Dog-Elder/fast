@@ -1,8 +1,12 @@
 package com.fast.core.common.util.bean;
 
 import com.alibaba.fastjson.JSON;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
@@ -17,9 +21,20 @@ import java.util.List;
 /**
  * 使用BeanUtils.copyProperties有一个问题就是当src对象的键值为Null时就会把target对象的对应键值覆盖成空，这不科学，本实现类在继承BeanUtils
  * 的基础上对此做了扩展
+ * 增加 获取Baen对象
  */
 @SuppressWarnings("ALL")
+@Component
+@RequiredArgsConstructor
 public class BUtil extends BeanUtils {
+
+    private static ApplicationContext applicationContext;
+
+
+    @Autowired
+    public void setApplicationContext(ApplicationContext context) {
+        applicationContext = context;
+    }
 
     /**
      * 创建一个targetClazz的实例（利用其默认构造），然后将source的非null的属性复制到target上的同名属性
@@ -96,10 +111,10 @@ public class BUtil extends BeanUtils {
     /**
      * 拷贝转List
      */
-    public static <S,T> List<T> copyList(Collection<S> sources, Class<T> targetClazz) {
+    public static <S, T> List<T> copyList(Collection<S> sources, Class<T> targetClazz) {
         List<T> targets = new ArrayList<>();
         try {
-            sources.stream().forEach(ele->targets.add(copy(ele,targetClazz)));
+            sources.stream().forEach(ele -> targets.add(copy(ele, targetClazz)));
             return targets;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -110,12 +125,13 @@ public class BUtil extends BeanUtils {
 
     /**
      * 复制对象到指定类（深度拷贝）
+     *
      * @param object
      * @param destclas 指定类
      * @param <T>
      * @return
      */
-    public static <T> T clone(final Object object, Class<T> destclas){
+    public static <T> T clone(final Object object, Class<T> destclas) {
         if (object == null) {
             return null;
         }
@@ -125,6 +141,7 @@ public class BUtil extends BeanUtils {
 
     /**
      * 复制集合到指定类（深度拷贝）
+     *
      * @param object
      * @param destclas 指定类
      * @param <T>
@@ -136,5 +153,17 @@ public class BUtil extends BeanUtils {
         }
         String json = JSON.toJSONString(object);
         return JSON.parseArray(json, destclas);
+    }
+
+
+    /**
+     * @Description: 获取Bean对象
+     * @Author: 黄嘉浩
+     * @Date: 2023/5/16 15:13
+     * @param clazz:
+     * @return: T
+     **/
+    public static <T> T getBean(Class<T> clazz) {
+        return applicationContext.getBean(clazz);
     }
 }

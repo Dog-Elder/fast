@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SysSetServiceImpl extends ServiceImpl<SysSetMapper, SysSet> implements ISysSetService {
-    private final SysSetMapper sysSetMapper;
 
     /**
      * 查询值集
@@ -39,7 +38,7 @@ public class SysSetServiceImpl extends ServiceImpl<SysSetMapper, SysSet> impleme
      */
     @Override
     public SysSet selectById(Long id) {
-        return sysSetMapper.selectSysSetById(id);
+        return baseMapper.selectSysSetById(id);
     }
 
     /**
@@ -50,7 +49,7 @@ public class SysSetServiceImpl extends ServiceImpl<SysSetMapper, SysSet> impleme
      */
     @Override
     public List<SysSet> list(SysSet sysSet) {
-        return sysSetMapper.selectSysSetList(sysSet);
+        return baseMapper.selectSysSetList(sysSet);
     }
 
     @Override
@@ -62,14 +61,14 @@ public class SysSetServiceImpl extends ServiceImpl<SysSetMapper, SysSet> impleme
             throw new CustomException("输入的值集编码有重复.");
         }
         //检查添的数据中的编码是否已在数据库中存在
-        String repeatCode = new LambdaQueryChainWrapper<>(sysSetMapper).in(SysSet::getSetCode, setCodes).list().stream().map(SysSet::getSetCode).collect(Collectors.joining(","));
+        String repeatCode = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getSetCode, setCodes).list().stream().map(SysSet::getSetCode).collect(Collectors.joining(","));
         if (SUtil.isNotEmpty(repeatCode)) {
             throw new CustomException("编码已存在:" + repeatCode);
         }
         //检查数据中的有父值集的是否存在
         Set<String> setParentCodes = sysSets.stream().filter(ele -> ele.getSetParentCode() != null).map(SysSet::getSetParentCode).collect(Collectors.toSet());
         if (CUtil.isNotEmpty(setParentCodes)) {
-            List<SysSet> parentSet = new LambdaQueryChainWrapper<>(sysSetMapper).select(SysSet::getSetCode).in(SysSet::getSetCode, setParentCodes).list();
+            List<SysSet> parentSet = new LambdaQueryChainWrapper<>(baseMapper).select(SysSet::getSetCode).in(SysSet::getSetCode, setParentCodes).list();
             //查找不同的元素
             Collection<String> diffByHashSet = CUtil.getDiffByHashSet(setParentCodes, parentSet.stream().map(SysSet::getSetCode).collect(Collectors.toSet()));
             if (CUtil.isEmpty(diffByHashSet)) {
@@ -92,7 +91,7 @@ public class SysSetServiceImpl extends ServiceImpl<SysSetMapper, SysSet> impleme
     @Transactional
     @Override
     public boolean update(SysSet sysSet) {
-        List<SysSet> dbList = new LambdaQueryChainWrapper<>(sysSetMapper).in(SysSet::getId, sysSet.getId()).list();
+        List<SysSet> dbList = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getId, sysSet.getId()).list();
         dbList.forEach(ele -> {
             //TODO 作者:@Dog_Elder 2022/3/25 17:27 待办  缺少操作权限校验
             if ((!SUtil.isEmpty(sysSet.getSetParentCode()) && !SUtil.isEmpty(ele.getSetParentCode()))) {
@@ -117,12 +116,12 @@ public class SysSetServiceImpl extends ServiceImpl<SysSetMapper, SysSet> impleme
     @Override
     public int deleteByIds(String ids) {
         List<String> idList = SUtil.splitToStrList(ids);
-        List<SysSet> sysSets = new LambdaQueryChainWrapper<>(sysSetMapper).in(SysSet::getId, idList).list();
+        List<SysSet> sysSets = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getId, idList).list();
         Set<String> setCodes = sysSets.stream().map(SysSet::getSetCode).collect(Collectors.toSet());
         if (CUtil.isEmpty(setCodes)) {
-            return sysSetMapper.deleteSysSetByIds(Convert.toStrArray(ids));
+            return baseMapper.deleteSysSetByIds(Convert.toStrArray(ids));
         }
-        List<SysSet> dbList = new LambdaQueryChainWrapper<>(sysSetMapper).in(SysSet::getSetParentCode, setCodes).list();
+        List<SysSet> dbList = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getSetParentCode, setCodes).list();
         StringBuilder sb = new StringBuilder();
         if (CUtil.isNotEmpty(dbList)) {
             sb.append("要删除的值集级有子集:");
@@ -130,7 +129,7 @@ public class SysSetServiceImpl extends ServiceImpl<SysSetMapper, SysSet> impleme
             sb.deleteCharAt(sb.length() - 1);
             throw new CustomException(sb.toString());
         }
-        return sysSetMapper.deleteSysSetByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteSysSetByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -141,7 +140,7 @@ public class SysSetServiceImpl extends ServiceImpl<SysSetMapper, SysSet> impleme
      */
     @Override
     public int deleteSysSetById(Long id) {
-        return sysSetMapper.deleteSysSetById(id);
+        return baseMapper.deleteSysSetById(id);
     }
 
     /**
