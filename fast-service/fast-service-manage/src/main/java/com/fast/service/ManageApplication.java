@@ -5,6 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
  **/
 @Slf4j
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@ServletComponentScan
 @ComponentScan(basePackages = {"com.fast"})
 @MapperScan(value = {"com.fast.service.dao", "com.fast.service.*.dao"})
 public class ManageApplication {

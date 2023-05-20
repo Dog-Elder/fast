@@ -1,14 +1,13 @@
 package com.fast.service.controller;
 
+import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.page.TableDataInfo;
 import com.fast.core.util.FastRedis;
 import com.fast.service.entity.sys.SysSet;
 import com.fast.service.service.ISysSetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,9 +39,25 @@ public class TestController extends BaseController {
      */
     @GetMapping
     @RequestMapping("/set")
-    public TableDataInfo list(SysSet sysSet) {
+    public R<TableDataInfo> list(SysSet sysSet) {
         startPage();
         List<SysSet> list = sysSetService.list(sysSet);
-        return getDataTable(list);
+        return R.success(getDataTable(list));
+    }
+    /**
+     * 查询值集列表
+     */
+    @PostMapping("/set2")
+    public R<TableDataInfo> list2(@RequestBody SysSet sysSet) {
+        startPage();
+        List<SysSet> list = sysSetService.list(sysSet);
+        return R.success(getDataTable(list));
+    }
+    /**
+     * 查询值集列表
+     */
+    @GetMapping("/set3/{v2}")
+    public R<String> list3(@RequestParam("v1")String aa,@PathVariable("v2") String v2) {
+        return R.success(aa+"   "+v2);
     }
 }
