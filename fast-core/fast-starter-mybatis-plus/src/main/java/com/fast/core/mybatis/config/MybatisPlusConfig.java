@@ -1,4 +1,4 @@
-package com.fast.core.mybatis.base.config;
+package com.fast.core.mybatis.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;

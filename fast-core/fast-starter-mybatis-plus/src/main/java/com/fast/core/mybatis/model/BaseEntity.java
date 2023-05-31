@@ -1,11 +1,11 @@
-package com.fast.core.mybatis.base.model;
+package com.fast.core.mybatis.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.fast.core.mybatis.base.annotation.AutoFill;
+import com.fast.core.mybatis.annotation.AutoFill;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.ToString;

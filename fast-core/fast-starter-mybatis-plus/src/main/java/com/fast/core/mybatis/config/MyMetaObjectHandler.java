@@ -1,8 +1,8 @@
-package com.fast.core.mybatis.base.config;
+package com.fast.core.mybatis.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.fast.core.mybatis.base.annotation.AutoFill;
-import com.fast.core.mybatis.base.service.MybatisFillService;
+import com.fast.core.mybatis.annotation.AutoFill;
+import com.fast.core.mybatis.service.MybatisFillService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Value;

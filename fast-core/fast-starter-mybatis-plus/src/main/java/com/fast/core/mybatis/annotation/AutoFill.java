@@ -1,4 +1,4 @@
-package com.fast.core.mybatis.base.annotation;
+package com.fast.core.mybatis.annotation;
 
 import java.lang.annotation.*;
 

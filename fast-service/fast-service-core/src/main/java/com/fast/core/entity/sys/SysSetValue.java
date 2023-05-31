@@ -3,7 +3,7 @@ package com.fast.core.entity.sys;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fast.core.common.util.Com;
 import com.fast.core.common.validate.annotation.Display;
-import com.fast.core.mybatis.base.model.BaseVersionEntity;
+import com.fast.core.mybatis.model.BaseVersionEntity;
 import com.fast.core.entity.verification.Qry;
 import com.fast.core.entity.verification.Save;
 import com.fast.core.entity.verification.Update;

@@ -1,8 +1,9 @@
-package com.fast.core.mybatis.base.model;
+package com.fast.core.mybatis.model;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.Version;import com.fast.core.mybatis.base.annotation.AutoFill;
+import com.baomidou.mybatisplus.annotation.Version;
+import com.fast.core.mybatis.annotation.AutoFill;
 import lombok.Data;
 import lombok.ToString;
 

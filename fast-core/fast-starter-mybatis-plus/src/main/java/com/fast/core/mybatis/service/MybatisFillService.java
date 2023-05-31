@@ -1,6 +1,6 @@
-package com.fast.core.mybatis.base.service;
+package com.fast.core.mybatis.service;
 
-import com.fast.core.mybatis.base.config.MyMetaObjectHandler;
+import com.fast.core.mybatis.config.MyMetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 
 public interface MybatisFillService {

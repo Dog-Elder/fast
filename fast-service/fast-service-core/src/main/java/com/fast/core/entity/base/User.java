@@ -1,7 +1,7 @@
 package com.fast.core.entity.base;
 
 
-import com.fast.core.mybatis.base.model.BaseVersionEntity;
+import com.fast.core.mybatis.model.BaseVersionEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.ToString;
