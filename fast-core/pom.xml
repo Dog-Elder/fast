@@ -21,6 +21,7 @@
         <module>fast-starter-log</module>
         <module>fast-starter-redis</module>
         <module>fast-starter-datasource</module>
+        <module>fast-starter-security</module>
     </modules>
 
 </project>
