@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fast.service.dao.SysSetValueMapper">
+<mapper namespace="com.fast.core.dao.SysSetValueMapper">
     
-    <resultMap type="com.fast.service.entity.sys.SysSetValue" id="SysSetValueResult">
+    <resultMap type="com.fast.core.entity.sys.SysSetValue" id="SysSetValueResult">
         <result property="id"    column="id"    />
         <result property="setCode"    column="set_code"    />
         <result property="setValueKey"    column="set_value_key"    />
@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
-    <insert id="insertSysSetValue" parameterType="com.fast.service.entity.sys.SysSetValue" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSysSetValue" parameterType="com.fast.core.entity.sys.SysSetValue" useGeneratedKeys="true" keyProperty="id">
         insert into sys_set_value
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="setCode != null and setCode != ''">set_code,</if>
@@ -79,7 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateSysSetValue" parameterType="com.fast.service.entity.sys.SysSetValue">
+    <update id="updateSysSetValue" parameterType="com.fast.core.entity.sys.SysSetValue">
         update sys_set_value
         <trim prefix="SET" suffixOverrides=",">
             <if test="setCode != null and setCode != ''">set_code = #{setCode},</if>

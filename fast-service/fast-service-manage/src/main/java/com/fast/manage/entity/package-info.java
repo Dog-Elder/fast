@@ -1,0 +1,1 @@
+package com.fast.manage.entity;
