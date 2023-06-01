@@ -18,7 +18,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @ServletComponentScan
 @ComponentScan(basePackages = {"com.fast"})
-@MapperScan(value = {"com.fast.service.dao", "com.fast.service.*.dao"})
+@MapperScan(value = {"com.fast.*.dao"})
 public class ManageApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManageApplication.class, args);
