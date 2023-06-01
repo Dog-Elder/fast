@@ -18,5 +18,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fast</groupId>
+            <artifactId>fast-starter-redis</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fast</groupId>
+            <artifactId>fast-starter-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>
