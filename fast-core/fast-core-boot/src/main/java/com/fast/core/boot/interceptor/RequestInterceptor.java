@@ -3,6 +3,7 @@ package com.fast.core.boot.interceptor;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.fast.core.common.util.SUtil;
+import com.fast.core.common.util.spring.RequestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -50,8 +51,8 @@ public class RequestInterceptor implements HandlerInterceptor {
             beforeReqArgs.add(request.getQueryString());
         }
 
-//        // 获取RequestBody中的数据
-        if ("POST".equals(request.getMethod()) || "PUT".equals(request.getMethod())) {
+        // 获取RequestBody中的数据
+        if (RequestUtils.isJsonContentType(request)) {
             //获取请求body
             byte[] bodyBytes = StreamUtils.copyToByteArray(request.getInputStream());
             String body = new String(bodyBytes, request.getCharacterEncoding());

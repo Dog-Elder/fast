@@ -48,10 +48,4 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(requestInterceptor).addPathPatterns("/**");;
     }
 
-//    @Override
-//    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-//        // 注册响应数据处理器
-//        converters.add(0, new MappingJackson2HttpMessageConverter());
-//    }
-
 }
