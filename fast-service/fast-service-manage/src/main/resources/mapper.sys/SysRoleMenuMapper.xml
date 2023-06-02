@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fast.manage.dao.SysRoleMenuMapper">
+    
+    <resultMap type="com.fast.manage.entity.SysRoleMenu" id="SysRoleMenuResult">
+        <result property="roleId"    column="role_id"    />
+        <result property="menuId"    column="menu_id"    />
+        <result property="type"    column="type"    />
+    </resultMap>
+
+    <sql id="selectSysRoleMenuVo">
+        select role_id, menu_id, type from sys_role_menu
+    </sql>
+
+    <select id="selectSysRoleMenuList" parameterType="com.fast.manage.entity.SysRoleMenu" resultMap="SysRoleMenuResult">
+        <include refid="selectSysRoleMenuVo"/>
+        <where>
+            del_flag = '0'
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysRoleMenuById" parameterType="Long" resultMap="SysRoleMenuResult">
+        <include refid="selectSysRoleMenuVo"/>
+        where role_id = #{roleId}
+    </select>
+        
+    <insert id="insertSysRoleMenu" parameterType="com.fast.manage.entity.SysRoleMenu">
+        insert into sys_role_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">role_id,</if>
+            <if test="menuId != null">menu_id,</if>
+            <if test="type != null and type != ''">type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">#{roleId},</if>
+            <if test="menuId != null">#{menuId},</if>
+            <if test="type != null and type != ''">#{type},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysRoleMenu" parameterType="com.fast.manage.entity.SysRoleMenu">
+        update sys_role_menu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="menuId != null">menu_id = #{menuId},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+        </trim>
+        where role_id = #{roleId}
+    </update>
+
+    <delete id="deleteSysRoleMenuById" parameterType="Long">
+        delete from sys_role_menu where role_id = #{roleId}
+    </delete>
+
+    <delete id="deleteSysRoleMenuByIds" parameterType="String">
+        delete from sys_role_menu where role_id in 
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+</mapper>
