@@ -10,7 +10,7 @@ import java.util.List;
 public interface AuthorizationService {
     /**
      * 认证TYPE
-     * {@link ManageUtil#TYPE}
+     * 例如 {@link ManageUtil#TYPE}
      **/
     String getType();
 

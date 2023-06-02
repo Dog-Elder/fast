@@ -1,11 +1,8 @@
 package com.fast.core.safe.authorization;
 
 import cn.dev33.satoken.stp.StpInterface;
-import com.fast.core.common.exception.CustomException;
-import com.fast.core.common.util.Util;
 import com.fast.core.safe.service.AuthorizationService;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +21,7 @@ public class DefaultStpInterface implements StpInterface {
         if (!Objects.equals(loginType, service.getType())) {
             return null;
         }
-        return null;
+        return service.getPermissionList(loginId);
     }
 
     @Override
@@ -32,11 +29,10 @@ public class DefaultStpInterface implements StpInterface {
         if (!Objects.equals(loginType, service.getType())) {
             return null;
         }
-        return null;
+        return service.getRoleList(loginId);
     }
 
     public DefaultStpInterface(AuthorizationService service) {
-        Util.isNull(service,"需要实现授权接口AuthorizationService!");
         this.service = service;
     }
 }
