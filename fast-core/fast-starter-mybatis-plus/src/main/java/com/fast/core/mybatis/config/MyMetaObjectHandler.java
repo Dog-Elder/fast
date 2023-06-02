@@ -8,9 +8,6 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * @program: xxxxx
  * @description: MyBatis-plus 创建时间/更新时间
@@ -23,11 +20,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Value(value = "${fast.apply-name}")
     private String APPLY_NAME;
 
-    private Set<MybatisFillService> fillService = new HashSet<>();
+    private MybatisFillService service;
 
-
-    public void inject(MybatisFillService service) {
-        fillService.add(service);
+    public MyMetaObjectHandler(MybatisFillService fillService) {
+        this.service = fillService;
     }
 
     /**
@@ -37,10 +33,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        for (MybatisFillService service : fillService) {
-            if (service.getApplyName().equals(APPLY_NAME)) {
-                service.insertFill(this, metaObject);
-            }
+        if (service.getApplyName().equals(APPLY_NAME)) {
+            service.insertFill(this, metaObject);
         }
 //        AutoFill autoFill = getAutoFill(metaObject);
 //        if (Util.isNull(autoFill) || autoFill.allClose()) {
@@ -77,10 +71,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-        for (MybatisFillService service : fillService) {
-            if (service.getApplyName().equals(APPLY_NAME)) {
-                service.updateFill(this, metaObject);
-            }
+        if (service.getApplyName().equals(APPLY_NAME)) {
+            service.updateFill(this, metaObject);
         }
 //        AutoFill autoFill = getAutoFill(metaObject);
 //        if (Util.isNull(autoFill) || autoFill.allClose()) {
