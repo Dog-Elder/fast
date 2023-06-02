@@ -1,9 +1,6 @@
 package com.fast.core.controller;
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.SaTokenInfo;
-
 import cn.hutool.json.JSONUtil;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.page.TableDataInfo;
@@ -16,6 +13,7 @@ import com.fast.core.util.FastRedis;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -71,7 +69,7 @@ public class TestController extends BaseController {
         return R.success(aa+"   "+v2);
     }
 
-    @RequestMapping("/login")
+    @PostMapping("/login")
     public R doLogin(@RequestParam("username")String username,@RequestParam("password")String password) {
         // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对
         if("zhang".equals(username) && "123456".equals(password)) {
@@ -81,6 +79,13 @@ public class TestController extends BaseController {
             // 第3步，返回给前端
             return R.success(JSONUtil.parseObj(tokenInfo));
         }
+        return R.success("登录失败");
+    }
+    @PostMapping("/ee")
+    @ResponseBody
+    public R<String> ee(@RequestParam("file") MultipartFile[] file) {
+        // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对
+        System.out.println(file);
         return R.success("登录失败");
     }
 
