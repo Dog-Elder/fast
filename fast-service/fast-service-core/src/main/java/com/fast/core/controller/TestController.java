@@ -1,6 +1,11 @@
 package com.fast.core.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.util.SaResult;
+import cn.hutool.json.JSONUtil;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.page.TableDataInfo;
 import com.fast.core.entity.sys.SysSet;
@@ -9,6 +14,7 @@ import com.fast.core.util.FastRedis;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,7 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TestController extends BaseController {
     private final FastRedis fastRedis;
-
+    @SaCheckLogin
     @GetMapping
     public String test() {
         String string = fastRedis.getString("111");
@@ -40,6 +46,7 @@ public class TestController extends BaseController {
      */
     @GetMapping
     @RequestMapping("/set")
+    @SaCheckPermission("user.add")
     public R<TableDataInfo> list(SysSet sysSet) {
         startPage();
         List<SysSet> list = sysSetService.list(sysSet);
@@ -49,6 +56,7 @@ public class TestController extends BaseController {
      * 查询值集列表
      */
     @PostMapping("/set2")
+    @SaCheckPermission("user.delete")
     public R<TableDataInfo> list2(@RequestBody SysSet sysSet) {
         startPage();
         List<SysSet> list = sysSetService.list(sysSet);
@@ -63,11 +71,14 @@ public class TestController extends BaseController {
     }
 
     @RequestMapping("/login")
-    public R<String> doLogin(@RequestParam("username") String username,@RequestParam("password") String password) {
+    public R doLogin(@RequestParam("username")String username,@RequestParam("password")String password) {
         // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对
         if("zhang".equals(username) && "123456".equals(password)) {
             StpUtil.login(10001);
-            return R.success("登录成功");
+            // 第2步，获取 Token  相关参数
+            SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+            // 第3步，返回给前端
+            return R.success(JSONUtil.parseObj(tokenInfo));
         }
         return R.success("登录失败");
     }

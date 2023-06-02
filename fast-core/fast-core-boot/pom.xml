@@ -31,6 +31,12 @@
             <artifactId>fast-starter-common</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <!--安全服务-->
+        <dependency>
+            <groupId>com.fast</groupId>
+            <artifactId>fast-starter-sa-token</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!--Druid-->
         <dependency>
             <groupId>com.alibaba</groupId>

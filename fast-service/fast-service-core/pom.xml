@@ -36,8 +36,9 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot-starter</artifactId>
+            <groupId>com.fast</groupId>
+            <artifactId>fast-starter-sa-token</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
