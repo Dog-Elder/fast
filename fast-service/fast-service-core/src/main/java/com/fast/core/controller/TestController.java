@@ -3,18 +3,19 @@ package com.fast.core.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.SaTokenInfo;
-import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SaResult;
+
 import cn.hutool.json.JSONUtil;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.page.TableDataInfo;
 import com.fast.core.entity.sys.SysSet;
+import com.fast.core.safe.annotation.manage.ManageCheckLogin;
+import com.fast.core.safe.annotation.manage.ManageCheckPermission;
+import com.fast.core.safe.util.ManageUtil;
 import com.fast.core.service.ISysSetService;
 import com.fast.core.util.FastRedis;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TestController extends BaseController {
     private final FastRedis fastRedis;
-    @SaCheckLogin
+    @ManageCheckLogin
     @GetMapping
     public String test() {
         String string = fastRedis.getString("111");
@@ -46,7 +47,7 @@ public class TestController extends BaseController {
      */
     @GetMapping
     @RequestMapping("/set")
-    @SaCheckPermission("user.add")
+    @ManageCheckPermission("user.add")
     public R<TableDataInfo> list(SysSet sysSet) {
         startPage();
         List<SysSet> list = sysSetService.list(sysSet);
@@ -56,7 +57,7 @@ public class TestController extends BaseController {
      * 查询值集列表
      */
     @PostMapping("/set2")
-    @SaCheckPermission("user.delete")
+    @ManageCheckPermission(value = "user.delete")
     public R<TableDataInfo> list2(@RequestBody SysSet sysSet) {
         startPage();
         List<SysSet> list = sysSetService.list(sysSet);
@@ -74,17 +75,18 @@ public class TestController extends BaseController {
     public R doLogin(@RequestParam("username")String username,@RequestParam("password")String password) {
         // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对
         if("zhang".equals(username) && "123456".equals(password)) {
-            StpUtil.login(10001);
+            ManageUtil.login(10001);
             // 第2步，获取 Token  相关参数
-            SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+            SaTokenInfo tokenInfo = ManageUtil.getTokenInfo();
             // 第3步，返回给前端
             return R.success(JSONUtil.parseObj(tokenInfo));
         }
         return R.success("登录失败");
     }
+
     // 查询登录状态，浏览器访问： http://localhost:8081/user/isLogin
     @RequestMapping("isLogin")
     public String isLogin() {
-        return "当前会话是否登录：" + StpUtil.isLogin();
+        return "当前会话是否登录：" + ManageUtil.isLogin();
     }
 }
