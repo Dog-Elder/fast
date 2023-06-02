@@ -23,7 +23,9 @@ import java.util.List;
  **/
 //@Log4j2
 public class BaseController {
-
+    /**
+     * 默认返回空列表
+     **/
     private static List<Object> DEFAULT_LIST = Collections.emptyList();
 
     /**

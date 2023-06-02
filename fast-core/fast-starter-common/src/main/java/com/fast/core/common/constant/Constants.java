@@ -70,12 +70,12 @@ public class Constants
     /**
      * 表示肯定(开启,是)
      */
-    public static final String Y = "0";
+    public static final String Y = "1";
 
     /**
      * 表示否定(关闭,否)
      */
-    public static final String N = "2";
+    public static final String N = "0";
 
     /**
      * 表示肯定(开启,是)

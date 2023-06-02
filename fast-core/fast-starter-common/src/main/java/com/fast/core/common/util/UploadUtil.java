@@ -43,12 +43,12 @@ public class UploadUtil {
         UploadUtil.APPLY_NAME = applyName;
     }
 
-    @Value("${attach.profile_win}")
+    @Value("${attach.profile-win}")
     public void setPROFILE_WIN(String profileWin) {
         UploadUtil.PROFILE_WIN = profileWin;
     }
 
-    @Value("${attach.profile_linux}")
+    @Value("${attach.profile-linux}")
     public void setPROFILE_LINUX(String profileLinux) {
         UploadUtil.PROFILE_LINUX = profileLinux;
     }
@@ -61,7 +61,7 @@ public class UploadUtil {
             new ConcurrentHashMap<String, Map<String, Set<String>>>();
 
     /**
-     * 附件位置 (PROFILE_WIN/PROFILE_WIN)+bucketName+directory+yyyy-MM-dd
+     * 附件位置 (profile-win/profile-win)+bucketName+directory+yyyy-MM-dd
      *
      * @param files:      文件数组
      * @param bucketName: 文件桶(类)

@@ -55,7 +55,7 @@ public class BaseEntity implements Serializable {
     private LocalDateTime updateTime;
 
     /**
-     * 删除标志（0代表存在 2代表删除）
+     * 删除标志（0:否 1:是）
      */
     @TableLogic
     private String delFlag;
