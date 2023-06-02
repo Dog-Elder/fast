@@ -2,7 +2,6 @@ package com.fast.core.boot.web.exception;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
-import cn.dev33.satoken.util.SaResult;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.exception.BaseException;
 import com.fast.core.common.exception.CustomException;
@@ -26,10 +25,10 @@ import java.util.List;
  *
  * @author @Dog_Elder
  */
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
-//    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
 
     /**
      * 基础异常

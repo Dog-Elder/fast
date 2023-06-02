@@ -2,10 +2,9 @@ package com.fast.core.mybatis.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.fast.core.mybatis.annotation.AutoFill;
-import com.fast.core.mybatis.service.MybatisFillService;
+import com.fast.core.mybatis.service.MPFillService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,12 +16,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
-    @Value(value = "${fast.apply-name}")
-    private String APPLY_NAME;
 
-    private MybatisFillService service;
+    private MPFillService service;
 
-    public MyMetaObjectHandler(MybatisFillService fillService) {
+    public MyMetaObjectHandler(MPFillService fillService) {
         this.service = fillService;
     }
 
@@ -33,28 +30,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        if (service.getApplyName().equals(APPLY_NAME)) {
-            service.insertFill(this, metaObject);
-        }
-//        AutoFill autoFill = getAutoFill(metaObject);
-//        if (Util.isNull(autoFill) || autoFill.allClose()) {
-//            return;
-//        }
-//        if (autoFill.createBy()) {
-//
-//        }
-//        if (autoFill.createTime()) {
-//            this.setFieldValByName("createTime", LocalDateTime.now(), metaObject);
-//        }
-//        if (autoFill.updateBy()) {
-//
-//        }
-//        if (autoFill.updateTime()) {
-//            this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
-//        }
-//        if (autoFill.defaultVersion()) {
-//            this.setFieldValByName("version", 1, metaObject);
-//        }
+        service.insertFill(this, metaObject);
     }
 
     private AutoFill getAutoFill(MetaObject metaObject) {
@@ -71,18 +47,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-        if (service.getApplyName().equals(APPLY_NAME)) {
-            service.updateFill(this, metaObject);
-        }
-//        AutoFill autoFill = getAutoFill(metaObject);
-//        if (Util.isNull(autoFill) || autoFill.allClose()) {
-//            return;
-//        }
-//        if (autoFill.updateBy()) {
-//
-//        }
-//        if (autoFill.updateTime()) {
-//            this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
-//        }
+        service.updateFill(this, metaObject);
     }
 }
