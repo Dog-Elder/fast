@@ -1,14 +1,14 @@
-package com.fast.core.controller;
+package com.fast.common.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.hutool.json.JSONUtil;
+import com.fast.common.entity.sys.SysSet;
+import com.fast.common.service.ISysSetService;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.page.TableDataInfo;
-import com.fast.core.entity.sys.SysSet;
 import com.fast.core.safe.annotation.manage.ManageCheckLogin;
 import com.fast.core.safe.annotation.manage.ManageCheckPermission;
 import com.fast.core.safe.util.ManageUtil;
-import com.fast.core.service.ISysSetService;
 import com.fast.core.util.FastRedis;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

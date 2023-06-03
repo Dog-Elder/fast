@@ -1,7 +1,5 @@
 package com.fast.manage.service.impl;
 
-import com.fast.core.entity.base.BaseLoginBody;
-import com.fast.core.service.TokenService;
 import com.fast.manage.service.ISysAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,9 +12,8 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 @RequiredArgsConstructor
-public class TokenServiceImpl implements TokenService {
+public class TokenServiceImpl  {
     private final ISysAdminService adminService;
-    @Override
-    public void authentication(BaseLoginBody body) {
-    }
+
+
 }

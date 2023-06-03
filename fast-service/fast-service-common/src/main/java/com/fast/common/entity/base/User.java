@@ -1,4 +1,4 @@
-package com.fast.core.entity.base;
+package com.fast.common.entity.base;
 
 
 import com.fast.core.mybatis.model.BaseVersionEntity;

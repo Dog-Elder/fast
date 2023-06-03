@@ -1,4 +1,4 @@
-package com.fast.core.entity.verification;
+package com.fast.common.entity.verification;
 /**
  * 修改校验
  **/
