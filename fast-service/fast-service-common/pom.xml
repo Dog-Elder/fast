@@ -18,7 +18,27 @@
     <dependencies>
         <dependency>
             <groupId>com.fast</groupId>
-            <artifactId>fast-service-core</artifactId>
+            <artifactId>fast-starter-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fast</groupId>
+            <artifactId>fast-core-boot</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fast</groupId>
+            <artifactId>fast-starter-mybatis-plus</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fast</groupId>
+            <artifactId>fast-starter-redis</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fast</groupId>
+            <artifactId>fast-starter-sa-token</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

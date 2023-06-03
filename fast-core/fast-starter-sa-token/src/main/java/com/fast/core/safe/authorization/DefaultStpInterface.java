@@ -1,7 +1,7 @@
 package com.fast.core.safe.authorization;
 
 import cn.dev33.satoken.stp.StpInterface;
-import com.fast.core.safe.service.AuthorizationService;
+import com.fast.core.safe.service.SecurityManagerService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Objects;
 @Component
 public class DefaultStpInterface implements StpInterface {
 
-    private AuthorizationService service;
+    private SecurityManagerService service;
 
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
@@ -32,7 +32,7 @@ public class DefaultStpInterface implements StpInterface {
         return service.getRoleList(loginId);
     }
 
-    public DefaultStpInterface(AuthorizationService service) {
+    public DefaultStpInterface(SecurityManagerService service) {
         this.service = service;
     }
 }

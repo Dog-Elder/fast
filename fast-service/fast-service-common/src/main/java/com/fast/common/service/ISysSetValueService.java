@@ -1,12 +1,12 @@
-package com.fast.core.service;
+package com.fast.common.service;
 
 
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.fast.core.entity.sys.SysSetValue;
-import com.fast.core.req.SysSetValueReq;
-import com.fast.core.vo.CustomSetValueVO;
-import com.fast.core.vo.SysSetValueVO;
+import com.fast.common.entity.sys.SysSetValue;
+import com.fast.common.req.SysSetValueReq;
+import com.fast.common.vo.CustomSetValueVO;
+import com.fast.common.vo.SysSetValueVO;
 
 import java.util.List;
 import java.util.Map;

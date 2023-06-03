@@ -1,12 +1,12 @@
-package com.fast.core.entity.sys;
+package com.fast.common.entity.sys;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fast.common.entity.verification.Qry;
+import com.fast.common.entity.verification.Save;
+import com.fast.common.entity.verification.Update;
 import com.fast.core.common.util.Com;
 import com.fast.core.common.validate.annotation.Display;
 import com.fast.core.mybatis.model.BaseVersionEntity;
-import com.fast.core.entity.verification.Qry;
-import com.fast.core.entity.verification.Save;
-import com.fast.core.entity.verification.Update;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.Accessors;

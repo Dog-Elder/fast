@@ -1,7 +1,7 @@
-package com.fast.core.dao;
+package com.fast.common.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.fast.core.entity.sys.SysSetValue;
+import com.fast.common.entity.sys.SysSetValue;
 
 import java.util.List;
 

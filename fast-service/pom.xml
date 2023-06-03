@@ -17,6 +17,5 @@
     <modules>
         <module>fast-service-common</module>
         <module>fast-service-manage</module>
-        <module>fast-service-core</module>
     </modules>
 </project>

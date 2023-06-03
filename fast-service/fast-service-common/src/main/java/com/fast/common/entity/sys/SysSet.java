@@ -1,4 +1,4 @@
-package com.fast.core.entity.sys;
+package com.fast.common.entity.sys;
 
 import com.fast.core.mybatis.model.BaseVersionEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;

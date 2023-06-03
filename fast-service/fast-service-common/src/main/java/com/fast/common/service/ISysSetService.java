@@ -1,8 +1,8 @@
-package com.fast.core.service;
+package com.fast.common.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.fast.core.entity.sys.SysSet;
+import com.fast.common.entity.sys.SysSet;
 
 import java.util.List;
 

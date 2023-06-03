@@ -1,4 +1,4 @@
-package com.fast.core.controller;
+package com.fast.common.controller;
 
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.page.TableDataInfo;

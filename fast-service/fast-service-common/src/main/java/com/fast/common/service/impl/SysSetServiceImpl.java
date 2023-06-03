@@ -1,14 +1,14 @@
-package com.fast.core.service.impl;
+package com.fast.common.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fast.common.dao.SysSetMapper;
+import com.fast.common.entity.sys.SysSet;
+import com.fast.common.service.ISysSetService;
 import com.fast.core.common.exception.CustomException;
 import com.fast.core.common.util.CUtil;
 import com.fast.core.common.util.SUtil;
-import com.fast.core.dao.SysSetMapper;
-import com.fast.core.entity.sys.SysSet;
-import com.fast.core.service.ISysSetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

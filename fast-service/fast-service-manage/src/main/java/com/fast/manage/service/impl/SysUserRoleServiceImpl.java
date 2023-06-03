@@ -6,6 +6,7 @@ import com.fast.core.common.util.SUtil;
 import com.fast.manage.dao.SysUserRoleMapper;
 import com.fast.manage.entity.SysUserRole;
 import com.fast.manage.service.ISysUserRoleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +20,10 @@ import java.util.List;
  * @date 2021-06-29
  */
 @Service
+@RequiredArgsConstructor
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements ISysUserRoleService
 {
-    @Autowired
-    private SysUserRoleMapper sysUserRoleMapper;
+    private final SysUserRoleMapper sysUserRoleMapper;
 
     /**
      * 查询用户和角色关联

@@ -1,11 +1,11 @@
-package com.fast.core.req;
+package com.fast.common.req;
 
 
+import com.fast.common.entity.sys.SysSetValue;
+import com.fast.common.entity.verification.Qry;
 import com.fast.core.common.constant.Constants;
 import com.fast.core.common.util.Com;
 import com.fast.core.common.validate.annotation.Display;
-import com.fast.core.entity.sys.SysSetValue;
-import com.fast.core.entity.verification.Qry;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

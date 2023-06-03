@@ -1,4 +1,4 @@
-package com.fast.core.vo;
+package com.fast.common.vo;
 
 import com.fast.core.common.validate.annotation.Display;
 import com.fasterxml.jackson.annotation.JsonInclude;

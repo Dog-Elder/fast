@@ -1,18 +1,22 @@
 package com.fast.core.safe.service;
 
+import com.fast.core.safe.entity.Authentication;
 import com.fast.core.safe.util.ManageUtil;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 
 /**
  * 授权服务
  **/
-public interface AuthorizationService {
+public interface SecurityManagerService {
     /**
      * 认证TYPE
      * 例如 {@link ManageUtil#TYPE}
      **/
     String getType();
+
+    void authenticate(Authentication request) throws AuthenticationException;
 
     /**
      * @param loginId: 用户登录id
