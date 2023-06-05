@@ -1,7 +1,7 @@
 package com.fast.manage.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.fast.manage.entity.SysAdmin;
+import com.fast.manage.entity.SysUser;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2021-06-18
  */
 @Mapper
-public interface SysAdminMapper extends BaseMapper<SysAdmin>
+public interface SysAdminMapper extends BaseMapper<SysUser>
 {
     /**
      * 查询后台用户
@@ -21,31 +21,31 @@ public interface SysAdminMapper extends BaseMapper<SysAdmin>
      * @param id 后台用户ID
      * @return 后台用户
      */
-    public SysAdmin selectSysAdminById(Long id);
+    public SysUser selectSysAdminById(Long id);
 
     /**
      * 查询后台用户列表
      *
-     * @param sysAdmin 后台用户
+     * @param sysUser 后台用户
      * @return 后台用户集合
      */
-    public List<SysAdmin> selectSysAdminList(SysAdmin sysAdmin);
+    public List<SysUser> selectSysAdminList(SysUser sysUser);
 
     /**
      * 新增后台用户
      *
-     * @param sysAdmin 后台用户
+     * @param sysUser 后台用户
      * @return 结果
      */
-    public int insertSysAdmin(SysAdmin sysAdmin);
+    public int insertSysAdmin(SysUser sysUser);
 
     /**
      * 修改后台用户
      *
-     * @param sysAdmin 后台用户
+     * @param sysUser 后台用户
      * @return 结果
      */
-    public int updateSysAdmin(SysAdmin sysAdmin);
+    public int updateSysAdmin(SysUser sysUser);
 
     /**
      * 删除后台用户

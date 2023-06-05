@@ -4,7 +4,7 @@ import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fast.core.common.util.SUtil;
 import com.fast.manage.dao.SysAdminMapper;
-import com.fast.manage.entity.SysAdmin;
+import com.fast.manage.entity.SysUser;
 import com.fast.manage.service.ISysAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2021-06-18
  */
 @Service
-public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysAdmin> implements ISysAdminService
+public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysUser> implements ISysAdminService
 {
     @Autowired
     private SysAdminMapper sysAdminMapper;
@@ -31,7 +31,7 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysAdmin> i
      * @return 后台用户
      */
     @Override
-    public SysAdmin selectById(Long id)
+    public SysUser selectById(Long id)
     {
         return super.getById(id);
     }
@@ -39,39 +39,39 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysAdmin> i
     /**
      * 查询后台用户列表
      *
-     * @param sysAdmin 后台用户
+     * @param sysUser 后台用户
      * @return 后台用户
      */
     @Override
-    public List<SysAdmin> list(SysAdmin sysAdmin)
+    public List<SysUser> list(SysUser sysUser)
     {
-        return sysAdminMapper.selectSysAdminList(sysAdmin);
+        return sysAdminMapper.selectSysAdminList(sysUser);
     }
 
     /**
      * 新增后台用户
      *
-     * @param sysAdmin 后台用户
+     * @param sysUser 后台用户
      * @return 结果
      */
     @Transactional
     @Override
-    public boolean save(SysAdmin sysAdmin)
+    public boolean save(SysUser sysUser)
     {
-        return super.save(sysAdmin);
+        return super.save(sysUser);
     }
 
     /**
      * 修改后台用户
      *
-     * @param sysAdmin 后台用户
+     * @param sysUser 后台用户
      * @return 结果
      */
     @Transactional
     @Override
-    public boolean update(SysAdmin sysAdmin)
+    public boolean update(SysUser sysUser)
     {
-        return super.updateById(sysAdmin);
+        return super.updateById(sysUser);
     }
 
     /**

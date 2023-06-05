@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @ToString(callSuper = true)
 @Accessors(chain = true)
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
-public class SysAdmin extends BaseVersionEntity {
+public class SysUser extends BaseVersionEntity {
     private static final long serialVersionUID = 1L;
 
     /**

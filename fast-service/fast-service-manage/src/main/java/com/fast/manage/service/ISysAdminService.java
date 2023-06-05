@@ -1,7 +1,7 @@
 package com.fast.manage.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.fast.manage.entity.SysAdmin;
+import com.fast.manage.entity.SysUser;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @author @Dog_Elder
  * @date 2021-06-18
  */
-public interface ISysAdminService extends IService<SysAdmin>
+public interface ISysAdminService extends IService<SysUser>
 {
     /**
      * 查询后台用户
@@ -19,31 +19,31 @@ public interface ISysAdminService extends IService<SysAdmin>
      * @param id 后台用户ID
      * @return 后台用户
      */
-    public SysAdmin selectById(Long id);
+    public SysUser selectById(Long id);
 
     /**
      * 查询后台用户列表
      *
-     * @param sysAdmin 后台用户
+     * @param sysUser 后台用户
      * @return 后台用户集合
      */
-    public List<SysAdmin> list(SysAdmin sysAdmin);
+    public List<SysUser> list(SysUser sysUser);
 
     /**
      * 新增后台用户
      *
-     * @param sysAdmin 后台用户
+     * @param sysUser 后台用户
      * @return 结果
      */
-    public boolean save(SysAdmin sysAdmin);
+    public boolean save(SysUser sysUser);
 
     /**
      * 修改后台用户
      *
-     * @param sysAdmin 后台用户
+     * @param sysUser 后台用户
      * @return 结果
      */
-    public boolean update(SysAdmin sysAdmin);
+    public boolean update(SysUser sysUser);
 
     /**
      * 真批量删除后台用户
