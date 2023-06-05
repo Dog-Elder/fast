@@ -11,7 +11,7 @@ import java.util.List;
  * @author @Dog_Elder
  * @date 2021-06-18
  */
-public interface ISysAdminService extends IService<SysUser>
+public interface ISysUserService extends IService<SysUser>
 {
     /**
      * 查询后台用户

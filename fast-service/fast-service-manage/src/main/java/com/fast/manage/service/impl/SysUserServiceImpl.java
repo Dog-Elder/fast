@@ -3,10 +3,9 @@ package com.fast.manage.service.impl;
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fast.core.common.util.SUtil;
-import com.fast.manage.dao.SysAdminMapper;
+import com.fast.manage.dao.SysUserMapper;
 import com.fast.manage.entity.SysUser;
-import com.fast.manage.service.ISysAdminService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fast.manage.service.ISysUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +18,8 @@ import java.util.List;
  * @date 2021-06-18
  */
 @Service
-public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysUser> implements ISysAdminService
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService
 {
-    @Autowired
-    private SysAdminMapper sysAdminMapper;
 
     /**
      * 查询后台用户
@@ -45,7 +42,7 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysUser> im
     @Override
     public List<SysUser> list(SysUser sysUser)
     {
-        return sysAdminMapper.selectSysAdminList(sysUser);
+        return baseMapper.selectSysAdminList(sysUser);
     }
 
     /**
@@ -84,7 +81,7 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysUser> im
     @Override
     public int deleteByIds(String ids)
     {
-        return sysAdminMapper.deleteSysAdminByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteSysAdminByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -96,7 +93,7 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysUser> im
     @Override
     public int deleteSysAdminById(Long id)
     {
-        return sysAdminMapper.deleteSysAdminById(id);
+        return baseMapper.deleteSysAdminById(id);
     }
 
     /**
