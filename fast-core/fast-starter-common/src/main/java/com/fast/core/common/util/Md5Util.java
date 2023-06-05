@@ -40,13 +40,13 @@ public class Md5Util {
      * 校验密码是否正确
      */
     public static boolean verifyPassword(String srcPass, String md5Pass) {
-        if (srcPass.length() > md5Pass.length()) {
-            throw new CustomException("参数异位");
-        }
-        if (com.fast.core.common.util.SUtil.isEmpty(srcPass) || SUtil.isEmpty(md5Pass)) {
-            throw new CustomException("密码错误");
-        }
         try {
+            if (srcPass.length() > md5Pass.length()) {
+                throw new CustomException("参数异位");
+            }
+            if (com.fast.core.common.util.SUtil.isEmpty(srcPass) || SUtil.isEmpty(md5Pass)) {
+                throw new CustomException("密码错误");
+            }
             char[] cs1 = new char[32];
             char[] cs2 = new char[16];
             for (int i = 0; i < 48; i += 3) {

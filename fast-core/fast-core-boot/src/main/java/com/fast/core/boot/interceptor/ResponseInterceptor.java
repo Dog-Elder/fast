@@ -37,6 +37,7 @@ public class ResponseInterceptor implements ResponseBodyAdvice<Object> {
         List<Object> afterReqArgs = new ArrayList<>();
         afterReqLog.append("\n");
         afterReqLog.append("===================响应 Start=================== \n");
+        afterReqLog.append("\n");
         try {
             String responseBody = objectMapper.writeValueAsString(body);
             afterReqLog.append("接口响应参数 {} \n");
@@ -45,6 +46,7 @@ public class ResponseInterceptor implements ResponseBodyAdvice<Object> {
             afterReqLog.append("转换响应参数失败:{}");
             afterReqArgs.add(e);
         }
+        afterReqLog.append("\n");
         afterReqLog.append("===================响应 End=================== \n");
 
         log.info(afterReqLog.toString(), afterReqArgs.toArray());
