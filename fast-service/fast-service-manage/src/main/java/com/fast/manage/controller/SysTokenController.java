@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.naming.AuthenticationException;
 
 /**
+ * 安全服务
+ *
  * @Program: fast
  * @Description: 服务登录
  * @Author: 黄嘉浩
@@ -27,6 +29,14 @@ import javax.naming.AuthenticationException;
 public class SysTokenController {
     private final SecurityManagerService service;
 
+    /**
+     * 登录接口
+     *
+     * @param req:
+     * @Author: 黄嘉浩
+     * @Date: 2023/6/5 20:23
+     * @Return: com.fast.core.common.domain.domain.R
+     **/
     @PostMapping("/login")
     public R login(@RequestBody UserPasswordAuthentication req) {
         try {
