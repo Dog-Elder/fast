@@ -1,6 +1,6 @@
 package com.fast.manage.service.impl;
 
-import com.fast.manage.service.ISysAdminService;
+import com.fast.manage.service.ISysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class TokenServiceImpl  {
-    private final ISysAdminService adminService;
+    private final ISysUserService adminService;
 
 
 }
