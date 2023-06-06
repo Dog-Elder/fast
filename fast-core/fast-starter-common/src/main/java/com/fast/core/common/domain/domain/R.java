@@ -2,6 +2,7 @@ package com.fast.core.common.domain.domain;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 操作消息提醒
@@ -13,7 +14,7 @@ import java.io.Serializable;
  *
  * @param <T> 数据类型
  */
-public class R<T extends Serializable> {
+public class R<T> implements Serializable{
     private int code;
     private String msg;
     private T data;
@@ -60,44 +61,54 @@ public class R<T extends Serializable> {
         this.code = type.value();
         this.msg = msg;
     }
+
     public R(Type type) {
         this.code = type.value();
         this.msg = type.description();
     }
 
     public static <T extends Serializable> R<T> success() {
-        return R.success("操作成功", null);
+        return new R<>(Type.SUCCESS);
     }
 
     public static <T extends Serializable> R<T> success(String msg) {
-        return R.success(msg, null);
+        return new R<>(Type.SUCCESS, msg);
     }
 
     public static <T extends Serializable> R<T> success(T data) {
-        return R.success("操作成功", data);
+        return new R<>(Type.SUCCESS, "操作成功", data);
     }
 
     public static <T extends Serializable> R<T> success(String msg, T data) {
         return new R<>(Type.SUCCESS, msg, data);
     }
 
+    public static <T extends Serializable> R<List<T>> success(List<T> data) {
+        return new R<>(Type.SUCCESS, "操作成功", data);
+    }
+
+    public static <T extends Serializable> R<List<T>> success(String msg, List<T> data) {
+        return new R<>(Type.SUCCESS, msg, data);
+    }
+
     public static <T extends Serializable> R<T> error() {
-        return R.error("操作失败", null);
+        return new R<>(Type.SERVER_ERROR, "操作失败");
     }
 
     public static <T extends Serializable> R<T> errorVersion() {
-        return R.error("操作失败,版本不一致!", null);
+        return new R<>(Type.SERVER_ERROR, "操作失败,版本不一致!");
     }
 
     public static <T extends Serializable> R<T> error(String msg) {
-        return R.error(msg, null);
+        return new R<>(Type.SERVER_ERROR, msg);
     }
 
     public static <T extends Serializable> R<T> error(Type type) {
         return new R<>(type);
     }
-    public static <T extends Serializable> R<T> error(Type type,String msg) {
-        return new R<>(type,msg);
+
+    public static <T extends Serializable> R<T> error(Type type, String msg) {
+        return new R<>(type, msg);
     }
 
     public static <T extends Serializable> R<T> error(String msg, T data) {
