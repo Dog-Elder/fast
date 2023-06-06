@@ -1,0 +1,137 @@
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 8092
+  servlet:
+    # 应用的访问路径
+    context-path: /
+    multipart:
+      #设置文件上传最大大小为20MB
+      max-file-size: 20MB
+      #设置请求最大大小为20MB
+      max-request-size: 20MB
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # tomcat最大线程数，默认为200
+    max-threads: 800
+    # Tomcat启动初始化的线程数，默认值25
+    min-spare-threads: 30
+    #设置内置Tomcat请求大小为20MB
+    max-http-form-post-size: 20MB
+
+fast:
+  apply-name: manage
+
+attach:
+  profile-win: D:/fast/manage
+  profile-linux: /doc/fast/manage
+
+
+spring:
+  config:
+    import:
+      # 能够正常加载只是识别不到
+      - classpath:/service-common-application.yml
+  # 开发环境配置
+  redis:
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1
+    host: fast.com
+    port: 6379
+    password: 123456
+    database: 0
+    timeout: 10000
+
+
+  # 数据源配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      # 主库数据源
+      #      master:
+      url: jdbc:mysql://fast.com:3336/fast?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      username: root
+      password: 27ac1ca76c1037366c17852e01a24bb7432ef4c
+
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
+      additional-paths: src/main/java #重启目录
+      exclude: templates/** #classpath目录下的templates文件夹内容修改不重启
+
+
+
+############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
+sa-token:
+  # token名称 (同时也是cookie名称)
+  token-name: Fast-Token
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 2592000
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: true
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: false
+  # 不答应启动LOGO
+  isPrint: false
+
+
+
+  # mybatis-plus配置
+#  mybatis-plus:
+#    # Mapper.xml 文件位置 Maven 多模块项目的扫描路径需以 classpath*: 开头
+#    mapperLocations:
+#      - classpath*:mapper/**/*Mapper.xml
+#      - classpath*:mapper/*Mapper.xml
+#      - classpath*:mapper.sys/*Mapper.xml
+#    #  #MyBaits 别名包扫描路径，通过该属性可以给包中的类注册别名 实体扫描，多个package用逗号或者分号分隔
+#    typeAliasesPackage: com.fast.*.entity.*
+#    #  #通过父类（或实现接口）的方式来限定扫描实体
+#    typeAliasesSuperType: com.fast.core.mybatis.model.BaseEntity
+#
+#    #  #启动时是否检查 MyBatis XML 文件的存在，默认不检查 仅限spring boot 使用
+#    checkConfigLocation: true
+#
+#    configuration: # MyBatis 原生支持的配置
+#      # 是否开启自动驼峰命名规则（camel case）映射
+#      mapUnderscoreToCamelCase: true
+#      # 配置JdbcTypeForNull, oracle数据库必须配置
+#      jdbc-type-for-null: null
+#    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    global-config: # 全局策略配置
+#      # 是否控制台 print mybatis-plus 的 LOGO
+#      banner: false
+#      db-config:
+#        # id类型
+#        id-type: auto
+#        # 表名是否使用下划线命名，默认数据库表使用下划线命名
+#        table-underline: true
+#        #是否开启大写命名，默认不开启
+#        #      capital-mode: false
+#        #      #逻辑未删除值,(逻辑删除下有效)
+#        logic-not-delete-value: 0
+#        #      #逻辑已删除值,(逻辑删除下有效) 需要注入逻辑策略LogicSqlInjector 以@Bean方式注入
+#        logic-delete-value: 1
+#
+#
+#  # PageHelper分页插件
+#  pagehelper:
+#    helperDialect: mysql
+#    reasonable: true
+#    supportMethodsArguments: true
+#    params: count=countSql
+
+
