@@ -3,6 +3,7 @@ package com.fast.manage.service.impl;
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fast.core.util.FastRedis;
 import com.fast.manage.dao.SysRoleMapper;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
@@ -11,6 +12,7 @@ import com.fast.manage.entity.SysUserRole;
 import com.fast.manage.service.ISysRoleService;
 import com.fast.manage.service.ISysUserRoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements ISysRoleService {
     private final ISysUserRoleService userRoleService;
+    private final FastRedis fastRedis;
 
     /**
      * 查询角色
@@ -111,4 +114,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return qryRolesByUser(id, roleType).stream().map(SysRole::getKey).collect(Collectors.toSet());
     }
 
+    @Override
+    @Cacheable( keyGenerator = "methodKeyGenerator")
+    public List<String> qryPermissionsById(String userId) {
+//        fastRedis.get()
+
+        return null;
+    }
 }

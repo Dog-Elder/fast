@@ -43,8 +43,9 @@ public class ManageRealms implements SecurityManagerService {
 
     @Override
     public List<String> getPermissionList(Object loginId) {
-
-        return null;
+        List<String> list = new ArrayList<>();
+        list.add("*");
+        return list;
     }
 
     @Override

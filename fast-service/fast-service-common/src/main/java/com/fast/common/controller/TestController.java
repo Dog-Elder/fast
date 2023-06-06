@@ -10,6 +10,7 @@ import com.fast.core.safe.annotation.manage.ManageCheckPermission;
 import com.fast.core.util.FastRedis;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class TestController extends BaseController {
     @GetMapping
     @RequestMapping("/set")
     @ManageCheckPermission("user.add")
+    @Cacheable( keyGenerator = "methodKeyGenerator")
     public R<TableDataInfo> list(SysSet sysSet) {
         startPage();
         List<SysSet> list = sysSetService.list(sysSet);

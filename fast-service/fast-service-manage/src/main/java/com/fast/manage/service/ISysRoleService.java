@@ -79,4 +79,12 @@ public interface ISysRoleService extends IService<SysRole>
      * 根据用户id查询该用户下的所有角色表示(key)
      **/
     public Set<String> qryRoleKeysByUser(Long id, Integer roleType);
+
+    /**
+     * 根据用户id查询权限
+     *
+     * @param userId:用户id
+     * @return: java.util.List<java.lang.String>
+     **/
+    List<String> qryPermissionsById(String userId);
 }
