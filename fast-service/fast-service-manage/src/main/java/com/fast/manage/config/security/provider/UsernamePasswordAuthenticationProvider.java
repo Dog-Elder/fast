@@ -1,6 +1,8 @@
 package com.fast.manage.config.security.provider;
 
+import cn.dev33.satoken.stp.SaLoginConfig;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fast.common.entity.base.User;
 import com.fast.common.service.AuthenticationProvider;
 import com.fast.core.common.util.Md5Util;
 import com.fast.core.common.util.SUtil;
@@ -37,7 +39,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
             throw new AuthenticationException("用户名或密码不能为空");
         }
         //TODO 作者:黄嘉浩   待办 密码加密
-        SysUser user = userService.getOne(new QueryWrapper<>(new SysUser().setUsername(username)));
+        SysUser user = userService.getOne(new QueryWrapper<>((SysUser) new SysUser().setUsername(username)));
         if (Util.isNotNull(user) && Md5Util.verifyPassword(password, user.getPassword())) {
             //TODO 作者:黄嘉浩 后期使用编码 先使用id
             ManageUtil.login(user.getId());

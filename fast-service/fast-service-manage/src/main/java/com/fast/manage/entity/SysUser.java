@@ -1,5 +1,6 @@
 package com.fast.manage.entity;
 
+import com.fast.common.entity.base.User;
 import com.fast.core.common.util.Util;
 import com.fast.core.mybatis.model.BaseVersionEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -20,49 +21,9 @@ import java.time.LocalDateTime;
 @ToString(callSuper = true)
 @Accessors(chain = true)
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
-public class SysUser extends BaseVersionEntity {
+public class SysUser extends User {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
-    private Long id;
-    /**
-     * 父级id
-     */
-    private Long parentId;
-    /**
-     * 用户名
-     */
-    private String username;
-    /**
-     * 密码
-     */
-    private String password;
-    /**
-     * 昵称
-     */
-    private String nickname;
-    /**
-     * 邮箱
-     */
-    private String email;
-    /**
-     * 姓名
-     */
-    private String realName;
-    /**
-     * 性别
-     */
-    private String sex;
-    /**
-     * 手机号
-     */
-    private String phoneNumber;
-    /**
-     * 头像URL
-     */
-    private String headPortrait;
     /**
      * 管理员 1 : 是
      */

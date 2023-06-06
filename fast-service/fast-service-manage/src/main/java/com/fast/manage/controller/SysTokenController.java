@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.naming.AuthenticationException;
 
 /**
- * 安全服务
+ * 认证授权
  *
  * @Program: fast
  * @Description: 服务登录
