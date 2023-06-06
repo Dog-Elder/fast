@@ -29,7 +29,19 @@ public class ManageRealms implements SecurityManagerService {
     }
 
     @Override
+    public void authenticate(Authentication request) throws AuthenticationException {
+        for (AuthenticationProvider provider : authenticationProviders) {
+            if (provider.supports(request.getClass())) {
+                provider.authenticate(request);
+                return;
+            }
+        }
+        throw new AuthenticationException("不支持的身份验证类型");
+    }
+
+    @Override
     public List<String> getPermissionList(Object loginId) {
+
         return null;
     }
 
@@ -38,14 +50,4 @@ public class ManageRealms implements SecurityManagerService {
         return null;
     }
 
-    @Override
-    public void authenticate(Authentication request) throws AuthenticationException {
-        for (AuthenticationProvider provider : authenticationProviders) {
-            if (provider.supports(request.getClass())) {
-                provider.authenticate(request);
-                return;
-            }
-        }
-        throw new AuthenticationException("Unsupported authentication type");
-    }
 }

@@ -87,6 +87,7 @@ sa-token:
   is-log: false
   # 不答应启动LOGO
   isPrint: false
-
+  # jwt秘钥
+  jwt-secret-key: aaaaaaaaaaasdadasda
 
 
