@@ -13,29 +13,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 菜单权限Controller
+ * 菜单
  *
  * @author @Dog_Elder
  * @date 2021-06-29
  */
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/manage-api/menu")
 public class SysMenuController extends WebBaseController {
-    private String prefix = "xxxxx/menu";
 
     private final ISysMenuService sysMenuService;
 
-    @GetMapping()
-    public String menu() {
-        return prefix + "/menu";
-    }
 
     /**
      * 查询菜单权限列表
      */
     @PostMapping("/list")
-    @ResponseBody
     public TableDataInfo list(SysMenu sysMenu) {
         startPage();
         List<SysMenu> list = sysMenuService.list(sysMenu);
@@ -44,37 +38,18 @@ public class SysMenuController extends WebBaseController {
 
 
     /**
-     * 新增菜单权限
-     */
-    @GetMapping("/add")
-    public String add() {
-        return prefix + "/add";
-    }
-
-    /**
      * 新增保存菜单权限
      */
     @PostMapping("/add")
-    @ResponseBody
     public R<Boolean> addSave(SysMenu sysMenu) {
         return toAjax(sysMenuService.save(sysMenu));
     }
 
-    /**
-     * 修改菜单权限
-     */
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
-        SysMenu sysMenu = sysMenuService.selectById(id);
-        mmap.put("sysMenu", sysMenu);
-        return prefix + "/edit";
-    }
 
     /**
      * 修改保存菜单权限
      */
     @PostMapping("/edit")
-    @ResponseBody
     public R editSave(SysMenu sysMenu) {
         return toAjax(sysMenuService.update(sysMenu));
     }
@@ -83,7 +58,6 @@ public class SysMenuController extends WebBaseController {
      * 真批量删除菜单权限
      */
     @PostMapping("/remove")
-    @ResponseBody
     public R remove(String ids) {
         return toAjax(sysMenuService.deleteByIds(ids));
     }
@@ -92,7 +66,6 @@ public class SysMenuController extends WebBaseController {
      * 逻辑删除菜单权限
      */
     @PostMapping("/logic-remove")
-    @ResponseBody
     public R logicRemove(String ids) {
         return toAjax(sysMenuService.logicRemove(ids));
     }

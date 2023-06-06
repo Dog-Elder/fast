@@ -64,7 +64,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Transactional
     @Override
     public boolean save(SysMenu sysMenu) {
-        return save(sysMenu);
+        return super.save(sysMenu);
     }
 
     /**

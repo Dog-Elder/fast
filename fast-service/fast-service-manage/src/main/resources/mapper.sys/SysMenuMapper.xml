@@ -31,7 +31,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysMenuList" parameterType="com.fast.manage.entity.SysMenu" resultMap="SysMenuResult">
         <include refid="selectSysMenuVo"/>
         <where>
-            del_flag = '0'
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="parentId != null "> and parent_id = #{parentId}</if>
             <if test="orderNum != null "> and order_num = #{orderNum}</if>
