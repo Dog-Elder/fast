@@ -22,6 +22,10 @@ import org.springframework.context.annotation.ComponentScan;
 public class ManageApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManageApplication.class, args);
-        log.info("项目启动完成!");
+        log.info(
+                "/\\_/\\\n" +
+                "                                                                                                ____/ o o \\\n" +
+                "                                                                                              /~____  =-= /\n" +
+                "                                                                                             (______)__m_m)");
     }
 }

@@ -1,5 +1,6 @@
 package com.fast.manage.config.security.realms;
 
+import cn.hutool.jwt.JWT;
 import com.fast.core.safe.entity.Authentication;
 import com.fast.common.service.AuthenticationProvider;
 import com.fast.core.safe.service.SecurityManagerService;
@@ -7,6 +8,7 @@ import com.fast.core.safe.util.ManageUtil;
 import org.springframework.stereotype.Component;
 
 import javax.naming.AuthenticationException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -42,7 +42,7 @@ public class TestController extends BaseController {
      */
     @GetMapping
     @RequestMapping("/set")
-    @SaCheckPermission("user.add")
+    @ManageCheckPermission("user.add")
     public R<TableDataInfo> list(SysSet sysSet) {
         startPage();
         List<SysSet> list = sysSetService.list(sysSet);
