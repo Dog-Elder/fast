@@ -1,8 +1,11 @@
 package com.fast.core.mybatis.service;
 
+import com.fast.core.common.util.Util;
 import com.fast.core.mybatis.annotation.AutoFill;
 import com.fast.core.mybatis.config.MyMetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
+
+import java.time.LocalDateTime;
 
 /**
  * Mybatis-plus对象处理服务
@@ -24,4 +27,36 @@ public interface MPFillService {
     void insertFill(MyMetaObjectHandler handler, MetaObject metaObject);
 
     void updateFill(MyMetaObjectHandler handler, MetaObject metaObject);
+
+
+    /**
+     * 默认 插入填充
+     **/
+    default void defaultInsertFill(MyMetaObjectHandler handler, MetaObject metaObject) {
+        AutoFill autoFill = getAutoFill(metaObject);
+        if (Util.isNull(autoFill) || autoFill.allClose()) {
+            return;
+        }
+        if (autoFill.createTime()) {
+            handler.setFieldValByName("createTime", LocalDateTime.now(), metaObject);
+        }
+        if (autoFill.updateTime()) {
+            handler.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
+        }
+        if (autoFill.defaultVersion()) {
+            handler.setFieldValByName("version", 1, metaObject);
+        }
+    }
+    /**
+     * 默认 修改填充
+     **/
+    default void defaultUpdateFill(MyMetaObjectHandler handler, MetaObject metaObject) {
+        AutoFill autoFill = getAutoFill(metaObject);
+        if (Util.isNull(autoFill) || autoFill.allClose()) {
+            return;
+        }
+        if (autoFill.updateTime()) {
+            handler.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
+        }
+    }
 }
