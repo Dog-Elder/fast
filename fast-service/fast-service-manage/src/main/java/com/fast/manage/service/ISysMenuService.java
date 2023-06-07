@@ -60,7 +60,7 @@ public interface ISysMenuService extends IService<SysMenu>
      * @param id 菜单权限ID
      * @return 结果
      */
-    public int deleteSysMenuById(Long id);
+    public int deleteSysMenuById(String id);
 
     /**
      * 菜单权限逻辑删除
@@ -70,11 +70,4 @@ public interface ISysMenuService extends IService<SysMenu>
      */
     public boolean logicRemove(String ids);
 
-    /**
-     * 根据用户ID查询权限
-     *
-     * @param userId 用户ID
-     * @return 权限列表
-     */
-    public Set<String> qryPermsByUserId(Long userId, Integer userRoleType);
 }

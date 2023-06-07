@@ -7,7 +7,6 @@ import com.fast.manage.dao.SysUserRoleMapper;
 import com.fast.manage.entity.SysUserRole;
 import com.fast.manage.service.ISysUserRoleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements ISysUserRoleService
 {
-    private final SysUserRoleMapper sysUserRoleMapper;
 
     /**
      * 查询用户和角色关联
@@ -34,7 +32,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
     @Override
     public SysUserRole selectById(Long userId)
     {
-        return sysUserRoleMapper.selectSysUserRoleById(userId);
+        return baseMapper.selectSysUserRoleById(userId);
     }
 
     /**
@@ -46,7 +44,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
     @Override
     public List<SysUserRole> list(SysUserRole sysUserRole)
     {
-        return sysUserRoleMapper.selectSysUserRoleList(sysUserRole);
+        return baseMapper.selectSysUserRoleList(sysUserRole);
     }
 
 
@@ -74,7 +72,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
     @Override
     public int deleteByIds(String ids)
     {
-        return sysUserRoleMapper.deleteSysUserRoleByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteSysUserRoleByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -86,7 +84,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
     @Override
     public int deleteSysUserRoleById(Long userId)
     {
-        return sysUserRoleMapper.deleteSysUserRoleById(userId);
+        return baseMapper.deleteSysUserRoleById(userId);
     }
 
     /**

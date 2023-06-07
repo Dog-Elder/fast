@@ -20,7 +20,7 @@ public interface ISysRoleService extends IService<SysRole>
      * @param id 角色ID
      * @return 角色
      */
-    public SysRole selectById(Long id);
+    public SysRole selectById(String id);
 
     /**
      * 查询角色列表
@@ -46,7 +46,7 @@ public interface ISysRoleService extends IService<SysRole>
      * @param id 角色ID
      * @return 结果
      */
-    public int deleteSysRoleById(Long id);
+    public int deleteSysRoleById(String id);
 
     /**
      * 角色逻辑删除
@@ -63,7 +63,7 @@ public interface ISysRoleService extends IService<SysRole>
      * @param id : 用户id
      * @return: 角色集合
      **/
-    public Set<SysRole> qryRolesByUser(Long id, Integer roleType);
+    public Set<SysRole> qryRolesByUser(String id, Integer roleType);
 
     /**
      * @Description: 根据用户id,类型获取角色ids
@@ -73,12 +73,12 @@ public interface ISysRoleService extends IService<SysRole>
      * @param roleType: 用户类型
      * @return: RoleIds
      **/
-    public Set<Long> qryRoleIdsByUser(Long id,Integer roleType);
+    public Set<String> qryRoleIdsByUser(String id,Integer roleType);
 
     /**
      * 根据用户id查询该用户下的所有角色表示(key)
      **/
-    public Set<String> qryRoleKeysByUser(Long id, Integer roleType);
+    public Set<String> qryRoleKeysByUser(String id, Integer roleType);
 
     /**
      * 根据用户id查询权限
@@ -86,5 +86,7 @@ public interface ISysRoleService extends IService<SysRole>
      * @param userId:用户id
      * @return: java.util.List<java.lang.String>
      **/
-    List<String> qryPermissionsById(String userId);
+    List<String> qryPermsById(String userId);
+
+    List<String> qryRoleById(String userId);
 }

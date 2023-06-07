@@ -27,11 +27,9 @@ import java.util.stream.Collectors;
  * @Date: 2021-06-29
  */
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements ISysMenuService {
-    private final SysMenuMapper sysMenuMapper;
-    private final ISysRoleService roleService;
-    private final ISysRoleMenuService roleMenuService;
 
     /**
      * 查询菜单权限
@@ -41,7 +39,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public SysMenu selectById(Long id) {
-        return sysMenuMapper.selectSysMenuById(id);
+        return baseMapper.selectSysMenuById(id);
     }
 
     /**
@@ -52,7 +50,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public List<SysMenu> list(SysMenu sysMenu) {
-        return sysMenuMapper.selectSysMenuList(sysMenu);
+        return baseMapper.selectSysMenuList(sysMenu);
     }
 
     /**
@@ -88,7 +86,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Transactional
     @Override
     public int deleteByIds(String ids) {
-        return sysMenuMapper.deleteSysMenuByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteSysMenuByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -98,8 +96,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return 结果
      */
     @Override
-    public int deleteSysMenuById(Long id) {
-        return sysMenuMapper.deleteSysMenuById(id);
+    public int deleteSysMenuById(String id) {
+        return baseMapper.deleteSysMenuById(id);
     }
 
     /**
@@ -111,28 +109,5 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public boolean logicRemove(String ids) {
         return removeByIds(SUtil.splitToStrList(ids));
-    }
-
-    /**
-     * 根据用户ID查询权限
-     *
-     * @param userId 用户ID
-     * @return 权限列表
-     */
-    @Override
-    public Set<String> qryPermsByUserId(Long userId, Integer userRoleType) {
-        Set<Long> roleIds = roleService.qryRoleIdsByUser(userId, userRoleType);
-        Set<SysMenu> menus = qryMenusByRoleIds(roleIds);
-        return menus.stream().map(SysMenu::getPerms).collect(Collectors.toSet());
-    }
-
-    /**
-     * 根基角色id 查询对应的 菜单
-     **/
-    public Set<SysMenu> qryMenusByRoleIds(Set<Long> roleIds) {
-        Set<Long> menuIds = roleMenuService.list(new LambdaQueryWrapper<SysRoleMenu>()
-                .in(SysRoleMenu::getRoleId, roleIds)).stream().map(SysRoleMenu::getMenuId).collect(Collectors.toSet());
-        return new HashSet<>(list(new LambdaQueryWrapper<SysMenu>()
-                .in(CUtil.isNotEmpty(menuIds), SysMenu::getId, menuIds)));
     }
 }

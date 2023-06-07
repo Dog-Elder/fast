@@ -26,11 +26,11 @@ public class SysRoleMenu extends BaseVersionEntity {
     /**
      * 角色ID
      */
-    private Long roleId;
+    private String roleId;
     /**
      * 菜单ID
      */
-    private Long menuId;
+    private String menuId;
     /**
      * 用户类型类型
      */

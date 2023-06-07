@@ -25,9 +25,9 @@ public class SysUserRole extends BaseVersionEntity
     private static final long serialVersionUID = 1L;
 
     /** 用户ID */
-    private Long userId;
+    private String userId;
     /** 角色ID */
-    private Long roleId;
+    private String roleId;
     /** 类型（0代表后台 2代表API） */
     private String type;
 

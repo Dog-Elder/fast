@@ -88,7 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteSysRoleById" parameterType="Long">
+    <delete id="deleteSysRoleById" parameterType="String">
         delete from sys_role where id = #{id}
     </delete>
 

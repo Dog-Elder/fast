@@ -27,7 +27,7 @@ public class SysRole extends BaseVersionEntity {
     /**
      * 角色ID
      */
-    private Long id;
+    private String id;
     /**
      * 角色名称
      */

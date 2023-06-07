@@ -113,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteSysMenuById" parameterType="Long">
+    <delete id="deleteSysMenuById" parameterType="String">
         delete from sys_menu where id = #{id}
     </delete>
 

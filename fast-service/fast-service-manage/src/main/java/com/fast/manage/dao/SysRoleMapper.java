@@ -19,7 +19,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole>
      * @param id 角色ID
      * @return 角色
      */
-    public SysRole selectSysRoleById(Long id);
+    public SysRole selectSysRoleById(String id);
 
     /**
      * 查询角色列表
@@ -51,7 +51,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole>
      * @param id 角色ID
      * @return 结果
      */
-    public int deleteSysRoleById(Long id);
+    public int deleteSysRoleById(String id);
 
     /**
      * 批量删除角色

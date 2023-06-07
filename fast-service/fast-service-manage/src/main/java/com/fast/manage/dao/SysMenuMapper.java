@@ -51,7 +51,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu>
      * @param id 菜单权限ID
      * @return 结果
      */
-    public int deleteSysMenuById(Long id);
+    public int deleteSysMenuById(String id);
 
     /**
      * 批量删除菜单权限
