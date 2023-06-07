@@ -1,6 +1,7 @@
 package com.fast.manage.config.security.provider;
 
 import cn.dev33.satoken.stp.SaLoginConfig;
+import cn.dev33.satoken.stp.SaLoginModel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fast.common.entity.base.User;
 import com.fast.common.service.AuthenticationProvider;
@@ -42,7 +43,8 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         SysUser user = userService.getOne(new QueryWrapper<>((SysUser) new SysUser().setUsername(username)));
         if (Util.isNotNull(user) && Md5Util.verifyPassword(password, user.getPassword())) {
             //TODO 作者:黄嘉浩 后期使用编码 先使用id
-            ManageUtil.login(user.getId());
+            ManageUtil.login(user.getId(), SaLoginModel.create()
+                    .setExtra("administrator",user.isGod()));
         } else {
             // 认证失败
             throw new AuthenticationException("用户名或密码无效");

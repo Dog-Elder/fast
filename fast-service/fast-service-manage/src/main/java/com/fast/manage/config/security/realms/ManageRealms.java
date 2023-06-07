@@ -1,14 +1,14 @@
 package com.fast.manage.config.security.realms;
 
-import cn.hutool.jwt.JWT;
+import cn.hutool.core.collection.ListUtil;
 import com.fast.core.safe.entity.Authentication;
 import com.fast.common.service.AuthenticationProvider;
 import com.fast.core.safe.service.SecurityManagerService;
 import com.fast.core.safe.util.ManageUtil;
+import com.fast.manage.service.ISysRoleService;
 import org.springframework.stereotype.Component;
 
 import javax.naming.AuthenticationException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,10 +19,13 @@ import java.util.List;
  **/
 @Component
 public class ManageRealms implements SecurityManagerService {
-    private List<AuthenticationProvider> authenticationProviders;
 
-    public ManageRealms(List<AuthenticationProvider> authenticationProviders) {
+    private List<AuthenticationProvider> authenticationProviders;
+    private final ISysRoleService roleService;
+
+    public ManageRealms(List<AuthenticationProvider> authenticationProviders, ISysRoleService roleService) {
         this.authenticationProviders = authenticationProviders;
+        this.roleService = roleService;
     }
 
     @Override
@@ -43,14 +46,20 @@ public class ManageRealms implements SecurityManagerService {
 
     @Override
     public List<String> getPermissionList(Object loginId) {
-        List<String> list = new ArrayList<>();
-        list.add("*");
-        return list;
+        Object administrator = ManageUtil.getExtra("administrator");
+        if ((Boolean) administrator) {
+            return ListUtil.of("*");
+        }
+        return roleService.qryPermsById(loginId.toString());
     }
 
     @Override
     public List<String> getRoleList(Object loginId) {
-        return null;
+        Object administrator = ManageUtil.getExtra("administrator");
+        if ((Boolean) administrator) {
+            return ListUtil.of("*");
+        }
+        return roleService.qryRoleById(loginId.toString());
     }
 
 }
