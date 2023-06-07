@@ -16,7 +16,7 @@ import com.fast.common.service.ISysSetValueService;
 import com.fast.common.vo.CustomSetValueVO;
 import com.fast.common.vo.SysSetValueVO;
 import com.fast.core.common.constant.Constants;
-import com.fast.core.common.constant.RedisConstant;
+import com.fast.common.constant.cache.CacheConstant;
 import com.fast.core.common.exception.CustomException;
 import com.fast.core.common.util.CUtil;
 import com.fast.core.common.util.PageUtils;
@@ -42,7 +42,6 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSetValue> implements ISysSetValueService {
-    private final SysSetValueMapper sysSetValueMapper;
 
     private final ISysSetService sysSetService;
 
@@ -57,7 +56,7 @@ public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSe
     @Override
     @Transactional()
     public SysSetValue selectById(Long id) {
-        return sysSetValueMapper.selectSysSetValueById(id);
+        return baseMapper.selectSysSetValueById(id);
     }
 
     /**
@@ -90,7 +89,7 @@ public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSe
             return vo;
         }
         //找到关联父级值集
-        List<SysSetValue> parentSetValues = new LambdaQueryChainWrapper<>(sysSetValueMapper).eq(SysSetValue::getSetCode, set.getSetParentCode()).in(SysSetValue::getSetValueKey, setRelationKeys).list();
+        List<SysSetValue> parentSetValues = new LambdaQueryChainWrapper<>(baseMapper).eq(SysSetValue::getSetCode, set.getSetParentCode()).in(SysSetValue::getSetValueKey, setRelationKeys).list();
         Map<String, SysSetValue> parentSetValueMap = CUtil.toMap(parentSetValues, SysSetValue::getSetValueKey);
         vo.forEach(ele -> {
             if (SUtil.isEmpty(ele.getSetRelationKey())) {
@@ -122,7 +121,7 @@ public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSe
         //获取有效的值集编码
         Set setCodes = CUtil.getPropertySet(validSets.stream().filter(Objects::nonNull), SysSet::getSetCode);
         //只筛选有效的值集值
-        List<SysSetValue> setValues = new LambdaQueryChainWrapper<>(sysSetValueMapper)
+        List<SysSetValue> setValues = new LambdaQueryChainWrapper<>(baseMapper)
                 .in(SysSetValue::getSetCode, setCodes)
                 .list();
         List<CustomSetValueVO> vos = CUtil.copy(setValues, CustomSetValueVO.class);
@@ -152,7 +151,7 @@ public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSe
         if (Constants.Y.equals(req.getDb())) {
             PageUtils.startPage();
         }
-        List<SysSetValue> list = new LambdaQueryChainWrapper<>(sysSetValueMapper)
+        List<SysSetValue> list = new LambdaQueryChainWrapper<>(baseMapper)
                 .eq(SysSetValue::getSetCode, req.getSetCode())
                 .eq(SUtil.isNotBlank(req.getSetRelationKey()), SysSetValue::getSetRelationKey, req.getSetRelationKey())
                 .eq(SUtil.isNotBlank(req.getSetValueKey()), SysSetValue::getSetValueKey, req.getSetValueKey())
@@ -166,7 +165,7 @@ public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSe
         //获取上级值集值key
         List<String> parentKeys = CUtil.getPropertyList(vos.stream().filter(ele -> SUtil.isNotBlank(ele.getSetRelationKey())), CustomSetValueVO::getSetRelationKey);
         //查询上级值集值
-        List<SysSetValue> parentValues = new LambdaQueryChainWrapper<>(sysSetValueMapper)
+        List<SysSetValue> parentValues = new LambdaQueryChainWrapper<>(baseMapper)
                 .eq(SysSetValue::getSetCode, set.getSetParentCode())
                 .in(CUtil.isNotEmpty(parentKeys), SysSetValue::getSetValueKey, parentKeys)
                 .list();
@@ -191,7 +190,7 @@ public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSe
             return null;
         }
         //查询缓存
-        String jsonArrayValue = redis.getHash(RedisConstant.SetValue._IN, req.getSetCode());
+        String jsonArrayValue = redis.getHash(CacheConstant.SetValue._IN, req.getSetCode());
         if (SUtil.isNotBlank(jsonArrayValue)) {
             JSONArray jsonArray = JSONUtil.parseArray(jsonArrayValue);
             List<CustomSetValueVO> customSetValueVOS = JSONUtil.toList(jsonArray, CustomSetValueVO.class);
@@ -208,7 +207,7 @@ public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSe
         }
         //这里主要为了获得只根据setCode关联的值集数据
         JSONArray objects = JSONUtil.parseArray(dataList(new SysSetValueReq().setSetCode(req.getSetCode()).setDb(Constants.N)));
-        redis.setHash(RedisConstant.SetValue._IN, req.getSetCode(), objects.toString());
+        redis.setHash(CacheConstant.SetValue._IN, req.getSetCode(), objects.toString());
         return customSetValueVOS;
     }
 
@@ -240,7 +239,7 @@ public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSe
         getRelevanceSetCode(fields,setCodes);
         log.info("清除值集值===要删除的key(SysSet.setCode):"+fields);
         fields.forEach(ele->{
-            redis.deleteHash(RedisConstant.SetValue._IN, ele);
+            redis.deleteHash(CacheConstant.SetValue._IN, ele);
         });
     }
 
@@ -275,7 +274,7 @@ public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSe
     @Transactional
     @Override
     public int deleteByIds(String ids) {
-        return sysSetValueMapper.deleteSysSetValueByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteSysSetValueByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -286,7 +285,7 @@ public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSe
      */
     @Override
     public int deleteSysSetValueById(Long id) {
-        return sysSetValueMapper.deleteSysSetValueById(id);
+        return baseMapper.deleteSysSetValueById(id);
     }
 
     /**
@@ -326,7 +325,7 @@ public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSe
         //检查库中值集值key重复
         //如果是修改则排除要修改id的
         Set<Long> ids = req.stream().filter(ele -> Util.isNotNull(ele.getId())).map(SysSetValue::getId).collect(Collectors.toSet());
-        List<SysSetValue> sysSetValues = new LambdaQueryChainWrapper<>(sysSetValueMapper)
+        List<SysSetValue> sysSetValues = new LambdaQueryChainWrapper<>(baseMapper)
                 .notIn(CUtil.isNotEmpty(ids), SysSetValue::getId, ids)
                 .in(SysSetValue::getSetCode, setCodes).list();
         if (CUtil.isEmpty(sysSetValues)) {

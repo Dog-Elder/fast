@@ -1,6 +1,5 @@
 package com.fast.core.util;
 
-import com.fast.core.common.constant.RedisConstant;
 import com.fast.core.common.exception.CustomException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -279,7 +278,7 @@ public class FastRedis {
             String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
             RedisScript<Long> redisScript = new DefaultRedisScript<>(script, Long.class);
             Long result = redisTemplate.execute(redisScript, Collections.singletonList(lockKey), requestId);
-            if (RedisConstant.RELEASE_SUCCESS.equals(result)) {
+            if (Long.valueOf(1L).equals(result)) {
                 return true;
             }
             return false;

@@ -2,7 +2,7 @@ package com.fast.common.controller;
 
 import com.fast.common.entity.sys.SysSet;
 import com.fast.common.service.ISysSetService;
-import com.fast.core.annotation.Cachea;
+import com.fast.core.annotation.Cache;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.page.TableDataInfo;
 import com.fast.core.safe.annotation.manage.ManageCheckLogin;
@@ -66,8 +66,7 @@ public class TestController extends BaseController {
      * 查询值集列表
      */
     @GetMapping("/set3/{v2}")
-//    @Cacheable(value = "test",keyGenerator = "methodKeyGenerator")
-    @Cachea(value = "aa")
+    @Cache(value = "test@ttl=30")
     public R<List<SysSet>> list3(@RequestParam("v1") String aa, @PathVariable("v2") String v2) {
 //        List<SysSet> list = );
         return R.success(sysSetService.list(new SysSet()));
