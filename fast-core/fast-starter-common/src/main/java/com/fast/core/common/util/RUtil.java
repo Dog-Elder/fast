@@ -13,10 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -26,6 +23,8 @@ import java.util.function.Function;
  */
 @Slf4j
 public class RUtil {
+    private static final Map<Class<?>, Map<Class<? extends Annotation>, Annotation>> annotationCache = new HashMap<>();
+    private static Map<Class<?>, Map<String, Field>> fieldCache = new HashMap<>();
 
     public static <T> T newInstance(Class<T> clazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         return clazz.getDeclaredConstructor().newInstance();
@@ -65,7 +64,7 @@ public class RUtil {
                     val = BigDecimal.ZERO;
                 }
             }
-            if (val instanceof Enum<?>) { // 枚举对象取rodinal
+            if (val instanceof Enum<?>) { // 枚举对象取ordinal
                 Enum<?> en = (Enum<?>) val;
                 val = en.ordinal();
             }
@@ -205,18 +204,29 @@ public class RUtil {
         return ret;
     }
 
-
     public static Field getField(Class<?> clazz, String propertyName) {
+        Map<String, Field> classFieldCache = fieldCache.get(clazz);
+        if (classFieldCache != null && classFieldCache.containsKey(propertyName)) {
+            return classFieldCache.get(propertyName);
+        }
 
+        Field field = null;
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             try {
-                return clazz.getDeclaredField(propertyName);
+                field = clazz.getDeclaredField(propertyName);
+                field.setAccessible(true);
+                if (classFieldCache == null) {
+                    classFieldCache = new HashMap<>();
+                    fieldCache.put(clazz, classFieldCache);
+                }
+                classFieldCache.put(propertyName, field);
+                break;
             } catch (NoSuchFieldException e) {
                 //如果找不到则继续向父类找
             }
         }
 
-        return null;
+        return field;
     }
 
     /**
@@ -225,13 +235,15 @@ public class RUtil {
     public static Object getValue(Object object, String propertyName) {
         Field field = getField(object.getClass(), propertyName);
         try {
-            field.setAccessible(true);
-            return field.get(object);
+            if (field != null) {
+                return field.get(object);
+            }
         } catch (Exception e) {
             LogFactory.getLog(new CurrentClassGetter().getCurrentClass()).error(e.getMessage(), e);
         }
         return null;
     }
+
     private static class CurrentClassGetter extends SecurityManager {
         public Class getCurrentClass() {
             Class[] arr = getClassContext();
@@ -243,5 +255,27 @@ public class RUtil {
             }
             return arr[i];
         }
+    }
+
+    /**
+     * 获取类注解
+     **/
+    public static <T extends Annotation> T getAnnotation(Class<?> clazz, Class<T> annotationClass) {
+        Map<Class<? extends Annotation>, Annotation> classCache = annotationCache.get(clazz);
+        if (classCache != null && classCache.containsKey(annotationClass)) {
+            return annotationClass.cast(classCache.get(annotationClass));
+        }
+
+        T annotation = clazz.getAnnotation(annotationClass);
+
+        if (annotation != null) {
+            if (classCache == null) {
+                classCache = new HashMap<>();
+                annotationCache.put(clazz, classCache);
+            }
+            classCache.put(annotationClass, annotation);
+        }
+
+        return annotation;
     }
 }

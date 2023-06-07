@@ -1,4 +1,4 @@
-package com.fast.common.config.cache;
+package com.fast.core.cache;
 
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.stereotype.Component;
@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 /**
  * 用于缓存方法
- * 方法密钥生成器
+ * 方法key生成器
  *
  * @author 黄嘉浩
  */

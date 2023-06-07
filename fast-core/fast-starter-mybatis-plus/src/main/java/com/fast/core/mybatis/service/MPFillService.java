@@ -1,5 +1,6 @@
 package com.fast.core.mybatis.service;
 
+import com.fast.core.common.util.RUtil;
 import com.fast.core.common.util.Util;
 import com.fast.core.mybatis.annotation.AutoFill;
 import com.fast.core.mybatis.config.MyMetaObjectHandler;
@@ -21,7 +22,7 @@ public interface MPFillService {
         //获取运行类
         Class<?> performClass = metaObject.getOriginalObject().getClass();
         //获取类标注
-        return performClass.getAnnotation(AutoFill.class);
+        return RUtil.getAnnotation(performClass,AutoFill.class);
     }
 
     void insertFill(MyMetaObjectHandler handler, MetaObject metaObject);

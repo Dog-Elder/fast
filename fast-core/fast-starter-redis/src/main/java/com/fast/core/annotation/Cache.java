@@ -4,21 +4,29 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
+
+/**
+ * @author 黄嘉浩
+ */
 @Cacheable
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface Cachea {
-    @AliasFor(value ="cacheNames")
-//    @AliasFor(annotation = Cacheable.class,value ="cacheNames")
+public @interface Cache {
+    /**
+     * 不设置代表永久
+     * 过期时间在最后使用[@ttl=30]秒
+     * 例如 user:test@ttl=30
+     **/
+    @AliasFor(value = "cacheNames")
     String[] value() default {};
+
     @AliasFor(value = "value")
-//    @AliasFor(annotation = Cacheable.class,value = "value")
     String[] cacheNames() default {};
 
     String key() default "";
-//    @AliasFor(annotation = Cacheable.class,value = "keyGenerator")
+
     String keyGenerator() default "methodKeyGenerator";
 
     String cacheManager() default "";
