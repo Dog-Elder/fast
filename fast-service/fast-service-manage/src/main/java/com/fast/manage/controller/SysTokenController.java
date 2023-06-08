@@ -46,4 +46,16 @@ public class SysTokenController {
         }
         return R.success(JSONUtil.parseObj(ManageUtil.getTokenInfo()));
     }
+    /**
+     * 用户注销
+     *
+     * @Author: 黄嘉浩
+     * @Date: 2023/6/5 20:23
+     * @Return: com.fast.core.common.domain.domain.R
+     **/
+    @PostMapping("/logout")
+    public R logout() {
+        ManageUtil.logout();
+        return R.success();
+    }
 }

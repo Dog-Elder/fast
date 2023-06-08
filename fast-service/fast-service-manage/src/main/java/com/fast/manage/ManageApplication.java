@@ -26,8 +26,8 @@ public class ManageApplication {
         SpringApplication.run(ManageApplication.class, args);
         log.info(
                 "/\\_/\\\n" +
-                "                                                                                                ____/ o o \\\n" +
-                "                                                                                              /~____  =-= /\n" +
-                "                                                                                             (______)__m_m)");
+                "                                                                                                 ____/ o o \\\n" +
+                "                                                                                               /~____  =-= /\n" +
+                "                                                                                              (______)__m_m)");
     }
 }
