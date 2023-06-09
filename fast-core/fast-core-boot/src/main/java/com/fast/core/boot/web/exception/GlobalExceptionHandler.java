@@ -8,6 +8,7 @@ import com.fast.core.common.exception.CustomException;
 import com.fast.core.common.util.Util;
 import com.fast.core.common.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.QueryTimeoutException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -55,7 +56,7 @@ public class GlobalExceptionHandler {
     public R handlerException(NotLoginException e) {
         runLog(e);
         String type = e.getType();
-        switch (type){
+        switch (type) {
             case NotLoginException.NOT_TOKEN:
             case NotLoginException.INVALID_TOKEN:
             case NotLoginException.TOKEN_TIMEOUT:
@@ -96,11 +97,20 @@ public class GlobalExceptionHandler {
         return R.error(e.getMessage());
     }
 
+    /**
+     *  查询超时
+     **/
+    @ExceptionHandler(QueryTimeoutException.class)
+    public R queryTimeoutException(QueryTimeoutException e) {
+        runLog(e);
+        return R.error();
+    }
+
 
     @ExceptionHandler(Exception.class)
     public R handleException(Exception e) {
         runLog(e);
-        return R.error(e.getMessage());
+        return R.error();
     }
 
     /**

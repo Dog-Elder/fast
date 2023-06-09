@@ -92,7 +92,7 @@ public class R<T> implements Serializable{
     }
 
     public static <T extends Serializable> R<T> error() {
-        return new R<>(Type.SERVER_ERROR, "操作失败");
+        return new R<>(Type.SERVER_ERROR, Type.SERVER_ERROR.description);
     }
 
     public static <T extends Serializable> R<T> errorVersion() {
