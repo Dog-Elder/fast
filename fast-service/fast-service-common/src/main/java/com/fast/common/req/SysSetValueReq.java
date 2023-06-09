@@ -32,6 +32,6 @@ public class SysSetValueReq {
     @Display("关联值集key")
     private String setRelationKey;
 
-    //主要是为了区分 是通过缓存查询还是通过数据库查询 直接命中数据库默认为0  命中缓存穿为2
+    //主要是为了区分 是通过缓存查询还是通过数据库查询 直接命中数据库默认为1  命中缓存穿为0
     private String db = Constants.Y;
 }
