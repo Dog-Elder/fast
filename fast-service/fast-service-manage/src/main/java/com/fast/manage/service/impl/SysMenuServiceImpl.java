@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 菜单权限Service业务层处理
  *
@@ -76,5 +78,11 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenu> imp
     @Override
     public boolean logicRemove(String ids) {
         return removeByIds(SUtil.splitToStrList(ids));
+    }
+
+    @Override
+    public List<SysMenu> list(SysMenu sysMenu) {
+        //TODO 作者:黄嘉浩  查询未写
+        return null;
     }
 }

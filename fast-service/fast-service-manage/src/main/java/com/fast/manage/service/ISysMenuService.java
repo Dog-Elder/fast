@@ -55,4 +55,5 @@ public interface ISysMenuService extends BaseService<SysMenu>
      */
     public boolean logicRemove(String ids);
 
+    List<SysMenu> list(SysMenu sysMenu);
 }
