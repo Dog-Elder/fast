@@ -6,7 +6,8 @@ import java.lang.annotation.*;
  * 公共字段值自动装配开关
  * 执行MP增删时会自动会会维护公共字段
  *
- **/
+ *
+ * @author 黄嘉浩*/
 @Inherited
 @Target({ElementType.TYPE})
 @Retention(value = RetentionPolicy.RUNTIME)

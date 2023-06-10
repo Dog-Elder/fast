@@ -37,6 +37,7 @@ public class BUtil extends BeanUtils {
     }
 
     /**
+     * 浅拷贝
      * 创建一个targetClazz的实例（利用其默认构造），然后将source的非null的属性复制到target上的同名属性
      */
     public static <S, T> T copy(S source, Class<T> targetClazz) {
@@ -51,6 +52,15 @@ public class BUtil extends BeanUtils {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    //浅拷贝
+    public static <S, T> List<T> copyList(List<S> sources, Class<T> targetClazz) {
+        List<T> targets = new ArrayList<>();
+        for (S source : sources) {
+            T target = copy(source, targetClazz);
+            targets.add(target);
+        }
+        return targets;
     }
 
     public static <S> S copy(S source) {
