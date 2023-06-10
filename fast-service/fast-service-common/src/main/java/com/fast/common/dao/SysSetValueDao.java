@@ -1,7 +1,7 @@
 package com.fast.common.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fast.common.entity.sys.SysSetValue;
+import com.fast.core.mybatis.dao.BaseDao;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @author @Dog_Elder
  * @date 2022-03-24
  */
-public interface SysSetValueMapper extends BaseMapper<SysSetValue>
+public interface SysSetValueDao extends BaseDao<SysSetValue>
 {
     /**
      * 查询值集列

@@ -1,9 +1,9 @@
 package com.fast.manage.service.impl;
 
 import cn.hutool.core.convert.Convert;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fast.core.common.util.SUtil;
-import com.fast.manage.dao.SysUserRoleMapper;
+import com.fast.core.mybatis.service.impl.BaseServiceImpl;
+import com.fast.manage.dao.SysUserRoleDao;
 import com.fast.manage.entity.SysUserRole;
 import com.fast.manage.service.ISysUserRoleService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements ISysUserRoleService
+public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleDao, SysUserRole> implements ISysUserRoleService
 {
 
     /**

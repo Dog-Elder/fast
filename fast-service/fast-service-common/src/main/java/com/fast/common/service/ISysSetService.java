@@ -3,6 +3,7 @@ package com.fast.common.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fast.common.entity.sys.SysSet;
+import com.fast.core.mybatis.service.BaseService;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author @Dog_Elder
  * @date 2022-03-24
  */
-public interface ISysSetService extends IService<SysSet>
+public interface ISysSetService extends BaseService<SysSet>
 {
     /**
      * 查询值集

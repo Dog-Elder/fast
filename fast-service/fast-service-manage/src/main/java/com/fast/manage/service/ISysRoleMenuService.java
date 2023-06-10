@@ -1,6 +1,7 @@
 package com.fast.manage.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fast.core.mybatis.service.BaseService;
 import com.fast.manage.entity.SysRoleMenu;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @author @Dog_Elder
  * @date 2021-06-29
  */
-public interface ISysRoleMenuService extends IService<SysRoleMenu>
+public interface ISysRoleMenuService extends BaseService<SysRoleMenu>
 {
     /**
      * 查询角色和菜单关联
@@ -20,22 +21,6 @@ public interface ISysRoleMenuService extends IService<SysRoleMenu>
      * @return 角色和菜单关联
      */
     public SysRoleMenu selectById(Long roleId);
-
-    /**
-     * 查询角色和菜单关联列表
-     * 
-     * @param sysRoleMenu 角色和菜单关联
-     * @return 角色和菜单关联集合
-     */
-    public List<SysRoleMenu> list(SysRoleMenu sysRoleMenu);
-
-    /**
-     * 新增角色和菜单关联
-     * 
-     * @param sysRoleMenu 角色和菜单关联
-     * @return 结果
-     */
-    public boolean save(SysRoleMenu sysRoleMenu);
 
     /**
      * 修改角色和菜单关联

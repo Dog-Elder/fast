@@ -1,6 +1,6 @@
 package com.fast.manage.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.fast.core.mybatis.dao.BaseDao;
 import com.fast.manage.entity.SysRole;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * @author @Dog_Elder
  * @date 2021-06-29
  */
-public interface SysRoleMapper extends BaseMapper<SysRole>
+public interface SysRoleDao extends BaseDao<SysRole>
 {
     /**
      * 查询角色

@@ -1,7 +1,7 @@
 package com.fast.common.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fast.common.entity.sys.SysSet;
+import com.fast.core.mybatis.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2022-03-24
  */
 @Mapper
-public interface SysSetMapper extends BaseMapper<SysSet>
+public interface SysSetDao extends BaseDao<SysSet>
 {
     /**
      * 查询值集

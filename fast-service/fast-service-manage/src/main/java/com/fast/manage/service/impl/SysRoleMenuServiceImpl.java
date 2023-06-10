@@ -1,16 +1,14 @@
 package com.fast.manage.service.impl;
 
 import cn.hutool.core.convert.Convert;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fast.core.common.util.SUtil;
-import com.fast.manage.dao.SysRoleMenuMapper;
+import com.fast.core.mybatis.service.impl.BaseServiceImpl;
+import com.fast.manage.dao.SysRoleMenuDao;
 import com.fast.manage.entity.SysRoleMenu;
 import com.fast.manage.service.ISysRoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * 角色和菜单关联Service业务层处理
@@ -19,10 +17,10 @@ import java.util.List;
  * @date 2021-06-29
  */
 @Service
-public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> implements ISysRoleMenuService
+public class SysRoleMenuServiceImpl extends BaseServiceImpl<SysRoleMenuDao, SysRoleMenu> implements ISysRoleMenuService
 {
     @Autowired
-    private SysRoleMenuMapper sysRoleMenuMapper;
+    private SysRoleMenuDao sysRoleMenuMapper;
 
     /**
      * 查询角色和菜单关联
@@ -36,30 +34,6 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
         return sysRoleMenuMapper.selectSysRoleMenuById(roleId);
     }
 
-    /**
-     * 查询角色和菜单关联列表
-     * 
-     * @param sysRoleMenu 角色和菜单关联
-     * @return 角色和菜单关联
-     */
-    @Override
-    public List<SysRoleMenu> list(SysRoleMenu sysRoleMenu)
-    {
-        return sysRoleMenuMapper.selectSysRoleMenuList(sysRoleMenu);
-    }
-
-    /**
-     * 新增角色和菜单关联
-     * 
-     * @param sysRoleMenu 角色和菜单关联
-     * @return 结果
-     */
-    @Transactional
-    @Override
-    public boolean save(SysRoleMenu sysRoleMenu)
-    {
-        return save(sysRoleMenu);
-    }
 
     /**
      * 修改角色和菜单关联

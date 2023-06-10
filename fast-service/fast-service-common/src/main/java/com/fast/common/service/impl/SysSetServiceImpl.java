@@ -2,13 +2,13 @@ package com.fast.common.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.fast.common.dao.SysSetMapper;
+import com.fast.common.dao.SysSetDao;
 import com.fast.common.entity.sys.SysSet;
 import com.fast.common.service.ISysSetService;
 import com.fast.core.common.exception.CustomException;
 import com.fast.core.common.util.CUtil;
 import com.fast.core.common.util.SUtil;
+import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SysSetServiceImpl extends ServiceImpl<SysSetMapper, SysSet> implements ISysSetService {
+public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implements ISysSetService {
 
     /**
      * 查询值集

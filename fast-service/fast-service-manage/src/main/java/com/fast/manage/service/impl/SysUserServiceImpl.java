@@ -1,9 +1,9 @@
 package com.fast.manage.service.impl;
 
 import cn.hutool.core.convert.Convert;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fast.core.common.util.SUtil;
-import com.fast.manage.dao.SysUserMapper;
+import com.fast.core.mybatis.service.impl.BaseServiceImpl;
+import com.fast.manage.dao.SysUserDao;
 import com.fast.manage.entity.SysUser;
 import com.fast.manage.service.ISysUserService;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.List;
  * @date 2021-06-18
  */
 @Service
-public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService
+public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> implements ISysUserService
 {
 
     /**

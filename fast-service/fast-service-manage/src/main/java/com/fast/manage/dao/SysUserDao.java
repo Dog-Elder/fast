@@ -1,6 +1,6 @@
 package com.fast.manage.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.fast.core.mybatis.dao.BaseDao;
 import com.fast.manage.entity.SysUser;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2021-06-18
  */
 @Mapper
-public interface SysUserMapper extends BaseMapper<SysUser>
+public interface SysUserDao extends BaseDao<SysUser>
 {
     /**
      * 查询后台用户

@@ -7,6 +7,7 @@ import com.fast.common.entity.sys.SysSetValue;
 import com.fast.common.req.SysSetValueReq;
 import com.fast.common.vo.CustomSetValueVO;
 import com.fast.common.vo.SysSetValueVO;
+import com.fast.core.mybatis.service.BaseService;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @author @Dog_Elder
  * @date 2022-03-25
  */
-public interface ISysSetValueService extends IService<SysSetValue> {
+public interface ISysSetValueService extends BaseService<SysSetValue> {
     /**
      * 查询值集列
      *

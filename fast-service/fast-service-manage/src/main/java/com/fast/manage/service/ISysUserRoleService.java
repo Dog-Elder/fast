@@ -1,6 +1,7 @@
 package com.fast.manage.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fast.core.mybatis.service.BaseService;
 import com.fast.manage.entity.SysUserRole;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @author @Dog_Elder
  * @date 2021-06-29
  */
-public interface ISysUserRoleService extends IService<SysUserRole>
+public interface ISysUserRoleService extends BaseService<SysUserRole>
 {
     /**
      * 查询用户和角色关联

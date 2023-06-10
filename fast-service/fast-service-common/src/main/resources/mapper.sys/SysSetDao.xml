@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fast.common.dao.SysSetMapper">
+<mapper namespace="com.fast.common.dao.SysSetDao">
 
     <resultMap type="com.fast.common.entity.sys.SysSet" id="SysSetResult">
         <result property="id" column="id"/>

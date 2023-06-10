@@ -6,8 +6,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.fast.common.dao.SysSetValueMapper;
+import com.fast.common.dao.SysSetValueDao;
 import com.fast.common.entity.sys.SysSet;
 import com.fast.common.entity.sys.SysSetValue;
 import com.fast.common.req.SysSetValueReq;
@@ -22,6 +21,7 @@ import com.fast.core.common.util.CUtil;
 import com.fast.core.common.util.PageUtils;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
+import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.core.util.FastRedis;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SysSetValueServiceImpl extends ServiceImpl<SysSetValueMapper, SysSetValue> implements ISysSetValueService {
+public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysSetValue> implements ISysSetValueService {
 
     private final ISysSetService sysSetService;
 

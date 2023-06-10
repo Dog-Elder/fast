@@ -1,6 +1,7 @@
 package com.fast.manage.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fast.core.mybatis.service.BaseService;
 import com.fast.manage.entity.SysMenu;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Set;
  * @author @Dog_Elder
  * @date 2021-06-29
  */
-public interface ISysMenuService extends IService<SysMenu>
+public interface ISysMenuService extends BaseService<SysMenu>
 {
     /**
      * 查询菜单权限
@@ -21,22 +22,6 @@ public interface ISysMenuService extends IService<SysMenu>
      * @return 菜单权限
      */
     public SysMenu selectById(Long id);
-
-    /**
-     * 查询菜单权限列表
-     * 
-     * @param sysMenu 菜单权限
-     * @return 菜单权限集合
-     */
-    public List<SysMenu> list(SysMenu sysMenu);
-
-    /**
-     * 新增菜单权限
-     * 
-     * @param sysMenu 菜单权限
-     * @return 结果
-     */
-    public boolean save(SysMenu sysMenu);
 
     /**
      * 修改菜单权限

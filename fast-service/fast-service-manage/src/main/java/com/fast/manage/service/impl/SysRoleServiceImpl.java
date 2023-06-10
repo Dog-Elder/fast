@@ -2,12 +2,11 @@ package com.fast.manage.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fast.core.annotation.Cache;
+import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.core.util.FastRedis;
-import com.fast.manage.dao.SysRoleMapper;
+import com.fast.manage.dao.SysRoleDao;
 import com.fast.core.common.util.SUtil;
-import com.fast.core.common.util.Util;
 import com.fast.manage.entity.SysMenu;
 import com.fast.manage.entity.SysRole;
 import com.fast.manage.entity.SysRoleMenu;
@@ -36,7 +35,7 @@ import static com.fast.common.constant.cache.CacheConstant.MANAGE;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements ISysRoleService {
+public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> implements ISysRoleService {
     private final ISysUserRoleService userRoleService;
     private final ISysRoleMenuService roleMenuService;
     private final ISysMenuService menuService;
