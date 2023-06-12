@@ -1,1 +1,0 @@
-package com.fast.common.entity;
