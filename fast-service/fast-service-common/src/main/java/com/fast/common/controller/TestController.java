@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/test")
 @RequiredArgsConstructor
-public class TestController extends BaseController {
+public class TestController extends WebBaseController {
     private final FastRedis fastRedis;
 
     @ManageCheckLogin
