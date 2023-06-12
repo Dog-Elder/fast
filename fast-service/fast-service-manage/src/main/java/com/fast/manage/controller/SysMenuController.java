@@ -2,7 +2,7 @@ package com.fast.manage.controller;
 
 import com.fast.common.entity.verification.Qry;
 import com.fast.common.entity.verification.Save;
-import com.fast.core.common.domain.controller.WebBaseController;
+import com.fast.common.controller.WebBaseController;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.domain.ValidList;
 import com.fast.core.common.domain.page.TableDataInfo;
@@ -13,8 +13,6 @@ import com.fast.manage.query.SysMenuQuery;
 import com.fast.manage.service.ISysMenuService;
 import com.fast.manage.vo.SysMenuVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

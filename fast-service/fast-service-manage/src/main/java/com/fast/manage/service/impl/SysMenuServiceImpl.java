@@ -1,13 +1,13 @@
 package com.fast.manage.service.impl;
 
-import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.fast.core.common.util.PageUtils;
+import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.manage.dao.SysMenuDao;
-import com.fast.core.common.util.SUtil;
 import com.fast.manage.entity.SysMenu;
 import com.fast.manage.query.SysMenuQuery;
 import com.fast.manage.service.ISysMenuService;
@@ -35,7 +35,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenu> imp
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<SysMenuVO> list(SysMenuQuery query) {
         List<SysMenu> entityList = list(getWrapper(query));
-        return BUtil.cloneList(entityList,SysMenuVO.class);
+        return PageUtils.copy(entityList,SysMenuVO.class);
     }
 
     private LambdaQueryWrapper<SysMenu> getWrapper(SysMenuQuery query){
@@ -56,7 +56,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenu> imp
     public List<SysMenuVO> save(List<SysMenuVO> vo) {
         List<SysMenu> entityList = BUtil.copyList(vo,SysMenu.class);
         saveBatch(entityList);
-        return vo;
+        return BUtil.copyList(entityList,SysMenuVO.class);
     }
 
     @Override

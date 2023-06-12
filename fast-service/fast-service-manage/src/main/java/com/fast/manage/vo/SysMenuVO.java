@@ -131,11 +131,6 @@ public class SysMenuVO implements Serializable {
     @Display("版本")
     private Integer version;
 
-    /**
-     * 删除标识
-     */
-    @Display("删除标识")
-    private String delFlag;
 
 
 }

@@ -1,12 +1,10 @@
 package com.fast.manage.query;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fast.core.common.domain.page.Query;
 import com.fast.core.common.validate.annotation.Display;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
 
 /**
 * 菜单权限表查询
@@ -16,7 +14,7 @@ import java.time.LocalDateTime;
 */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class SysMenuQuery {
+public class SysMenuQuery extends Query {
     /**
      * 菜单ID
      */
