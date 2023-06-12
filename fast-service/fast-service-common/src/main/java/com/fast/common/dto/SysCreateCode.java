@@ -1,4 +1,4 @@
-package com.fast.common.req;
+package com.fast.common.dto;
 
 
 import com.fast.common.entity.verification.Qry;
