@@ -29,7 +29,7 @@ mybatis-plus:
     # 配置JdbcTypeForNull, oracle数据库必须配置
     jdbc-type-for-null: null
     #log sql打印
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config: # 全局策略配置
     # 是否控制台 print mybatis-plus 的 LOGO
     banner: false

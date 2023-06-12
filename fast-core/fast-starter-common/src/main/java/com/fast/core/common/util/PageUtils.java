@@ -64,13 +64,13 @@ public class PageUtils extends PageHelper {
             page.setPageNum(pageList.getPageNum());
             page.setPages(pageList.getPages());
             page.setPageSize(pageList.getPageSize());
-            page.addAll(com.fast.core.common.util.CUtil.copy(sourceList, targetClazz));
+            page.addAll(CUtil.copy(sourceList, targetClazz));
             return page;
         } else {
             if (com.fast.core.common.util.Util.isNull(sourceList)) {
                 return new ArrayList<>();
             }
-            return com.fast.core.common.util.CUtil.copy(sourceList, targetClazz);
+            return CUtil.copy(sourceList, targetClazz);
         }
     }
 
@@ -131,8 +131,8 @@ public class PageUtils extends PageHelper {
         PageDomain pageDomain = getPage();
         String orderBy2 = pageDomain.getOrderBy2();
         String orderDirections = pageDomain.orderByColumngetIsAsc();
-        if (com.fast.core.common.util.SUtil.isNotBlank(orderBy2) && SUtil.isNotBlank(orderDirections)) {
-            com.fast.core.common.util.CUtil.sort(list,orderBy2,orderDirections);
+        if (SUtil.isNotBlank(orderBy2) && SUtil.isNotBlank(orderDirections)) {
+            CUtil.sort(list,orderBy2,orderDirections);
         }
         return createPage(list, pageDomain.getPageNum(), pageDomain.getPageSize());
     }
