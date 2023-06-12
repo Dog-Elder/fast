@@ -2,9 +2,8 @@ package com.fast.common.service;
 
 
 import cn.hutool.json.JSONObject;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.fast.common.entity.sys.SysSetValue;
-import com.fast.common.req.SysSetValueReq;
+import com.fast.common.query.SysSetValueQuery;
 import com.fast.common.vo.CustomSetValueVO;
 import com.fast.common.vo.SysSetValueVO;
 import com.fast.core.mybatis.service.BaseService;
@@ -86,12 +85,12 @@ public interface ISysSetValueService extends BaseService<SysSetValue> {
     /**
      * 查询值列表
      */
-    List<CustomSetValueVO> dataList(SysSetValueReq req);
+    List<CustomSetValueVO> dataList(SysSetValueQuery req);
 
     /**
      * 查询值列表(从缓存中获取数据)
      */
-    List<CustomSetValueVO> qryCacheDataList(SysSetValueReq req);
+    List<CustomSetValueVO> qryCacheDataList(SysSetValueQuery req);
 
     /**
      * 根据值集编码 和值集值key获取一个 值含义

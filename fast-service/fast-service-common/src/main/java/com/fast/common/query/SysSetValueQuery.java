@@ -1,9 +1,10 @@
-package com.fast.common.req;
+package com.fast.common.query;
 
 
 import com.fast.common.entity.sys.SysSetValue;
 import com.fast.common.entity.verification.Qry;
 import com.fast.core.common.constant.Constants;
+import com.fast.core.common.domain.page.Query;
 import com.fast.core.common.util.Com;
 import com.fast.core.common.validate.annotation.Display;
 import lombok.Data;
@@ -17,7 +18,7 @@ import javax.validation.constraints.NotBlank;
  **/
 @Data
 @Accessors(chain = true)
-public class SysSetValueReq {
+public class SysSetValueQuery extends Query {
 
     @Display("值集编码")
     @NotBlank(message = Com.Require, groups = {Qry.class})

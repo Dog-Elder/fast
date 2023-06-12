@@ -23,7 +23,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
 public class SysSet extends BaseVersionEntity {
-    private static final long serialVersionUID = 1L;
 
     private Long id;
 

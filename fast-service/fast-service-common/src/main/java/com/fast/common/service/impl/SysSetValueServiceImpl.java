@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.fast.common.dao.SysSetValueDao;
 import com.fast.common.entity.sys.SysSet;
 import com.fast.common.entity.sys.SysSetValue;
-import com.fast.common.req.SysSetValueReq;
+import com.fast.common.query.SysSetValueQuery;
 import com.fast.common.service.ISysSetService;
 import com.fast.common.service.ISysSetValueService;
 import com.fast.common.vo.CustomSetValueVO;
@@ -142,7 +142,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
      * 查询值列表
      */
     @Override
-    public List<CustomSetValueVO> dataList(SysSetValueReq req) {
+    public List<CustomSetValueVO> dataList(SysSetValueQuery req) {
         //查询值集是否已经被删除或关闭
         SysSet set = sysSetService.getOne(new LambdaQueryWrapper<SysSet>().eq(SysSet::getSetCode, req.getSetCode()).eq(SysSet::getSetState, Constants.Y));
         if (Util.isNull(set)) {
@@ -183,7 +183,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
     }
 
     @Override
-    public List<CustomSetValueVO> qryCacheDataList(SysSetValueReq req) {
+    public List<CustomSetValueVO> qryCacheDataList(SysSetValueQuery req) {
         //查询值集是否已经被删除或关闭
         SysSet set = sysSetService.getOne(new LambdaQueryWrapper<SysSet>().eq(SysSet::getSetCode, req.getSetCode()).eq(SysSet::getSetState, Constants.Y));
         if (Util.isNull(set)) {
@@ -206,7 +206,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
             return customSetValueVOS;
         }
         //这里主要为了获得只根据setCode关联的值集数据
-        JSONArray objects = JSONUtil.parseArray(dataList(new SysSetValueReq().setSetCode(req.getSetCode()).setDb(Constants.N)));
+        JSONArray objects = JSONUtil.parseArray(dataList(new SysSetValueQuery().setSetCode(req.getSetCode()).setDb(Constants.N)));
         redis.setHash(CacheConstant.SetValue._IN, req.getSetCode(), objects.toString());
         return customSetValueVOS;
     }
