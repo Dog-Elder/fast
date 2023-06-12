@@ -58,7 +58,7 @@ public class BaseEntity implements Serializable {
      * 删除标志（0:否 1:是）
      */
     @TableLogic
-    private String delFlag;
+    private Integer delFlag;
 
     /**
      * 备注
@@ -88,11 +88,11 @@ public class BaseEntity implements Serializable {
         return params;
     }
 
-    public String getDelFlag() {
+    public Integer getDelFlag() {
         return delFlag;
     }
 
-    public void setDelFlag(String delFlag) {
+    public void setDelFlag(Integer delFlag) {
         this.delFlag = delFlag;
     }
 

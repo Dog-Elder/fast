@@ -21,11 +21,6 @@ public class TableDataInfo implements Serializable
     /** 列表数据 */
     private List<?> rows;
 
-    /** 消息状态码 */
-    private int code;
-
-    /** 消息内容 */
-    private int msg;
 
     /**
      * 表格数据对象
@@ -64,26 +59,6 @@ public class TableDataInfo implements Serializable
     public void setRows(List<?> rows)
     {
         this.rows = rows;
-    }
-
-    public int getCode()
-    {
-        return code;
-    }
-
-    public void setCode(int code)
-    {
-        this.code = code;
-    }
-
-    public int getMsg()
-    {
-        return msg;
-    }
-
-    public void setMsg(int msg)
-    {
-        this.msg = msg;
     }
 
     public long getPages() {

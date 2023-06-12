@@ -1,4 +1,4 @@
-package com.fast.core.common.domain.controller;
+package com.fast.common.controller;
 
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.page.TableDataInfo;
@@ -74,7 +74,6 @@ public class WebBaseController {
     @SuppressWarnings({"rawtypes", "unchecked"})
     protected TableDataInfo getDataTable(List<?> list) {
         TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(0);
         if (CUtil.isEmpty(list)) {
             list = defaultList;
         }

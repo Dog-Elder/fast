@@ -9,6 +9,7 @@ import com.fast.core.common.util.Util;
 import com.fast.core.common.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.QueryTimeoutException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -90,20 +91,32 @@ public class GlobalExceptionHandler {
         return R.error(e.getMessage());
     }
 
-
+    /**
+     * 账户过期
+     **/
     @ExceptionHandler(AccountExpiredException.class)
     public R handleAccountExpiredException(AccountExpiredException e) {
         runLog(e);
         return R.error(e.getMessage());
     }
 
+
     /**
-     *  查询超时
+     * 查询超时
      **/
     @ExceptionHandler(QueryTimeoutException.class)
     public R queryTimeoutException(QueryTimeoutException e) {
         runLog(e);
         return R.error();
+    }
+
+    /**
+     * 查询超时
+     **/
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public R httpMessageNotReadableException(HttpMessageNotReadableException e) {
+        runLog(e);
+        return R.error(R.Type.BAD_REQUEST);
     }
 
 
