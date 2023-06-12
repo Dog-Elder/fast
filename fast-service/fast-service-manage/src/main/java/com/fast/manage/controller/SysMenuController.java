@@ -1,13 +1,21 @@
 package com.fast.manage.controller;
 
+import com.fast.common.entity.verification.Qry;
+import com.fast.common.entity.verification.Save;
 import com.fast.core.common.domain.controller.WebBaseController;
 import com.fast.core.common.domain.domain.R;
+import com.fast.core.common.domain.domain.ValidList;
 import com.fast.core.common.domain.page.TableDataInfo;
+import com.fast.core.common.util.bean.BUtil;
+import com.fast.core.safe.annotation.manage.ManageCheckPermission;
 import com.fast.manage.entity.SysMenu;
+import com.fast.manage.query.SysMenuQuery;
 import com.fast.manage.service.ISysMenuService;
+import com.fast.manage.vo.SysMenuVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,48 +33,51 @@ public class SysMenuController extends WebBaseController {
 
     private final ISysMenuService sysMenuService;
 
-
     /**
-     * 查询菜单权限列表
+     * 分页
      */
-    @PostMapping("/list")
-    public TableDataInfo list(SysMenu sysMenu) {
+    @GetMapping("/page")
+    @ManageCheckPermission(value = "manage.menu.page")
+    public R<TableDataInfo> page(@Validated(Qry.class) SysMenuQuery query){
         startPage();
-        List<SysMenu> list = sysMenuService.list(sysMenu);
-        return getDataTable(list);
-    }
-
-
-    /**
-     * 新增保存菜单权限
-     */
-    @PostMapping("/add")
-    public R<Boolean> addSave(SysMenu sysMenu) {
-        return toAjax(sysMenuService.save(sysMenu));
-    }
-
-
-    /**
-     * 修改保存菜单权限
-     */
-    @PostMapping("/edit")
-    public R editSave(SysMenu sysMenu) {
-        return toAjax(sysMenuService.update(sysMenu));
+        return R.success(getDataTable(sysMenuService.list(query)));
     }
 
     /**
-     * 真批量删除菜单权限
+     * 信息
      */
-    @PostMapping("/remove")
-    public R remove(String ids) {
-        return toAjax(sysMenuService.deleteByIds(ids));
+    @GetMapping("{id}")
+    @ManageCheckPermission(value = "manage.menu.info")
+    public R<SysMenuVO> get(@PathVariable("id") String id){
+        SysMenu entity = sysMenuService.getById(id);
+        return R.success(BUtil.copy(entity,SysMenuVO.class));
     }
 
     /**
-     * 逻辑删除菜单权限
+     * 保存
      */
-    @PostMapping("/logic-remove")
-    public R logicRemove(String ids) {
-        return toAjax(sysMenuService.logicRemove(ids));
+    @PostMapping
+    @ManageCheckPermission(value = "manage.menu.save")
+    public R save(@RequestBody @Validated(Save.class) ValidList<SysMenuVO> vo){
+        return R.success(sysMenuService.save(vo));
+    }
+
+    /**
+     * 修改
+     */
+    @PutMapping
+    @ManageCheckPermission(value = "manage.menu.update")
+    public R update(@RequestBody @Validated SysMenuVO vo){
+        return toVersionAjax(sysMenuService.update(vo));
+    }
+
+    /**
+     * 删除
+     */
+    @DeleteMapping
+    @ManageCheckPermission(value = "manage.menu.delete")
+    public R delete(@RequestBody List<String> idList){
+        sysMenuService.delete(idList);
+        return R.success();
     }
 }

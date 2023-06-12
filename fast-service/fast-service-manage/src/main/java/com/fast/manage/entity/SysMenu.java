@@ -1,5 +1,8 @@
 package com.fast.manage.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.fast.core.common.validate.annotation.Display;
 import com.fast.core.mybatis.model.BaseVersionEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -26,52 +29,79 @@ public class SysMenu extends BaseVersionEntity {
     /**
      * 菜单ID
      */
+    @TableId
+    @Display("菜单ID")
+    @TableField("id")
     private String id;
+
     /**
      * 菜单名称
      */
+    @Display("菜单名称")
+    @TableField("name")
     private String name;
+
     /**
      * 父菜单ID
      */
+    @Display("父菜单ID")
+    @TableField("parent_id")
     private String parentId;
+
     /**
      * 显示顺序
      */
-    private Long orderNum;
+    @Display("显示顺序")
+    @TableField("order_num")
+    private Integer orderNum;
+
     /**
      * 请求地址
      */
+    @Display("请求地址")
+    @TableField("url")
     private String url;
+
     /**
      * 打开方式（menuItem页签 menuBlank新窗口）
      */
-
+    @Display("打开方式（menuItem页签 menuBlank新窗口）")
+    @TableField("target")
     private String target;
+
     /**
      * 菜单类型（M目录 C菜单 F按钮）
      */
-
+    @Display("菜单类型（M目录 C菜单 F按钮）")
+    @TableField("menu_type")
     private String menuType;
-    /**
-     * 菜单状态（0显示 1隐藏）
-     */
 
-    private String visible;
     /**
-     * 是否刷新（0刷新 1不刷新）
+     * 菜单状态（0隐藏 1显示）
      */
+    @Display("菜单状态（0隐藏 1显示）")
+    @TableField("visible")
+    private String visible;
+
+    /**
+     * 是否刷新（0不刷新 1刷新）
+     */
+    @Display("是否刷新（0不刷新 1刷新）")
+    @TableField("is_refresh")
     private String isRefresh;
+
     /**
      * 权限标识
      */
+    @Display("权限标识")
+    @TableField("perms")
     private String perms;
+
     /**
      * 菜单图标
      */
+    @Display("菜单图标")
+    @TableField("icon")
     private String icon;
-    /** 类型（0代表后台 2代表API） */
-    private String type;
-
 
 }
