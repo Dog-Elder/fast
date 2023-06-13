@@ -1,17 +1,26 @@
 package com.fast.common.service.impl;
 
-import cn.hutool.core.convert.Convert;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.fast.common.dao.SysSetDao;
 import com.fast.common.entity.sys.SysSet;
+import com.fast.common.entity.sys.SysSetValue;
+import com.fast.common.query.SysSetQuery;
 import com.fast.common.service.ISysSetService;
+import com.fast.common.vo.SysSetVO;
 import com.fast.core.common.exception.CustomException;
 import com.fast.core.common.util.CUtil;
+import com.fast.core.common.util.PageUtils;
 import com.fast.core.common.util.SUtil;
+import com.fast.core.common.util.Util;
+import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -30,35 +39,33 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implements ISysSetService {
 
-    /**
-     * 查询值集
-     *
-     * @param id 值集ID
-     * @return 值集
-     */
+
     @Override
-    public SysSet selectById(Long id) {
-        return baseMapper.selectSysSetById(id);
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = true)
+    public List<SysSetVO> list(SysSetQuery query) {
+        List<SysSet> entityList = list(getWrapper(query));
+        return PageUtils.copy(entityList,SysSetVO.class);
     }
 
-    /**
-     * 查询值集列表
-     *
-     * @param sysSet 值集
-     * @return 值集
-     */
-    @Override
-    public List<SysSet> list(SysSet sysSet) {
-        return baseMapper.selectSysSetList(sysSet);
+    private LambdaQueryWrapper<SysSet> getWrapper(SysSetQuery query){
+        LambdaQueryWrapper<SysSet> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(Util.isNotNull(query.getId())&& SUtil.isNotEmpty(query.getId()), SysSet::getId, query.getId());
+        wrapper.eq(Util.isNotNull(query.getSetCode())&& SUtil.isNotEmpty(query.getSetCode()), SysSet::getSetCode, query.getSetCode());
+        wrapper.eq(Util.isNotNull(query.getSetParentCode())&& SUtil.isNotEmpty(query.getSetParentCode()), SysSet::getSetParentCode, query.getSetParentCode());
+        wrapper.like(Util.isNotNull(query.getSetName()) && SUtil.isNotEmpty(query.getSetName()), SysSet::getSetName, query.getSetName());
+        wrapper.like(Util.isNotNull(query.getSetDescribe()) && SUtil.isNotEmpty(query.getSetDescribe()), SysSet::getSetDescribe, query.getSetDescribe());
+        wrapper.like(Util.isNotNull(query.getRemark()) && SUtil.isNotEmpty(query.getRemark()), SysSet::getRemark, query.getRemark());
+        return wrapper;
     }
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public List<SysSet> addSave(List<SysSet> sysSets) {
+    public List<SysSetVO> save(List<SysSetVO> vo) {
+        List<SysSet> entityList = BUtil.copyList(vo,SysSet.class);
         //检查添加的数据中是否有重复编码数据
-        Set<String> setCodes = sysSets.stream().map(SysSet::getSetCode).collect(Collectors.toSet());
-        if (setCodes.size() != sysSets.size()) {
-            throw new CustomException("输入的值集编码有重复.");
+        Set<String> setCodes = entityList.stream().map(SysSet::getSetCode).collect(Collectors.toSet());
+        if (setCodes.size() != entityList.size()) {
+            throw new CustomException("输入的值集编码有重复");
         }
         //检查添的数据中的编码是否已在数据库中存在
         String repeatCode = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getSetCode, setCodes).list().stream().map(SysSet::getSetCode).collect(Collectors.joining(","));
@@ -66,60 +73,48 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
             throw new CustomException("编码已存在:" + repeatCode);
         }
         //检查数据中的有父值集的是否存在
-        Set<String> setParentCodes = sysSets.stream().filter(ele -> ele.getSetParentCode() != null).map(SysSet::getSetParentCode).collect(Collectors.toSet());
+        Set<String> setParentCodes = entityList.stream().filter(ele -> ele.getSetParentCode() != null).map(SysSet::getSetParentCode).collect(Collectors.toSet());
         if (CUtil.isNotEmpty(setParentCodes)) {
             List<SysSet> parentSet = new LambdaQueryChainWrapper<>(baseMapper).select(SysSet::getSetCode).in(SysSet::getSetCode, setParentCodes).list();
             //查找不同的元素
             Collection<String> diffByHashSet = CUtil.getDiffByHashSet(setParentCodes, parentSet.stream().map(SysSet::getSetCode).collect(Collectors.toSet()));
             if (CUtil.isEmpty(diffByHashSet)) {
-                saveBatch(sysSets);
-                return sysSets;
+                saveBatch(entityList);
+                return BUtil.copyList(entityList,SysSetVO.class);
             }
             throw new CustomException("关联的值集编码不存在" + diffByHashSet);
         }
-        saveBatch(sysSets);
-        return sysSets;
+        saveBatch(entityList);
+        return BUtil.copyList(entityList,SysSetVO.class);
     }
 
-
-    /**
-     * 修改值集
-     *
-     * @param sysSet 值集
-     * @return 结果
-     */
-    @Transactional
     @Override
-    public boolean update(SysSet sysSet) {
-        List<SysSet> dbList = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getId, sysSet.getId()).list();
+    @Transactional(rollbackFor = Exception.class)
+    public boolean update(SysSetVO vo) {
+        SysSet entity = BUtil.copy(vo, SysSet.class);
+        List<SysSet> dbList = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getId, entity.getId()).list();
         dbList.forEach(ele -> {
             //TODO 作者:@Dog_Elder 2022/3/25 17:27 待办  缺少操作权限校验
-            if ((!SUtil.isEmpty(sysSet.getSetParentCode()) && !SUtil.isEmpty(ele.getSetParentCode()))) {
-                if (!sysSet.getSetParentCode().equals(ele.getSetParentCode())) {
+            if ((!SUtil.isEmpty(entity.getSetParentCode()) && !SUtil.isEmpty(ele.getSetParentCode()))) {
+                if (!entity.getSetParentCode().equals(ele.getSetParentCode())) {
                     throw new CustomException("不可更换父级值集编码");
                 }
             }
-            if (!ele.getSetCode().equals(sysSet.getSetCode())) {
+            if (!ele.getSetCode().equals(entity.getSetCode())) {
                 throw new CustomException("不可更换值集编码");
             }
         });
-        return updateById(sysSet);
+        return updateById(entity);
     }
 
-    /**
-     * 真删除值集对象
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
+
     @Transactional
     @Override
-    public int deleteByIds(String ids) {
-        List<String> idList = SUtil.splitToStrList(ids);
+    public boolean delete(List<String> idList) {
         List<SysSet> sysSets = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getId, idList).list();
         Set<String> setCodes = sysSets.stream().map(SysSet::getSetCode).collect(Collectors.toSet());
         if (CUtil.isEmpty(setCodes)) {
-            return baseMapper.deleteSysSetByIds(Convert.toStrArray(ids));
+            return removeByIds(idList);
         }
         List<SysSet> dbList = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getSetParentCode, setCodes).list();
         StringBuilder sb = new StringBuilder();
@@ -129,29 +124,6 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
             sb.deleteCharAt(sb.length() - 1);
             throw new CustomException(sb.toString());
         }
-        return baseMapper.deleteSysSetByIds(Convert.toStrArray(ids));
+        return removeByIds(idList);
     }
-
-    /**
-     * 真删除值集信息
-     *
-     * @param id 值集ID
-     * @return 结果
-     */
-    @Override
-    public int deleteSysSetById(Long id) {
-        return baseMapper.deleteSysSetById(id);
-    }
-
-    /**
-     * 值集逻辑删除
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Override
-    public boolean logicRemove(String ids) {
-        return removeByIds(SUtil.splitToStrList(ids));
-    }
-
 }

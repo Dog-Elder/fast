@@ -54,7 +54,7 @@ public class SysEncodingSetRuleController extends WebBaseController{
      */
     @PostMapping
     @ManageCheckPermission(value = "manage.encodingSetRule.save")
-    public R save(@RequestBody @Validated ValidList<SysEncodingSetRuleVO> vo){
+    public R<List<SysEncodingSetRuleVO>> save(@RequestBody @Validated ValidList<SysEncodingSetRuleVO> vo){
         return R.success(sysEncodingSetRuleService.save(vo));
     }
 

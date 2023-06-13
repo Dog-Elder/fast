@@ -3,6 +3,8 @@ package com.fast.common.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fast.common.entity.sys.SysSet;
+import com.fast.common.query.SysSetQuery;
+import com.fast.common.vo.SysSetVO;
 import com.fast.core.mybatis.service.BaseService;
 
 import java.util.List;
@@ -15,60 +17,8 @@ import java.util.List;
  */
 public interface ISysSetService extends BaseService<SysSet>
 {
-    /**
-     * 查询值集
-     * 
-     * @param id 值集ID
-     * @return 值集
-     */
-    public SysSet selectById(Long id);
-
-    /**
-     * 查询值集列表
-     * 
-     * @param sysSet 值集
-     * @return 值集集合
-     */
-    public List<SysSet> list(SysSet sysSet);
-
-    /**
-     * @Description: 批量添加
-     * @Author: Dog_Elder
-     * @Date: 2022/3/24 14:31
-     * @param sysSets: 值集对象
-     * @return: java.util.List<com.xxxxx.domain.sys.SysSet>
-     **/
-    public List<SysSet> addSave(List<SysSet> sysSets);
-
-    /**
-     * 修改值集
-     * 
-     * @param sysSet 值集
-     * @return 结果
-     */
-    public boolean update(SysSet sysSet);
-
-    /**
-     * 真批量删除值集
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteByIds(String ids);
-
-    /**
-     * 真删除值集信息
-     * 
-     * @param id 值集ID
-     * @return 结果
-     */
-    public int deleteSysSetById(Long id);
-
-    /**
-     * 值集逻辑删除
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    public boolean logicRemove(String ids);
+    List<SysSetVO> list(SysSetQuery query);
+    List<SysSetVO> save(List<SysSetVO> vo);
+    boolean update(SysSetVO vo);
+    boolean delete(List<String> idList);
 }
