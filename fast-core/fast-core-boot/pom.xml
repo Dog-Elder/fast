@@ -37,11 +37,6 @@
             <artifactId>fast-starter-sa-token</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <!--Druid-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>
     </dependencies>
 
 </project>
