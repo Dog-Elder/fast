@@ -33,7 +33,7 @@
         <pagehelper.boot.version>1.4.3</pagehelper.boot.version>
         <jackson.version>2.13.0</jackson.version>
         <commons-codec.version>1.14</commons-codec.version>
-        <hutool.version>5.8.16</hutool.version>
+        <hutool.version>5.8.19</hutool.version>
         <javase.verison>3.2.1</javase.verison>
         <core.verison>3.3.3</core.verison>
         <sa.token.verison>1.34.0</sa.token.verison>
