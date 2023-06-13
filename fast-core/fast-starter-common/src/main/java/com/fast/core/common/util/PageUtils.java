@@ -31,7 +31,8 @@ public class PageUtils extends PageHelper {
                 pageSize = 1000;
             }
             String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
-            PageHelper.startPage(pageNum, pageSize, orderBy);
+            Page page=PageHelper.startPage(pageNum, pageSize);
+            page.setUnsafeOrderBy(orderBy);
         }
         return pageDomain;
     }
