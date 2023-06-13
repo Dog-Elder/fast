@@ -40,35 +40,35 @@ public class TestController extends WebBaseController {
     private ISysSetService sysSetService;
 
     /**
-     * 查询值集列表
+     * 查询值集值表
      */
     @GetMapping
     @RequestMapping("/set")
     @ManageCheckPermission("user.add")
     public R<TableDataInfo> list(SysSet sysSet) {
         startPage();
-        List<SysSet> list = sysSetService.list(sysSet);
+        List<SysSet> list = sysSetService.list();
         return R.success(getDataTable(list));
     }
 
     /**
-     * 查询值集列表
+     * 查询值集值表
      */
     @PostMapping("/set2")
     @ManageCheckPermission(value = "user.delete")
     public R<TableDataInfo> list2(@RequestBody SysSet sysSet) {
         startPage();
-        List<SysSet> list = sysSetService.list(sysSet);
+        List<SysSet> list = sysSetService.list();
         return R.success(getDataTable(list));
     }
 
     /**
-     * 查询值集列表
+     * 查询值集值表
      */
     @GetMapping("/set3/{v2}")
     @Cache(value = "test@ttl=30")
     public R<List<SysSet>> list3(@RequestParam("v1") String aa, @PathVariable("v2") String v2) {
 //        List<SysSet> list = );
-        return R.success(sysSetService.list(new SysSet()));
+        return R.success(sysSetService.list());
     }
 }
