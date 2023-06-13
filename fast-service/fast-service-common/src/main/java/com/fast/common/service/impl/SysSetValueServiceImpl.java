@@ -1,11 +1,12 @@
 package com.fast.common.service.impl;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.fast.common.constant.cache.CacheConstant;
 import com.fast.common.dao.SysSetValueDao;
 import com.fast.common.entity.sys.SysSet;
 import com.fast.common.entity.sys.SysSetValue;
@@ -15,17 +16,19 @@ import com.fast.common.service.ISysSetValueService;
 import com.fast.common.vo.CustomSetValueVO;
 import com.fast.common.vo.SysSetValueVO;
 import com.fast.core.common.constant.Constants;
-import com.fast.common.constant.cache.CacheConstant;
 import com.fast.core.common.exception.CustomException;
 import com.fast.core.common.util.CUtil;
 import com.fast.core.common.util.PageUtils;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
+import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.core.util.FastRedis;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -33,7 +36,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * 值集列Service业务层处理
+ * 值集值Service业务层处理
  *
  * @author @Dog_Elder
  * @date 2022-03-25
@@ -42,41 +45,29 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysSetValue> implements ISysSetValueService {
-
     private final ISysSetService sysSetService;
-
     private final FastRedis redis;
 
-    /**
-     * 查询值集列
-     *
-     * @param id 值集列ID
-     * @return 值集列
-     */
-    @Override
-    @Transactional()
-    public SysSetValue selectById(Long id) {
-        return baseMapper.selectSysSetValueById(id);
+    private LambdaQueryWrapper<SysSetValue> getWrapper(SysSetValueQuery query) {
+        LambdaQueryWrapper<SysSetValue> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(Util.isNotNull(query.getSetCode()) && SUtil.isNotEmpty(query.getSetCode()), SysSetValue::getSetCode, query.getSetCode());
+        wrapper.eq(Util.isNotNull(query.getSetValueKey()) && SUtil.isNotEmpty(query.getSetValueKey()), SysSetValue::getSetValueKey, query.getSetValueKey());
+        wrapper.like(Util.isNotNull(query.getSetValueValue()) && SUtil.isNotEmpty(query.getSetValueValue()), SysSetValue::getSetValueValue, query.getSetValueValue());
+        wrapper.eq(Util.isNotNull(query.getSetRelationKey()) && SUtil.isNotEmpty(query.getSetRelationKey()), SysSetValue::getSetRelationKey, query.getSetRelationKey());
+        return wrapper;
     }
 
     /**
-     * 查询值集列列表
+     * 查询值集值列表
      *
-     * @param sysSetValue 值集列
-     * @return 值集列
+     * @param query 值集值
+     * @return 值集值
      */
     @Override
-    public List<SysSetValueVO> list(SysSetValue sysSetValue) {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = true)
+    public List<SysSetValueVO> list(SysSetValueQuery query) {
         List<SysSetValueVO> vo;
-        List<SysSetValue> sysSetValues = list(new LambdaQueryWrapper<SysSetValue>()
-                .eq(Util.isNotNull(sysSetValue.getSetCode()) && SUtil.isNotEmpty(sysSetValue.getSetCode()), SysSetValue::getSetCode, sysSetValue.getSetCode())
-                .eq(Util.isNotNull(sysSetValue.getSetValueKey()) && SUtil.isNotEmpty(sysSetValue.getSetValueKey()), SysSetValue::getSetValueKey, sysSetValue.getSetValueKey())
-                .eq(Util.isNotNull(sysSetValue.getSetValueValue()) && SUtil.isNotEmpty(sysSetValue.getSetValueValue()), SysSetValue::getSetValueValue, sysSetValue.getSetValueValue())
-                .eq(Util.isNotNull(sysSetValue.getSetRelationKey()) && SUtil.isNotEmpty(sysSetValue.getSetRelationKey()), SysSetValue::getSetRelationKey, sysSetValue.getSetRelationKey())
-                .eq(Util.isNotNull(sysSetValue.getSetOperate()) && SUtil.isNotEmpty(sysSetValue.getSetOperate()), SysSetValue::getSetOperate, sysSetValue.getSetOperate())
-                .eq(Util.isNotNull(sysSetValue.getSetOrder()), SysSetValue::getSetOrder, sysSetValue.getSetOrder())
-                .eq(Util.isNotNull(sysSetValue.getVersion()), SysSetValue::getVersion, sysSetValue.getVersion())
-        );
+        List<SysSetValue> sysSetValues = list(getWrapper(query));
         //取所有的关联值集值的key
         Set<String> setRelationKeys = sysSetValues.stream().map(SysSetValue::getSetRelationKey).collect(Collectors.toSet());
         vo = PageUtils.copy(sysSetValues, SysSetValueVO.class);
@@ -84,7 +75,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
             return vo;
         }
         //获取当前对象找到关联的值集
-        SysSet set = sysSetService.getOne(new LambdaQueryWrapper<SysSet>().eq(SysSet::getSetCode, sysSetValue.getSetCode()));
+        SysSet set = sysSetService.getOne(new LambdaQueryWrapper<SysSet>().eq(SysSet::getSetCode, query.getSetCode()));
         if (Util.isNull(set) || SUtil.isEmpty(set.getSetParentCode())) {
             return vo;
         }
@@ -104,9 +95,29 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         return vo;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public List<SysSetValueVO> save(List<SysSetValueVO> vo) {
+        List<SysSetValue> entityList = BUtil.copyList(vo, SysSetValue.class);
+        checkSet(entityList);
+        verifyRepeat(entityList);
+        removeCache(entityList);
+        saveBatch(entityList);
+        return BUtil.copyList(entityList, SysSetValueVO.class);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean update(SysSetValueVO vo) {
+        SysSetValue entity = BUtil.copy(vo, SysSetValue.class);
+        verifyRepeat(Collections.singletonList(entity));
+        return updateById(entity);
+    }
+
     /**
      * 自定义列表
      * 不能分页
+     *
      * @param map K:返回k  V:值集code
      * @return JSONObject k:List<值集值>
      */
@@ -119,14 +130,17 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         //过滤值集未启用的
         List<SysSet> validSets = sysSetService.list(new LambdaQueryWrapper<SysSet>().select(SysSet::getSetCode).in(SysSet::getSetCode, values).eq(SysSet::getSetState, Constants.Y));
         //获取有效的值集编码
-        Set setCodes = CUtil.getPropertySet(validSets.stream().filter(Objects::nonNull), SysSet::getSetCode);
+        Set<String> setCodes = CUtil.getPropertySet(validSets.stream().filter(Objects::nonNull), SysSet::getSetCode);
+        if (CUtil.isEmpty(setCodes)) {
+            return JSONUtil.createObj();
+        }
         //只筛选有效的值集值
         List<SysSetValue> setValues = new LambdaQueryChainWrapper<>(baseMapper)
                 .in(SysSetValue::getSetCode, setCodes)
                 .list();
         List<CustomSetValueVO> vos = CUtil.copy(setValues, CustomSetValueVO.class);
         Map<String, List<CustomSetValueVO>> byCodeGrouping = CUtil.toGrouping(vos, CustomSetValueVO::getSetCode);
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = JSONUtil.createObj();
         map.forEach((k, v) -> {
             List<CustomSetValueVO> customSetValueVOs = byCodeGrouping.get(v);
             List<CustomSetValueVO> descVO = CUtil.asc(customSetValueVOs, CustomSetValueVO::getSetOrder);
@@ -213,91 +227,44 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
 
     @Override
     public String qryValue(String setCode, String setValueKey) {
-        return null;
+        //查询值集是否已经被删除或关闭
+        SysSet set = sysSetService.getOne(new LambdaQueryWrapper<SysSet>().eq(SysSet::getSetCode, setCode).eq(SysSet::getSetState, Constants.Y));
+        if (Util.isNull(set)) {
+            return null;
+        }
+        SysSetValue setValue = getOne(Wrappers.<SysSetValue>lambdaQuery()
+                .eq(SysSetValue::getSetCode, setCode)
+                .eq(SysSetValue::getSetValueKey, setValueKey));
+        return setValue != null ? setValue.getSetValueValue() : null;
     }
 
-    /**
-     * 添加值集列
-     *
-     * @param sysSetValue 值集列
-     * @return 结果
-     */
+
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
-    public List<SysSetValue> addSave(List<SysSetValue> sysSetValue) {
-        checkSet(sysSetValue);
-        verifyRepeat(sysSetValue);
-        removeCache(sysSetValue);
-        saveBatch(sysSetValue);
-        return sysSetValue;
+    @Transactional(rollbackFor = Exception.class)
+    public boolean delete(List<String> idList) {
+        return removeByIds(idList);
     }
 
     private void removeCache(List<SysSetValue> sysSetValue) {
         Set<String> setCodes = CUtil.getPropertySet(sysSetValue, SysSetValue::getSetCode);
         Set<String> fields = new HashSet<>(setCodes);
         //查询所有的
-        getRelevanceSetCode(fields,setCodes);
-        log.info("清除值集值===要删除的key(SysSet.setCode):"+fields);
-        fields.forEach(ele->{
+        getRelevanceSetCode(fields, setCodes);
+        log.info("清除值集值===要删除的key(SysSet.setCode):" + fields);
+        fields.forEach(ele -> {
             redis.deleteHash(CacheConstant.SetValue._IN, ele);
         });
     }
 
-    private void getRelevanceSetCode(Set<String> fields,Set<String> setCodes){
-        List<SysSet> list = sysSetService.list(new LambdaQueryWrapper<SysSet>().select( SysSet::getSetCode).in(SysSet::getSetParentCode, setCodes));
+    private void getRelevanceSetCode(Set<String> fields, Set<String> setCodes) {
+        List<SysSet> list = sysSetService.list(new LambdaQueryWrapper<SysSet>().select(SysSet::getSetCode).in(SysSet::getSetParentCode, setCodes));
         if (CUtil.isNotEmpty(list)) {
             Set<String> setCode = CUtil.getPropertySet(list, SysSet::getSetCode);
             fields.addAll(setCode);
-            getRelevanceSetCode(fields,setCode);
+            getRelevanceSetCode(fields, setCode);
         }
     }
 
-    /**
-     * 修改值集列
-     *
-     * @param sysSetValue 值集列
-     * @return 结果
-     */
-    @Transactional(rollbackFor = RuntimeException.class)
-    @Override
-    public boolean update(SysSetValue sysSetValue) {
-        verifyRepeat(Collections.singletonList(sysSetValue));
-        return updateById(sysSetValue);
-    }
-
-    /**
-     * 真删除值集列对象
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Transactional
-    @Override
-    public int deleteByIds(String ids) {
-        return baseMapper.deleteSysSetValueByIds(Convert.toStrArray(ids));
-    }
-
-    /**
-     * 真删除值集列信息
-     *
-     * @param id 值集列ID
-     * @return 结果
-     */
-    @Override
-    public int deleteSysSetValueById(Long id) {
-        return baseMapper.deleteSysSetValueById(id);
-    }
-
-    /**
-     * 值集列逻辑删除
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Override
-    public boolean logicRemove(String ids) {
-        return removeByIds(SUtil.splitToStrList(ids));
-    }
 
     /**
      * 检查要添加的值集值对应的值集是否存在
@@ -346,7 +313,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
             List<String> setValueKeys = v.stream().map(SysSetValue::getSetValueKey).collect(Collectors.toList());
             List<String> duplicateElements = CUtil.getDuplicateElements(setValueKeys);
             if (CUtil.isNotEmpty(duplicateElements)) {
-                throw new CustomException("值集值key重复:" + duplicateElements.toString());
+                throw new CustomException("值集值key重复:" + duplicateElements);
             }
         });
         return reqMap.keySet();

@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
- * 值集列对象 sys_set_value
+ * 值集值对象 sys_set_value
  *
  * @author @Dog_Elder
  * @date 2022-03-24

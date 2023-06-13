@@ -24,7 +24,7 @@ public interface SysSetDao extends BaseDao<SysSet>
     public SysSet selectSysSetById(Long id);
 
     /**
-     * 查询值集列表
+     * 查询值集值表
      * 
      * @param sysSet 值集
      * @return 值集集合
