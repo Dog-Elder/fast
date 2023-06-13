@@ -25,7 +25,7 @@ import java.util.List;
 */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/manage-api/encodingSetRule")
+@RequestMapping("/manage-api/encoding-set-rule")
 public class SysEncodingSetRuleController extends WebBaseController{
     private final ISysEncodingSetRuleService sysEncodingSetRuleService;
 
