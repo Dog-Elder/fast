@@ -37,11 +37,11 @@ public class SysSet extends BaseVersionEntity {
     @NotBlank(message = "值集名称不能为空")
     private String setName;
 
-    /** 值集状态（0代表关闭 1代表启用） */
+    /** 值集状态（0:关闭 1:启用） */
     @NotBlank(message = "值机状态不能为空")
     private String setState;
 
-    /** 是否分页（0代表关闭 1代表启用） */
+    /** 是否分页（0:关闭 1:启用） */
     @NotBlank(message = "是否分页不能为空")
     private String setPage;
 

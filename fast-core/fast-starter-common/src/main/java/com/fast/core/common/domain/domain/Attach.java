@@ -47,8 +47,8 @@ package com.fast.core.common.domain.domain;//package com.fast.core.common.domain
 //    @TableField("`attach_suffix`")
 //    private String attachSuffix;
 //
-//    /** 删除标志（0代表存在 2代表删除） */
-//    @Display("删除标志（0代表存在 2代表删除）")
+//    /** 删除标志（1:删除） */
+//    @Display("删除标志（1:删除）")
 //    @TableField("`del_flag`")
 //    private String delFlag;
 //

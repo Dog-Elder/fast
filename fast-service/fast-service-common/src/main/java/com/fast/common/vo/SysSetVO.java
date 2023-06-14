@@ -47,16 +47,16 @@ public class SysSetVO implements Serializable {
     private String setName;
 
     /**
-     * 值集状态（0代表启用 2代表关闭）
+     * 值集状态（0:关闭 1:启用）
      */
-    @Display("值集状态（0代表启用 2代表关闭）")
+    @Display("值集状态（0:关闭 1:启用）")
     @NotBlank(message = Com.Require, groups = {Save.class})
     private String setState;
 
     /**
-     * 是否分页（0代表启用 2代表关闭）
+     * 是否分页（0:关闭 1:启用）
      */
-    @Display("是否分页（0代表启用 2代表关闭）")
+    @Display("是否分页（0:关闭 1:启用）")
     @NotBlank(message = Com.Require, groups = {Save.class})
     private String setPage;
 

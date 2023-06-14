@@ -46,7 +46,7 @@ public class SysRole extends BaseVersionEntity {
      */
     private String dataScope;
     /**
-     * 角色状态（0正常 2停用）
+     * 角色状态（0:关闭 1:启用）
      */
     @TableField("`status`")
     private String status;
