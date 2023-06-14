@@ -2,14 +2,15 @@ package com.fast.common.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fast.common.entity.verification.Save;
+import com.fast.core.common.annotation.lov.Lov;
+import com.fast.core.common.domain.vo.Vo;
 import com.fast.core.common.util.Com;
 import com.fast.core.common.validate.annotation.Display;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.time.LocalDateTime;
+
 
 /**
  * 值集
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
  * @since 1.0.0 2023-06-12
  */
 @Data
-public class SysSetVO implements Serializable {
+public class SysSetVO extends Vo {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -50,6 +51,7 @@ public class SysSetVO implements Serializable {
      * 值集状态（0:关闭 1:启用）
      */
     @Display("值集状态（0:关闭 1:启用）")
+    @Lov(setCode = "STATUS",decipherField = "setStateMessage")
     @NotBlank(message = Com.Require, groups = {Save.class})
     private String setState;
 
@@ -57,8 +59,19 @@ public class SysSetVO implements Serializable {
      * 是否分页（0:关闭 1:启用）
      */
     @Display("是否分页（0:关闭 1:启用）")
+    @Lov(setCode = "STATUS",decipherField = "setPageMessage")
     @NotBlank(message = Com.Require, groups = {Save.class})
     private String setPage;
+
+    /**
+     * 值集状态（0:关闭 1:启用）
+     */
+    private String setStateMessage;
+
+    /**
+     * 是否分页（0:关闭 1:启用）
+     */
+    private String setPageMessage;
 
     /**
      * 值集概要

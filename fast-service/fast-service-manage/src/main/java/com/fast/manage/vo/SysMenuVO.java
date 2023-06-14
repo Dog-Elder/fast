@@ -1,6 +1,7 @@
 package com.fast.manage.vo;
 
 import com.fast.common.entity.verification.Save;
+import com.fast.core.common.domain.vo.Vo;
 import com.fast.core.common.util.Com;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
  * @since 1.0.0 2023-06-12
  */
 @Data
-public class SysMenuVO implements Serializable {
+public class SysMenuVO extends Vo {
     private static final long serialVersionUID = 1L;
 
     /**

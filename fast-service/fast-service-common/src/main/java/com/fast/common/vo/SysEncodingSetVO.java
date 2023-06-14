@@ -1,5 +1,6 @@
 package com.fast.common.vo;
 
+import com.fast.core.common.domain.vo.Vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fast.core.common.validate.annotation.Display;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 * @since 1.0.0 2023-06-12
 */
 @Data
-public class SysEncodingSetVO implements Serializable {
+public class SysEncodingSetVO extends Vo {
 	private static final long serialVersionUID = 1L;
 
 	/**
