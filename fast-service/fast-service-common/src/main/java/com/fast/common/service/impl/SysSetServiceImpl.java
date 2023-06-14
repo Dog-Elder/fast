@@ -8,6 +8,7 @@ import com.fast.common.entity.sys.SysSet;
 import com.fast.common.entity.sys.SysSetValue;
 import com.fast.common.query.SysSetQuery;
 import com.fast.common.service.ISysSetService;
+import com.fast.common.service.ISysSetValueService;
 import com.fast.common.vo.SysSetVO;
 import com.fast.core.common.exception.CustomException;
 import com.fast.core.common.util.CUtil;
@@ -18,11 +19,13 @@ import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -38,20 +41,22 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implements ISysSetService {
-
+    @Lazy
+    @Resource
+    private ISysSetValueService sysSetValueService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<SysSetVO> list(SysSetQuery query) {
         List<SysSet> entityList = list(getWrapper(query));
-        return PageUtils.copy(entityList,SysSetVO.class);
+        return PageUtils.copy(entityList, SysSetVO.class);
     }
 
-    private LambdaQueryWrapper<SysSet> getWrapper(SysSetQuery query){
+    private LambdaQueryWrapper<SysSet> getWrapper(SysSetQuery query) {
         LambdaQueryWrapper<SysSet> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(Util.isNotNull(query.getId())&& SUtil.isNotEmpty(query.getId()), SysSet::getId, query.getId());
-        wrapper.eq(Util.isNotNull(query.getSetCode())&& SUtil.isNotEmpty(query.getSetCode()), SysSet::getSetCode, query.getSetCode());
-        wrapper.eq(Util.isNotNull(query.getSetParentCode())&& SUtil.isNotEmpty(query.getSetParentCode()), SysSet::getSetParentCode, query.getSetParentCode());
+        wrapper.eq(Util.isNotNull(query.getId()) && SUtil.isNotEmpty(query.getId()), SysSet::getId, query.getId());
+        wrapper.eq(Util.isNotNull(query.getSetCode()) && SUtil.isNotEmpty(query.getSetCode()), SysSet::getSetCode, query.getSetCode());
+        wrapper.eq(Util.isNotNull(query.getSetParentCode()) && SUtil.isNotEmpty(query.getSetParentCode()), SysSet::getSetParentCode, query.getSetParentCode());
         wrapper.like(Util.isNotNull(query.getSetName()) && SUtil.isNotEmpty(query.getSetName()), SysSet::getSetName, query.getSetName());
         wrapper.like(Util.isNotNull(query.getSetDescribe()) && SUtil.isNotEmpty(query.getSetDescribe()), SysSet::getSetDescribe, query.getSetDescribe());
         wrapper.like(Util.isNotNull(query.getRemark()) && SUtil.isNotEmpty(query.getRemark()), SysSet::getRemark, query.getRemark());
@@ -61,7 +66,7 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public List<SysSetVO> save(List<SysSetVO> vo) {
-        List<SysSet> entityList = BUtil.copyList(vo,SysSet.class);
+        List<SysSet> entityList = BUtil.copyList(vo, SysSet.class);
         //检查添加的数据中是否有重复编码数据
         Set<String> setCodes = entityList.stream().map(SysSet::getSetCode).collect(Collectors.toSet());
         if (setCodes.size() != entityList.size()) {
@@ -80,12 +85,12 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
             Collection<String> diffByHashSet = CUtil.getDiffByHashSet(setParentCodes, parentSet.stream().map(SysSet::getSetCode).collect(Collectors.toSet()));
             if (CUtil.isEmpty(diffByHashSet)) {
                 saveBatch(entityList);
-                return BUtil.copyList(entityList,SysSetVO.class);
+                return BUtil.copyList(entityList, SysSetVO.class);
             }
             throw new CustomException("关联的值集编码不存在" + diffByHashSet);
         }
         saveBatch(entityList);
-        return BUtil.copyList(entityList,SysSetVO.class);
+        return BUtil.copyList(entityList, SysSetVO.class);
     }
 
     @Override
@@ -113,17 +118,19 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
     public boolean delete(List<String> idList) {
         List<SysSet> sysSets = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getId, idList).list();
         Set<String> setCodes = sysSets.stream().map(SysSet::getSetCode).collect(Collectors.toSet());
-        if (CUtil.isEmpty(setCodes)) {
-            return removeByIds(idList);
-        }
         List<SysSet> dbList = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getSetParentCode, setCodes).list();
         StringBuilder sb = new StringBuilder();
         if (CUtil.isNotEmpty(dbList)) {
-            sb.append("要删除的值集级有子集:");
+            sb.append("需先删除的值集级子集:");
             dbList.forEach(ele -> sb.append(ele.getSetParentCode()).append(","));
             sb.deleteCharAt(sb.length() - 1);
             throw new CustomException(sb.toString());
         }
-        return removeByIds(idList);
+        boolean removeSetValue = sysSetValueService.remove(Wrappers.<SysSetValue>lambdaQuery()
+                .in(SysSetValue::getSetCode, setCodes));
+        if (removeSetValue) {
+            return removeByIds(idList);
+        }
+        return false;
     }
 }

@@ -2,12 +2,16 @@ package com.fast.common.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fast.common.entity.verification.Save;
+import com.fast.common.entity.verification.Update;
 import com.fast.core.common.annotation.lov.Lov;
 import com.fast.core.common.domain.vo.Vo;
 import com.fast.core.common.util.Com;
 import com.fast.core.common.validate.annotation.Display;
+import com.fast.core.common.validate.annotation.PositiveInt;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
+
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
@@ -51,16 +55,20 @@ public class SysSetVO extends Vo {
      * 值集状态（0:关闭 1:启用）
      */
     @Display("值集状态（0:关闭 1:启用）")
-    @Lov(setCode = "STATUS",decipherField = "setStateMessage")
-    @NotBlank(message = Com.Require, groups = {Save.class})
+    @Lov(setCode = "STATUS", decipherField = "setStateMessage")
+    @NotBlank(message = Com.Require, groups = {Save.class, Update.class})
+    @PositiveInt(canBeZero = true, groups = {Save.class, Update.class})
+    @Range(min = 0, max = 1, message = Com.MinMaxValue, groups = {Save.class, Update.class})
     private String setState;
 
     /**
      * 是否分页（0:关闭 1:启用）
      */
     @Display("是否分页（0:关闭 1:启用）")
-    @Lov(setCode = "STATUS",decipherField = "setPageMessage")
-    @NotBlank(message = Com.Require, groups = {Save.class})
+    @Lov(setCode = "STATUS", decipherField = "setPageMessage")
+    @NotBlank(message = Com.Require, groups = {Save.class, Update.class})
+    @PositiveInt(canBeZero = true, groups = {Save.class, Update.class})
+    @Range(min = 0, max = 1, message = Com.MinMaxValue, groups = {Save.class, Update.class})
     private String setPage;
 
     /**
@@ -121,10 +129,12 @@ public class SysSetVO extends Vo {
     private String remark;
 
     /**
-     * 操作权限（0代表不可操作 1代表管理员可操作 2代表所有人可操作）
+     * 操作权限（0:不可操作 1:管理员 2:所有人）
      */
     @Display("操作权限（0代表不可操作 1代表管理员可操作 2代表所有人可操作）")
     @NotBlank(message = Com.Require, groups = {Save.class})
+    @PositiveInt(canBeZero = true, groups = {Save.class, Update.class})
+    @Range(min = 0, max = 3, message = Com.MinMaxValue, groups = {Save.class, Update.class})
     private String setOperate;
 
 
