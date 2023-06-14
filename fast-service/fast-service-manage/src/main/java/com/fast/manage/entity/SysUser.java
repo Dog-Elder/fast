@@ -29,7 +29,7 @@ public class SysUser extends User {
      */
     private Integer administrator;
     /**
-     * 用户状态（1:删除）
+     * 用户状态（1 :正常 0:停封）
      */
     private String status;
     /**

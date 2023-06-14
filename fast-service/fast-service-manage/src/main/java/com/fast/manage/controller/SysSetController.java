@@ -12,6 +12,7 @@ import com.fast.common.service.ISysSetService;
 import com.fast.common.service.ISysSetValueService;
 import com.fast.common.vo.SysSetVO;
 import com.fast.common.vo.SysSetValueVO;
+import com.fast.core.common.annotation.lov.AutoLov;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.domain.ValidList;
 import com.fast.core.common.domain.page.TableDataInfo;
@@ -38,6 +39,7 @@ public class SysSetController extends WebBaseController {
     /**
      * 值集分页
      */
+    @AutoLov
     @GetMapping("/page")
     @ManageCheckPermission(value = "manage.set.page")
     public R<TableDataInfo> page(@Validated(Qry.class) SysSetQuery query){
