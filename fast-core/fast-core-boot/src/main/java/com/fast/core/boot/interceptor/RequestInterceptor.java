@@ -1,5 +1,6 @@
 package com.fast.core.boot.interceptor;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.fast.core.common.util.SUtil;
@@ -58,8 +59,14 @@ public class RequestInterceptor implements HandlerInterceptor {
             String body = new String(bodyBytes, request.getCharacterEncoding());
             if (SUtil.isNotBlank(body)) {
                 try {
-                    JSONObject jsonObject = JSONUtil.parseObj(body);
-                    String formattedJson = jsonObject.toJSONString(0);
+                    String formattedJson;
+                    if (JSONUtil.isTypeJSONObject(body)) {
+                        JSONObject jsonObject = JSONUtil.parseObj(body);
+                        formattedJson = jsonObject.toJSONString(0);
+                    }else {
+                        JSONArray jsonArray = JSONUtil.parseArray(body);
+                        formattedJson = jsonArray.toJSONString(0);
+                    }
                     beforeReqLog.append("===>请求体 {}\n");
                     beforeReqArgs.add(formattedJson);
                 } catch (Exception e) {
