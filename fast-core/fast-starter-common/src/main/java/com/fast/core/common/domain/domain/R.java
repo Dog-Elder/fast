@@ -119,6 +119,10 @@ public class R<T> implements Serializable{
         return code;
     }
 
+    public boolean isSuccess() {
+        return code==200;
+    }
+
     public void setCode(int code) {
         this.code = code;
     }

@@ -14,43 +14,64 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-
 /**
- * 反射工具
+ * 反射工具类
  */
 @Slf4j
 public class RUtil {
+    // 缓存对象的运行时类
+    private static final Map<Object, Class<?>> classCache = new ConcurrentHashMap<>();
+    // 缓存类的注解
     private static final Map<Class<?>, Map<Class<? extends Annotation>, Annotation>> annotationCache = new HashMap<>();
-    private static Map<Class<?>, Map<String, Field>> fieldCache = new HashMap<>();
+    // 缓存类的字段
+    private static final Map<Class<?>, Map<String, Field>> fieldCache = new HashMap<>();
+    // 缓存类的所有字段，包括父类的字段
+    private static final Map<Class<?>, List<Field>> allFieldsCache = new ConcurrentHashMap<>();
 
+    /**
+     * 创建指定类的新实例
+     *
+     * @param clazz 类型
+     * @param <T>   泛型参数
+     * @return 类的新实例
+     * @throws NoSuchMethodException     如果找不到无参构造函数
+     * @throws IllegalAccessException    如果无法访问构造函数
+     * @throws InvocationTargetException 如果构造函数调用发生异常
+     * @throws InstantiationException    如果实例化失败
+     */
     public static <T> T newInstance(Class<T> clazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         return clazz.getDeclaredConstructor().newInstance();
     }
 
     /**
-     * 反射获取对象所有属性及相应值，包括所有上级类，其中枚举取ordinal值
-     * 忽略 静态属性 和 类型非BigDecimal的null值
+     * 获取对象的所有字段及相应值（包括父类的字段），枚举类型返回ordinal值，忽略静态字段和BigDecimal类型的null值
+     *
+     * @param bean 对象实例
+     * @return 包含字段名和对应值的映射
      */
     public static Map<String, Object> getAllFields(Object bean) {
         return getAllFields(bean, null);
     }
 
     /**
-     * 反射获取对象所有属性及相应值，包括所有上级类，其中枚举取ordinal值
-     * 不忽略任何值
+     * 获取对象的所有字段及相应值（包括父类的字段），枚举类型返回ordinal值，不忽略任何值
+     *
+     * @param bean 对象实例
+     * @return 包含字段名和对应值的映射
      */
     public static Map<String, Object> getAllFieldsForBatchAdd(Object bean) {
         Map<String, Object> ret = new HashMap<>();
         allFields(bean.getClass(), field -> {
             if (ret.containsKey(field.getName())) {
-                return; // 为了避免把值覆盖为null, 因为:继承如果存在同名的属性,则通过反射从父类获取的是null
+                return; // 避免将值覆盖为null，因为在继承关系中，如果存在同名的属性，则通过反射从父类获取的是null
             }
             boolean isStatic = Modifier.isStatic(field.getModifiers());
             if (isStatic) {
-                return; // 忽略静态属性
+                return; // 忽略静态字段
             }
             field.setAccessible(true);
             Object val = null;
@@ -64,7 +85,7 @@ public class RUtil {
                     val = BigDecimal.ZERO;
                 }
             }
-            if (val instanceof Enum<?>) { // 枚举对象取ordinal
+            if (val instanceof Enum<?>) { // 枚举对象取ordinal值
                 Enum<?> en = (Enum<?>) val;
                 val = en.ordinal();
             }
@@ -75,19 +96,21 @@ public class RUtil {
     }
 
     /**
-     * 反射获取对象属性及相应值，包括所有上级类，其中枚举取ordinal值
+     * 获取对象指定属性的字段及相应值（包括父类的字段），枚举类型返回ordinal值
      *
-     * @param targetPropList 只反射这些指定的属性
+     * @param bean            对象实例
+     * @param targetPropList  只反射指定的属性列表
+     * @return 包含字段名和对应值的映射
      */
     public static Map<String, Object> getAllFields(Object bean, List<String> targetPropList) {
         Map<String, Object> ret = new HashMap<>();
         allFields(bean.getClass(), field -> {
             if (ret.containsKey(field.getName())) {
-                return; // 为了避免把值覆盖为null, 因为:继承如果存在同名的属性,则通过反射从父类获取的是null
+                return; // 避免将值覆盖为null，因为在继承关系中，如果存在同名的属性，则通过反射从父类获取的是null
             }
             boolean isStatic = Modifier.isStatic(field.getModifiers());
             if (isStatic) {
-                return; // 忽略静态属性
+                return; // 忽略静态字段
             }
             boolean isOk = targetPropList == null;
             Optional<String> item = Optional.empty();
@@ -112,7 +135,7 @@ public class RUtil {
                         return;
                     }
                 }
-                if (val instanceof Enum<?>) { // 枚举对象取rodinal
+                if (val instanceof Enum<?>) { // 枚举对象取ordinal值
                     Enum<?> en = (Enum<?>) val;
                     val = en.ordinal();
                 }
@@ -124,8 +147,11 @@ public class RUtil {
     }
 
     /**
-     * 反射获取对象所有属性（包括父类）
-     **/
+     * 遍历类的所有字段（包括父类的字段）
+     *
+     * @param clazz          类型
+     * @param fieldConsumer  字段消费者
+     */
     public static void allFields(Class<?> clazz, Consumer<Field> fieldConsumer) {
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             Field[] fields = clazz.getDeclaredFields();
@@ -136,8 +162,11 @@ public class RUtil {
     }
 
     /**
-     * 反射获取对象所有属性（包括父类），fn若返回false则停止循环
-     **/
+     * 遍历类的所有字段（包括父类的字段），通过回调函数判断是否继续循环
+     *
+     * @param clazz 类型
+     * @param fn    回调函数，返回false时停止循环
+     */
     public static void allFields(Class<?> clazz, Function<Field, Boolean> fn) {
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             Field[] fields = clazz.getDeclaredFields();
@@ -151,8 +180,11 @@ public class RUtil {
     }
 
     /**
-     * 反射获取对象所有方法（包括父类）
-     **/
+     * 遍历类的所有方法（包括父类的方法）
+     *
+     * @param clazz 类型
+     * @param fn    方法消费者
+     */
     public static void allMethods(Class<?> clazz, Consumer<Method> fn) {
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             Method[] methods = clazz.getDeclaredMethods();
@@ -163,8 +195,11 @@ public class RUtil {
     }
 
     /**
-     * desc 反射获取对象所有方法（包括父类），fn若返回false则停止循环
-     **/
+     * 遍历类的所有方法（包括父类的方法），通过回调函数判断是否继续循环
+     *
+     * @param clazz 类型
+     * @param fn    回调函数，返回false时停止循环
+     */
     public static void allMethods(Class<?> clazz, Function<Method, Boolean> fn) {
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             Method[] methods = clazz.getDeclaredMethods();
@@ -178,8 +213,12 @@ public class RUtil {
     }
 
     /**
-     * desc 反射获取注解指定属性的值
-     **/
+     * 获取注解指定属性的值
+     *
+     * @param annotation  注解实例
+     * @param memberName  属性名称
+     * @return 属性的值
+     */
     public static Object annoValue(Annotation annotation, String memberName) {
         try {
             InvocationHandler h = Proxy.getInvocationHandler(annotation);
@@ -193,6 +232,13 @@ public class RUtil {
         }
     }
 
+    /**
+     * 获取字段的类型
+     *
+     * @param aClass       类型
+     * @param propertyName 字段名
+     * @return 字段的类型
+     */
     public static Class<?> getFieldClass(Class<?> aClass, String propertyName) {
         Class<?> ret = null;
 
@@ -204,6 +250,13 @@ public class RUtil {
         return ret;
     }
 
+    /**
+     * 获取字段实例
+     *
+     * @param clazz        类型
+     * @param propertyName 字段名
+     * @return 字段实例
+     */
     public static Field getField(Class<?> clazz, String propertyName) {
         Map<String, Field> classFieldCache = fieldCache.get(clazz);
         if (classFieldCache != null && classFieldCache.containsKey(propertyName)) {
@@ -222,7 +275,7 @@ public class RUtil {
                 classFieldCache.put(propertyName, field);
                 break;
             } catch (NoSuchFieldException e) {
-                //如果找不到则继续向父类找
+                //如果找不到则继续向父类查找
             }
         }
 
@@ -239,43 +292,84 @@ public class RUtil {
                 return field.get(object);
             }
         } catch (Exception e) {
-            LogFactory.getLog(new CurrentClassGetter().getCurrentClass()).error(e.getMessage(), e);
+            LogUtil.err(e);
         }
         return null;
     }
 
-    private static class CurrentClassGetter extends SecurityManager {
-        public Class getCurrentClass() {
-            Class[] arr = getClassContext();
-            int i = 2;
-            for (i = 2; i < arr.length; i++) {
-                if (arr[i] != LogUtil.class) {
-                    break;
-                }
-            }
-            return arr[i];
+    /**
+     * 获取类的所有字段（包括父类的字段）
+     *
+     * @param clazz 类型
+     * @return 包含所有字段的列表
+     */
+    public static List<Field> getAllFields(Class<?> clazz) {
+        List<Field> fields = allFieldsCache.get(clazz);
+        if (fields != null) {
+            return fields;
         }
+        final List<Field> fieldList = new ArrayList<>(); // 使用 final 声明列表变量
+        allFields(clazz, field -> {
+            fieldList.add(field);
+            return true;
+        });
+        allFieldsCache.put(clazz, fieldList); // 缓存字段列表
+        return fieldList;
     }
 
     /**
-     * 获取类注解
-     **/
-    public static <T extends Annotation> T getAnnotation(Class<?> clazz, Class<T> annotationClass) {
-        Map<Class<? extends Annotation>, Annotation> classCache = annotationCache.get(clazz);
-        if (classCache != null && classCache.containsKey(annotationClass)) {
-            return annotationClass.cast(classCache.get(annotationClass));
+     * 获取指定类型的注解
+     *
+     * @param clazz      类型
+     * @param annotation 注解类型
+     * @param <A>        注解类型参数
+     * @return 注解实例
+     */
+    public static <A extends Annotation> A getAnnotation(Class<?> clazz, Class<A> annotation) {
+        Map<Class<? extends Annotation>, Annotation> annotationMap = annotationCache.get(clazz);
+        if (annotationMap != null && annotationMap.containsKey(annotation)) {
+            return (A) annotationMap.get(annotation);
         }
 
-        T annotation = clazz.getAnnotation(annotationClass);
-
-        if (annotation != null) {
-            if (classCache == null) {
-                classCache = new HashMap<>();
-                annotationCache.put(clazz, classCache);
+        A ret = null;
+        for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+            ret = clazz.getAnnotation(annotation);
+            if (ret != null) {
+                if (annotationMap == null) {
+                    annotationMap = new HashMap<>();
+                    annotationCache.put(clazz, annotationMap);
+                }
+                annotationMap.put(annotation, ret);
+                break;
             }
-            classCache.put(annotationClass, annotation);
         }
 
-        return annotation;
+        return ret;
+    }
+
+    /**
+     * 判断类是否包含指定注解
+     *
+     * @param clazz      类型
+     * @param annotation 注解类型
+     * @return true-包含指定注解；false-不包含指定注解
+     */
+    public static boolean hasAnnotation(Class<?> clazz, Class<? extends Annotation> annotation) {
+        return getAnnotation(clazz, annotation) != null;
+    }
+
+    /**
+     * 获取类的运行时类型
+     *
+     * @param object 实例对象
+     * @return 运行时类型
+     */
+    public static Class<?> getClass(Object object) {
+        Class<?> clazz = classCache.get(object);
+        if (clazz == null) {
+            clazz = object.getClass();
+            classCache.put(object, clazz);
+        }
+        return clazz;
     }
 }
