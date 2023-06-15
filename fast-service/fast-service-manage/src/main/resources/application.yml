@@ -42,8 +42,8 @@ spring:
         min-idle: 0
         max-wait: -1
     host: fast.com
-    port: 6379
-    password: 123456
+    port: 6377
+    password: 27ac1ca76c1037366c17852e01a24bb7432ef4c
     database: 0
     timeout: 10000
 
