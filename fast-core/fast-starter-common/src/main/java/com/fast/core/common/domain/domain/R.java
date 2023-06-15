@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class R<T> implements Serializable{
     private int code;
+    private boolean success;
     private String msg;
     private T data;
 
@@ -55,16 +56,19 @@ public class R<T> implements Serializable{
         this.code = type.value();
         this.msg = msg;
         this.data = data;
+        this.success = (type == Type.SUCCESS);
     }
 
     public R(Type type, String msg) {
         this.code = type.value();
         this.msg = msg;
+        this.success = (type == Type.SUCCESS);
     }
 
     public R(Type type) {
         this.code = type.value();
         this.msg = type.description();
+        this.success = (type == Type.SUCCESS);
     }
 
     public static <T extends Serializable> R<T> success() {
