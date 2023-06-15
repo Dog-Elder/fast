@@ -35,17 +35,22 @@ spring:
       - classpath:/service-common-application.yml
   # 开发环境配置
   redis:
-    jedis:
-      pool:
-        max-active: 8
-        max-idle: 8
-        min-idle: 0
-        max-wait: -1
     host: fast.com
     port: 6377
     password: 27ac1ca76c1037366c17852e01a24bb7432ef4c
     database: 0
     timeout: 10000
+    lettuce:
+      pool:
+        # 连接池最大连接数
+        max-active: 200
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
+        max-idle: 10
+        # 连接池中的最小空闲连接
+        min-idle: 0
+
 
 
   # 数据源配置
