@@ -75,10 +75,6 @@ public class R<T> implements Serializable{
         return new R<>(Type.SUCCESS);
     }
 
-    public static <T extends Serializable> R<T> success(String msg) {
-        return new R<>(Type.SUCCESS, msg);
-    }
-
     public static <T extends Serializable> R<T> success(T data) {
         return new R<>(Type.SUCCESS, "操作成功", data);
     }
