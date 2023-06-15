@@ -97,6 +97,15 @@ public class SysSetController extends WebBaseController {
     }
 
     /**
+     * 查询值列表
+     */
+    @GetMapping("/data-list")
+    @ManageCheckPermission(value = "manage.setValue.list")
+    public R<TableDataInfo> dataList(@Validated(value = Qry.class) SysSetValueQuery req) {
+        return R.success(getDataTable(sysSetValueService.dataList(req)));
+    }
+
+    /**
      * 值集值信息
      */
     @GetMapping("/value/{id}")

@@ -35,7 +35,9 @@ public class CacheConstant {
      **/
     public interface SetValue {
         //列表
-        String _IN = SYS + "set:value";
+        String SET_VALUE = SYS + "set:value";
+        String SET_STATE = SYS + "set:state::{}";
+
     }
 
     /**
@@ -43,7 +45,7 @@ public class CacheConstant {
      **/
     public interface SysLock {
         //编码锁前缀
-        String _CODE_IN = SYS + "lock:code:{}:{}";
+        String _CODE_IN = SYS + "lock:code::{}::{}";
     }
 
     /**
@@ -52,13 +54,13 @@ public class CacheConstant {
     public interface SysSetRule {
         String CODE = "code:";
         //编码集状态  v: Y:开启 N:关闭
-        String _STATUS = SYS + CODE + "set:status:{}:{}";
+        String _STATUS = SYS + CODE + "set:status::{}::{}";
         //编码集已经使用(指的业务中已经开始生成字段)
-        String _USE_OPEN = SYS + CODE + "set:use:{}:{}";
+        String _USE_OPEN = SYS + CODE + "set:use::{}::{}";
         //编码段数据 sys:code:rule:规则代码:编码值
-        String _IN = SYS + CODE + "rule:{}:{}";
+        String _IN = SYS + CODE + "rule::{}::{}";
         //编码序列自增值
-        String _NUMBER = SYS + CODE + "rule:number:{}:{}";
+        String _NUMBER = SYS + CODE + "rule:number::{}::{}";
     }
 
 }

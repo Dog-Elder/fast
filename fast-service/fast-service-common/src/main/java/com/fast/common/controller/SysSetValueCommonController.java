@@ -32,13 +32,6 @@ public class SysSetValueCommonController extends WebBaseController{
         return R.success(sysSetValueService.customList(map));
     }
 
-    /**
-     * 查询值列表
-     */
-    @GetMapping("/data-list")
-    public R<TableDataInfo> dataList(@Validated(value = Qry.class) SysSetValueQuery req) {
-        return R.success(getDataTable(sysSetValueService.dataList(req)));
-    }
 
     /**
      * 通过缓存查询值列表
@@ -53,7 +46,7 @@ public class SysSetValueCommonController extends WebBaseController{
      */
     @GetMapping("/get-value/{setCode}/{setValueKey}")
     public R<String> qryValue(@PathVariable("setCode") String setCode,@PathVariable("setValueKey") String setValueKey) {
-        return R.success(sysSetValueService.qryValue(setCode,setValueKey));
+        return R.success(sysSetValueService.qryValues(setCode,setValueKey));
     }
 
 }

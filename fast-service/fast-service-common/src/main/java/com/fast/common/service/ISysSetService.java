@@ -21,4 +21,10 @@ public interface ISysSetService extends BaseService<SysSet>
     List<SysSetVO> save(List<SysSetVO> vo);
     boolean update(SysSetVO vo);
     boolean delete(List<String> idList);
+    /**
+     * 是否启用
+     *
+     * @param setCode:     值集编码
+     **/
+    Boolean isEnableBySetCode(String setCode);
 }

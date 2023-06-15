@@ -134,11 +134,10 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         if (CUtil.isEmpty(setCodes)) {
             return JSONUtil.createObj();
         }
-        //只筛选有效的值集值
-        List<SysSetValue> setValues = new LambdaQueryChainWrapper<>(baseMapper)
-                .in(SysSetValue::getSetCode, setCodes)
-                .list();
-        List<CustomSetValueVO> vos = CUtil.copy(setValues, CustomSetValueVO.class);
+        List<CustomSetValueVO> vos = new ArrayList<>();
+        setCodes.forEach(ele -> {
+                vos.addAll(qryCacheDataList(new SysSetValueQuery().setSetCode(ele)));
+        });
         Map<String, List<CustomSetValueVO>> byCodeGrouping = CUtil.toGrouping(vos, CustomSetValueVO::getSetCode);
         JSONObject jsonObject = JSONUtil.createObj();
         map.forEach((k, v) -> {
@@ -153,7 +152,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
     }
 
     /**
-     * 查询值列表
+     * 查询值列表 只查数据库
      */
     @Override
     public List<CustomSetValueVO> dataList(SysSetValueQuery req) {
@@ -199,12 +198,11 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
     @Override
     public List<CustomSetValueVO> qryCacheDataList(SysSetValueQuery req) {
         //查询值集是否已经被删除或关闭
-        SysSet set = sysSetService.getOne(new LambdaQueryWrapper<SysSet>().eq(SysSet::getSetCode, req.getSetCode()).eq(SysSet::getSetState, Constants.Y));
-        if (Util.isNull(set)) {
+        if (!sysSetService.isEnableBySetCode(req.getSetCode())) {
             return null;
         }
         //查询缓存
-        String jsonArrayValue = redis.getHash(CacheConstant.SetValue._IN, req.getSetCode());
+        String jsonArrayValue = redis.getHash(CacheConstant.SetValue.SET_VALUE, req.getSetCode());
         if (SUtil.isNotBlank(jsonArrayValue)) {
             JSONArray jsonArray = JSONUtil.parseArray(jsonArrayValue);
             List<CustomSetValueVO> customSetValueVOS = JSONUtil.toList(jsonArray, CustomSetValueVO.class);
@@ -221,21 +219,43 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         }
         //这里主要为了获得只根据setCode关联的值集数据
         JSONArray objects = JSONUtil.parseArray(dataList(new SysSetValueQuery().setSetCode(req.getSetCode()).setDb(Constants.N)));
-        redis.setHash(CacheConstant.SetValue._IN, req.getSetCode(), objects.toString());
+        redis.setHash(CacheConstant.SetValue.SET_VALUE, req.getSetCode(), objects.toString());
         return customSetValueVOS;
     }
 
     @Override
-    public String qryValue(String setCode, String setValueKey) {
+    public String qryValues(String setCode, String setValueKeys) {
         //查询值集是否已经被删除或关闭
-        SysSet set = sysSetService.getOne(new LambdaQueryWrapper<SysSet>().eq(SysSet::getSetCode, setCode).eq(SysSet::getSetState, Constants.Y));
-        if (Util.isNull(set)) {
+        if (!sysSetService.isEnableBySetCode(setCode)) {
             return null;
         }
-        SysSetValue setValue = getOne(Wrappers.<SysSetValue>lambdaQuery()
-                .eq(SysSetValue::getSetCode, setCode)
-                .eq(SysSetValue::getSetValueKey, setValueKey));
-        return setValue != null ? setValue.getSetValueValue() : null;
+        List<String> valueKeys = SUtil.strToList(setValueKeys, ",");
+
+        //查询缓存
+        String jsonArrayValue = redis.getHash(CacheConstant.SetValue.SET_VALUE, setCode);
+        List<CustomSetValueVO> customSetValueVOS;
+        if (SUtil.isNotBlank(jsonArrayValue)) {
+            JSONArray jsonArray = JSONUtil.parseArray(jsonArrayValue);
+            customSetValueVOS = JSONUtil.toList(jsonArray, CustomSetValueVO.class);
+        }
+
+        //查询不到缓存就查询数据库
+        else {
+            customSetValueVOS = dataList(new SysSetValueQuery().setSetCode(setCode));
+            if (CUtil.isEmpty(customSetValueVOS)) {
+                return null;
+            }
+            //这里主要为了获得只根据setCode关联的值集数据
+            JSONArray objects = JSONUtil.parseArray(dataList(new SysSetValueQuery().setSetCode(setCode).setDb(Constants.N)));
+            redis.setHash(CacheConstant.SetValue.SET_VALUE, setCode, objects.toString());
+        }
+
+        List<String> values = customSetValueVOS.stream()
+                .filter(ele -> valueKeys.contains(ele.getSetValueKey()))
+                .map(CustomSetValueVO::getSetValueValue)
+                .collect(Collectors.toList());
+        if (CUtil.isEmpty(values)) return null;
+        return String.join(",", values);
     }
 
 
@@ -252,7 +272,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         getRelevanceSetCode(fields, setCodes);
         log.info("清除值集值===要删除的key(SysSet.setCode):" + fields);
         fields.forEach(ele -> {
-            redis.deleteHash(CacheConstant.SetValue._IN, ele);
+            redis.deleteHash(CacheConstant.SetValue.SET_VALUE, ele);
         });
     }
 

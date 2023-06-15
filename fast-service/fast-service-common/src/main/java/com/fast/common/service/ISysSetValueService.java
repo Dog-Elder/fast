@@ -46,13 +46,16 @@ public interface ISysSetValueService extends BaseService<SysSetValue> {
     List<CustomSetValueVO> qryCacheDataList(SysSetValueQuery req);
 
     /**
-     * 根据值集编码 和值集值key获取一个 值含义
+     * 根据值集编码 获取 值含义
      *
      * @param setCode:     值集编码
-     * @param setValueKey: 值集值key
+     * @param setValueKeys: 值集值key 多个用,号分割
      * @Date: 2022/8/24 0:22
      * @return: java.lang.String 值含义
      **/
-    String qryValue(String setCode, String setValueKey);
+    String qryValues(String setCode, String setValueKeys);
+
+
+
 
 }

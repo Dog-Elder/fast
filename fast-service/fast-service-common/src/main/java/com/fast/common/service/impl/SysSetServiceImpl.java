@@ -1,8 +1,10 @@
 package com.fast.common.service.impl;
 
+import cn.hutool.core.util.BooleanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.fast.common.constant.cache.CacheConstant;
 import com.fast.common.dao.SysSetDao;
 import com.fast.common.entity.sys.SysSet;
 import com.fast.common.entity.sys.SysSetValue;
@@ -10,15 +12,15 @@ import com.fast.common.query.SysSetQuery;
 import com.fast.common.service.ISysSetService;
 import com.fast.common.service.ISysSetValueService;
 import com.fast.common.vo.SysSetVO;
+import com.fast.core.common.constant.Constants;
 import com.fast.core.common.exception.CustomException;
-import com.fast.core.common.util.CUtil;
-import com.fast.core.common.util.PageUtils;
-import com.fast.core.common.util.SUtil;
-import com.fast.core.common.util.Util;
+import com.fast.core.common.util.*;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
+import com.fast.core.util.FastRedis;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -44,6 +46,7 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
     @Lazy
     @Resource
     private ISysSetValueService sysSetValueService;
+    private final FastRedis redis;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = true)
@@ -109,7 +112,10 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
                 throw new CustomException("不可更换值集编码");
             }
         });
-        return updateById(entity);
+        boolean outcome = updateById(entity);
+        //关闭值集需要删除值集状态缓存
+        if (outcome) setState(entity.getSetCode(), entity.getSetState());
+        return outcome;
     }
 
 
@@ -128,9 +134,42 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
         }
         boolean removeSetValue = sysSetValueService.remove(Wrappers.<SysSetValue>lambdaQuery()
                 .in(SysSetValue::getSetCode, setCodes));
-        if (removeSetValue) {
-            return removeByIds(idList);
+        if (!removeSetValue) {
+            return false;
         }
-        return false;
+        boolean removeSysSets = removeByIds(idList);
+        //删除缓存操作
+        setCodes.forEach(ele -> {
+            if (removeSysSets) {
+                redis.deleteKey(SUtil.format(CacheConstant.SetValue.SET_STATE, ele));
+                redis.deleteHash(CacheConstant.SetValue.SET_VALUE, ele);
+            }
+        });
+        return removeSysSets;
+    }
+
+    @Override
+    public Boolean isEnableBySetCode(String setCode) {
+        Boolean value = redis.getObject(SUtil.format(CacheConstant.SetValue.SET_STATE, setCode), Boolean.class);
+        if (value != null) {
+            return value;
+        }
+        SysSet set = getOne(Wrappers.<SysSet>lambdaQuery().eq(SysSet::getSetCode, setCode));
+        if (Util.isNull(set)) {
+            return false;
+        }
+        setState(set.getSetCode(), set.getSetState());
+        value = SUtil.equals(set.getSetState(), Constants.Y);
+        return value;
+    }
+
+    /**
+     * 更新缓存 值集状态
+     *
+     * @param setCode:  值集编码
+     * @param setState: 值集状态（0:关闭 1:启用）
+     **/
+    private void setState(String setCode, String setState) {
+        redis.setObject(SUtil.format(CacheConstant.SetValue.SET_STATE, setCode), SUtil.equals(setState, Constants.Y));
     }
 }
