@@ -35,7 +35,7 @@ spring:
       - classpath:/service-common-application.yml
   # 开发环境配置
   redis:
-    host: fast.com
+    host: redis.fast.com
     port: 6377
     password: 27ac1ca76c1037366c17852e01a24bb7432ef4c
     database: 0
