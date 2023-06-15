@@ -176,17 +176,6 @@ public class AutoLovAspect {
      * @return 值集含义
      */
     private String getValueMeaning(String setCode, String currentFieldValue) {
-        // TODO 先查询数据表，后续值集数据存入 Redis
-        List<String> valueKeys = SUtil.strToList(currentFieldValue, ",");
-        List<SysSetValue> setValues = sysSetValueService.list(new LambdaQueryWrapper<SysSetValue>()
-                .select(SysSetValue::getSetValueValue)
-                .eq(SysSetValue::getSetCode, setCode)
-                .in(SysSetValue::getSetValueKey, valueKeys)
-        );
-        if (CUtil.isEmpty(setValues)) {
-            return "";
-        }
-        List<String> meanings = CUtil.getPropertyList(setValues, SysSetValue::getSetValueValue);
-        return SUtil.join(meanings, ",");
+        return sysSetValueService.qryValues(setCode, currentFieldValue);
     }
 }
