@@ -127,6 +127,10 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
             throw new CustomException("查询值集不能为空");
         }
         Collection<String> values = map.values();
+        Optional<String> any = values.stream().filter(SUtil::isBlank).findAny();
+        if (any.isPresent()) {
+            throw new CustomException("参数值和参数名不能为空");
+        }
         //过滤值集未启用的
         List<SysSet> validSets = sysSetService.list(new LambdaQueryWrapper<SysSet>().select(SysSet::getSetCode).in(SysSet::getSetCode, values).eq(SysSet::getSetState, Constants.Y));
         //获取有效的值集编码
@@ -311,7 +315,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         Set<String> setCodes = checkRepeat(req);
         //检查库中值集值key重复
         //如果是修改则排除要修改id的
-        Set<Long> ids = req.stream().filter(ele -> Util.isNotNull(ele.getId())).map(SysSetValue::getId).collect(Collectors.toSet());
+        Set<String> ids = req.stream().filter(ele -> Util.isNotNull(ele.getId())).map(SysSetValue::getId).collect(Collectors.toSet());
         List<SysSetValue> sysSetValues = new LambdaQueryChainWrapper<>(baseMapper)
                 .notIn(CUtil.isNotEmpty(ids), SysSetValue::getId, ids)
                 .in(SysSetValue::getSetCode, setCodes).list();

@@ -1,6 +1,5 @@
 package com.fast.common.vo;
 
-import com.fast.core.common.domain.vo.Vo;
 import com.fast.core.common.validate.annotation.Display;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -12,7 +11,7 @@ import java.math.BigDecimal;
  **/
 @Data
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
-public class CustomSetValueVO extends Vo {
+public class CustomSetValueVO {
 
     @Display("值集编码")
     private String setCode;

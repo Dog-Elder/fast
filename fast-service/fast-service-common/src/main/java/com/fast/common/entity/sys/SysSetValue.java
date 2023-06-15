@@ -38,7 +38,7 @@ public class SysSetValue extends BaseVersionEntity {
      */
     @Display("id")
     @NotNull(message = Com.Require, groups = {Update.class})
-    private Long id;
+    private String id;
 
     /**
      * 值集编码
