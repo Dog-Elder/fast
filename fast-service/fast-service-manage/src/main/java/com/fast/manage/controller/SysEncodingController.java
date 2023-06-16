@@ -2,9 +2,13 @@ package com.fast.manage.controller;
 
 import com.fast.common.controller.WebBaseController;
 import com.fast.common.entity.sys.SysEncoding;
+import com.fast.common.entity.sys.SysEncodingSet;
 import com.fast.common.entity.verification.Qry;
 import com.fast.common.query.SysEncodingQuery;
+import com.fast.common.query.SysEncodingSetQuery;
 import com.fast.common.service.ISysEncodingService;
+import com.fast.common.service.ISysEncodingSetService;
+import com.fast.common.vo.SysEncodingSetVO;
 import com.fast.common.vo.SysEncodingVO;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.domain.ValidList;
@@ -28,13 +32,13 @@ import java.util.List;
 @RequestMapping("/manage-api/encoding")
 public class SysEncodingController extends WebBaseController{
     private final ISysEncodingService sysEncodingService;
-
+    private final ISysEncodingSetService sysEncodingSetService;
     /**
      * 分页
      */
     @GetMapping("/page")
     @ManageCheckPermission(value = "manage.encoding.page")
-    public R<TableDataInfo> page(@Validated(Qry.class) SysEncodingQuery query){
+    public R<TableDataInfo<SysEncodingVO>> page(@Validated(Qry.class) SysEncodingQuery query){
         startPage();
         return R.success(getDataTable(sysEncodingService.list(query)));
     }
@@ -68,12 +72,55 @@ public class SysEncodingController extends WebBaseController{
     }
 
     /**
-     * 删除
+     * 编码集分页
+     * @folder 编码/编码集
      */
-    @DeleteMapping
-    @ManageCheckPermission(value = "manage.encoding.delete")
-    public R delete(@RequestBody List<String> idList){
-        sysEncodingService.delete(idList);
+    @GetMapping("/set/page")
+    @ManageCheckPermission(value = "manage.encodingSet.page")
+    public R<TableDataInfo<SysEncodingSetVO>> setPage(@Validated(Qry.class) SysEncodingSetQuery query){
+        startPage();
+        return R.success(getDataTable(sysEncodingSetService.list(query)));
+    }
+
+    /**
+     * 编码集信息
+     * @folder 编码/编码集
+     */
+    @GetMapping("/set/{id}")
+    @ManageCheckPermission(value = "manage.encodingSet.info")
+    public R<SysEncodingSetVO> setGet(@PathVariable("id") String id){
+        SysEncodingSet entity = sysEncodingSetService.getById(id);
+        return R.success(BUtil.copy(entity,SysEncodingSetVO.class));
+    }
+
+    /**
+     * 编码集保存
+     * @folder 编码/编码集
+     */
+    @PostMapping("/set")
+    @ManageCheckPermission(value = "manage.encodingSet.save")
+    public R<List<SysEncodingSetVO>> setSave(@RequestBody @Validated ValidList<SysEncodingSetVO> vo){
+        return R.success(sysEncodingSetService.save(vo));
+    }
+
+    /**
+     * 编码集修改
+     * @folder 编码/编码集
+     */
+    @PutMapping("/set")
+    @ManageCheckPermission(value = "manage.encodingSet.update")
+    public R setUpdate(@RequestBody @Validated SysEncodingSetVO vo){
+        return R.toVersion(sysEncodingSetService.update(vo));
+    }
+
+    /**
+     * 编码集删除
+     * @folder 编码/编码集
+     */
+    @DeleteMapping("/set")
+    @ManageCheckPermission(value = "manage.encodingSet.delete")
+    public R setDelete(@RequestBody List<String> idList){
+        sysEncodingSetService.delete(idList);
         return R.success();
     }
 }

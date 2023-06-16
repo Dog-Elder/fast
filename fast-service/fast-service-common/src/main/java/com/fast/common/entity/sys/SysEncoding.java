@@ -48,11 +48,4 @@ public class SysEncoding extends BaseVersionEntity {
 	@TableField("sys_encoding_name")
 	private String sysEncodingName;
 
-
-
-
-
-
-
-
 }

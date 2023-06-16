@@ -34,7 +34,7 @@ public class SysEncodingSetController extends WebBaseController{
      */
     @GetMapping("/page")
     @ManageCheckPermission(value = "manage.encodingSet.page")
-    public R<TableDataInfo> page(@Validated(Qry.class) SysEncodingSetQuery query){
+    public R<TableDataInfo<SysEncodingSetVO>> page(@Validated(Qry.class) SysEncodingSetQuery query){
         startPage();
         return R.success(getDataTable(sysEncodingSetService.list(query)));
     }
@@ -54,7 +54,7 @@ public class SysEncodingSetController extends WebBaseController{
      */
     @PostMapping
     @ManageCheckPermission(value = "manage.encodingSet.save")
-    public R save(@RequestBody @Validated ValidList<SysEncodingSetVO> vo){
+    public R<List<SysEncodingSetVO>> save(@RequestBody @Validated ValidList<SysEncodingSetVO> vo){
         return R.success(sysEncodingSetService.save(vo));
     }
 
