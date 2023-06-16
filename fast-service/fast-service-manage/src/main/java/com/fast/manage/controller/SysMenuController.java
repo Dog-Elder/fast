@@ -66,7 +66,7 @@ public class SysMenuController extends WebBaseController {
     @PutMapping
     @ManageCheckPermission(value = "manage.menu.update")
     public R update(@RequestBody @Validated SysMenuVO vo){
-        return toVersionAjax(sysMenuService.update(vo));
+        return R.toVersion(sysMenuService.update(vo));
     }
 
     /**

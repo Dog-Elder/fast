@@ -10,6 +10,7 @@ import com.fast.common.query.SysSetQuery;
 import com.fast.common.query.SysSetValueQuery;
 import com.fast.common.service.ISysSetService;
 import com.fast.common.service.ISysSetValueService;
+import com.fast.common.vo.CustomSetValueVO;
 import com.fast.common.vo.SysSetVO;
 import com.fast.common.vo.SysSetValueVO;
 import com.fast.core.common.annotation.lov.AutoLov;
@@ -42,7 +43,7 @@ public class SysSetController extends WebBaseController {
     @AutoLov
     @GetMapping("/page")
     @ManageCheckPermission(value = "manage.set.page")
-    public R<TableDataInfo> page(@Validated(Qry.class) SysSetQuery query){
+    public R<TableDataInfo<SysSetVO>> page(@Validated(Qry.class) SysSetQuery query){
         startPage();
         return R.success(getDataTable(sysSetService.list(query)));
     }
@@ -62,7 +63,7 @@ public class SysSetController extends WebBaseController {
      */
     @PostMapping
     @ManageCheckPermission(value = "manage.set.save")
-    public R save(@RequestBody @Validated(Save.class) ValidList<SysSetVO> vo){
+    public R<List<SysSetVO>> save(@RequestBody @Validated(Save.class) ValidList<SysSetVO> vo){
         return R.success(sysSetService.save(vo));
     }
 
@@ -72,7 +73,7 @@ public class SysSetController extends WebBaseController {
     @PutMapping
     @ManageCheckPermission(value = "manage.set.update")
     public R update(@RequestBody @Validated SysSetVO vo){
-        return toVersionAjax(sysSetService.update(vo));
+        return R.toVersion(sysSetService.update(vo));
     }
 
     /**
@@ -88,25 +89,29 @@ public class SysSetController extends WebBaseController {
 
     /**
      * 值集值分页
+     * @folder 值集/值集值
      */
     @GetMapping("/value/page")
     @ManageCheckPermission(value = "manage.setValue.page")
-    public R<TableDataInfo> valuePage(@Validated(Qry.class) SysSetValueQuery query){
+    public R<TableDataInfo<SysSetValueVO>> valuePage(@Validated(Qry.class) SysSetValueQuery query){
         startPage();
         return R.success(getDataTable(sysSetValueService.list(query)));
     }
 
     /**
      * 查询值列表
+     * @folder 值集/值集值
      */
     @GetMapping("/data-list")
     @ManageCheckPermission(value = "manage.setValue.list")
-    public R<TableDataInfo> dataList(@Validated(value = Qry.class) SysSetValueQuery req) {
-        return R.success(getDataTable(sysSetValueService.dataList(req)));
+    public R<TableDataInfo<CustomSetValueVO>> dataList(@Validated(value = Qry.class) SysSetValueQuery req) {
+        List<CustomSetValueVO> vos = sysSetValueService.dataList(req);
+        return R.success(getDataTable(vos));
     }
 
     /**
      * 值集值信息
+     * @folder 值集/值集值
      */
     @GetMapping("/value/{id}")
     @ManageCheckPermission(value = "manage.setValue.info")
@@ -117,24 +122,28 @@ public class SysSetController extends WebBaseController {
 
     /**
      * 值集值保存
+     * @folder 值集/值集值
      */
     @PostMapping("/value")
     @ManageCheckPermission(value = "manage.setValue.save")
-    public R valueSave(@RequestBody @Validated(Save.class) ValidList<SysSetValueVO> vo){
-        return R.success(sysSetValueService.save(vo));
+    public R<List<SysSetValueVO>> valueSave(@RequestBody @Validated(Save.class) ValidList<SysSetValueVO> vo){
+        List<SysSetValueVO> sysSetValueVO = sysSetValueService.save(vo);
+        return R.success(sysSetValueVO);
     }
 
     /**
      * 值集值修改
+     * @folder 值集/值集值
      */
     @PutMapping("/value")
     @ManageCheckPermission(value = "manage.setValue.update")
-    public R valueUpdate(@RequestBody @Validated(Update.class) SysSetValueVO vo){
-        return toVersionAjax(sysSetValueService.update(vo));
+    public R<Boolean> valueUpdate(@RequestBody @Validated(Update.class) SysSetValueVO vo){
+        return R.toVersion(sysSetValueService.update(vo));
     }
 
     /**
      * 值集值删除
+     * @folder 值集/值集值
      */
     @DeleteMapping("/value")
     @ManageCheckPermission(value = "manage.setValue.delete")

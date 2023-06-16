@@ -64,7 +64,7 @@ public class SysEncodingSetController extends WebBaseController{
     @PutMapping
     @ManageCheckPermission(value = "manage.encodingSet.update")
     public R update(@RequestBody @Validated SysEncodingSetVO vo){
-        return toVersionAjax(sysEncodingSetService.update(vo));
+        return R.toVersion(sysEncodingSetService.update(vo));
     }
 
     /**
