@@ -94,6 +94,15 @@ public class R<T> implements Serializable{
     public static <T extends Serializable> R<T> error() {
         return new R<>(Type.SERVER_ERROR, Type.SERVER_ERROR.description);
     }
+    /**
+     * 响应返回结果(针对乐观锁修改)
+     *
+     * @param result 结果
+     * @return 操作结果
+     */
+    public static <T extends Serializable> R<T> toVersion(boolean result) {
+        return result ? success() : R.errorVersion();
+    }
 
     public static <T extends Serializable> R<T> errorVersion() {
         return new R<>(Type.SERVER_ERROR, "操作失败,版本不一致!");

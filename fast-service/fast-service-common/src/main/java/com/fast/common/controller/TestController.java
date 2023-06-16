@@ -40,6 +40,7 @@ public class TestController extends WebBaseController {
     private ISysSetService sysSetService;
 
     /**
+     * @folder 一级目录/二级目录
      * 查询值集值表
      */
     @GetMapping
