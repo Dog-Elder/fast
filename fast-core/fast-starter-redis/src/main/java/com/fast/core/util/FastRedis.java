@@ -4,6 +4,7 @@ import com.fast.core.common.exception.CustomException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -11,9 +12,7 @@ import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -26,6 +25,14 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class FastRedis {
 
     private final StringRedisTemplate redisTemplate;
+    /**
+     * 检查指定的键是否存在于 Redis 中
+     * @param key 要检查的键
+     * @return 如果键存在，则返回 true；否则返回 false
+     */
+    public Boolean exists(String ruleNumberIn) {
+        return redisTemplate.hasKey(ruleNumberIn);
+    }
 
     /**
      * 存储字符串类型的数据到 Redis 中
@@ -172,6 +179,48 @@ public class FastRedis {
      */
     public Map<Object, Object> getAllHash(String key) {
         return redisTemplate.opsForHash().entries(key);
+    }
+
+    /**
+     * 获取 Redis 哈希键的所有值并返回为 List<String> 类型
+     * @param key Redis 哈希键
+     * @return 包含所有值的 List<String>
+     */
+    public List<String> getAllHashValues(String key) {
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+        List<String> resultList = new ArrayList<>(hashOperations.values(key));
+        return resultList;
+    }
+
+    /**
+     * 将指定键的值按指定增量增加，并返回增加后的结果
+     * @param key 指定的键
+     * @param number 增量值
+     * @return 增加后的结果
+     */
+    public Long incrementBy(String key, long number) {
+        return increaseOrDecreaseBy(key, number);
+    }
+
+    /**
+     * 将指定键的值按指定减量减少，并返回减少后的结果
+     * @param key 指定的键
+     * @param number 减量值
+     * @return 减少后的结果
+     */
+    public Long decrementBy(String key, long number) {
+        return increaseOrDecreaseBy(key, -number);
+    }
+
+    /**
+     * 将指定键的值按指定增量增加或减量减少，并返回操作后的结果
+     * @param key 指定的键
+     * @param number 增量或减量值
+     * @return 操作后的结果
+     */
+    public Long increaseOrDecreaseBy(String key, long number) {
+        ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
+        return valueOps.increment(key, number);
     }
 
     /**

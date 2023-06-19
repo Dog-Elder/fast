@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync
 public class TaskPoolConfig {
  
-    @Bean
+    @Bean("taskExecutor")
     public ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
         // 核心池大小

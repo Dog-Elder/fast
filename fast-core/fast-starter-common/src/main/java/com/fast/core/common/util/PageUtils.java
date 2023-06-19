@@ -87,11 +87,11 @@ public class PageUtils extends PageHelper {
      * System.out.println("起始条数 = " + firstIndex);
      * System.out.println("页数 = " + totalPage);
      **/
-    public static <T> List<T> createPage(List<T> list, Integer pageNum, Integer pageSize) {
+    public static <S> List<S> createPage(List<S> list, Integer pageNum, Integer pageSize) {
         if (com.fast.core.common.util.Util.isNull(pageNum) || Util.isNull(pageSize)) {
             return list;
         }
-        Page<T> page = new Page<>();
+        Page<S> page = new Page<>();
         int total = list.size();
         //如果总数为0的情况下直接返回list
         if (total == 0) {
@@ -128,7 +128,7 @@ public class PageUtils extends PageHelper {
      * 排序并分页
      * 简单实现PageHelper分页功能
      **/
-    public static <T> List<T> createPage(List<T> list) {
+    public static <S> List<S> createPage(List<S> list) {
         PageDomain pageDomain = getPage();
         String orderBy2 = pageDomain.getOrderBy2();
         String orderDirections = pageDomain.orderByColumngetIsAsc();
@@ -142,16 +142,24 @@ public class PageUtils extends PageHelper {
      * 排序并分页
      * 简单实现PageHelper分页功能
      **/
-    public static <T> List<T> createPage(Stream<T> stream) {
+    public static <S> List<S> createPage(Stream<S> stream) {
         return createPage(stream.collect(Collectors.toList()));
+    }
+    /**
+     * 排序并分页 并转换vo
+     * 简单实现PageHelper分页功能
+     **/
+    public static <S, T> List<T> createPage(Stream<S> stream,Class<T> c) {
+        List<S> page = createPage(stream.collect(Collectors.toList()));
+        return copy(page,c);
     }
 
     /**
      * 分页并排序(自定义)
      * 简单实现PageHelper分页功能
      **/
-    public static <T, U extends Comparable<? super U>> List<T> createPage(List<T> list,
-                                                                          Function<? super T, ? extends U> mapper,
+    public static <S, U extends Comparable<? super U>> List<S> createPage(List<S> list,
+                                                                          Function<? super S, ? extends U> mapper,
                                                                           boolean desc) {
         CUtil.sort(list,mapper,desc);
         PageDomain pageDomain = getPage();
