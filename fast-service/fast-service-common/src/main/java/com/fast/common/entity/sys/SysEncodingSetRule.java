@@ -97,14 +97,14 @@ public class SysEncodingSetRule extends BaseVersionEntity {
 	 */
 	@Display("开始值")
 	@TableField("sys_encoding_set_initial_value")
-	private String sysEncodingSetInitialValue;
+	private Long sysEncodingSetInitialValue;
 
 	/**
 	 * 当前值
 	 */
 	@Display("当前值")
 	@TableField("sys_encoding_set_now_value")
-	private String sysEncodingSetNowValue;
+	private Long sysEncodingSetNowValue;
 
 	/**
 	 * 上次重置时间

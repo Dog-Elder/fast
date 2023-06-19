@@ -1,10 +1,18 @@
 package com.fast.common.query;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fast.common.entity.verification.Qry;
+import com.fast.common.entity.verification.Save;
+import com.fast.common.entity.verification.Update;
 import com.fast.core.common.domain.page.Query;
+import com.fast.core.common.util.Com;
 import com.fast.core.common.validate.annotation.Display;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -28,6 +36,7 @@ public class SysEncodingSetRuleQuery extends Query {
      */
     @Display("规则代码")
     @TableField("sys_encoding_code")
+    @NotBlank(message = Com.Require,groups = {Qry.class})
     private String sysEncodingCode;
 
     /**
@@ -35,7 +44,15 @@ public class SysEncodingSetRuleQuery extends Query {
      */
     @Display("编码值")
     @TableField("sys_encoding_set_code")
+    @NotBlank(message = Com.Require,groups = {Qry.class})
     private String sysEncodingSetCode;
+
+    /**
+     * 规则段类型
+     */
+    @Display("规则段类型")
+    @TableField("sys_encoding_set_rule_type")
+    private String sysEncodingSetRuleType;
 
     /**
      * 序号

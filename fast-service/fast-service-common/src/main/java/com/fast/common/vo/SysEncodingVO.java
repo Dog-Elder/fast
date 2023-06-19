@@ -1,10 +1,18 @@
 package com.fast.common.vo;
 
+import com.fast.common.entity.verification.Save;
+import com.fast.common.entity.verification.Update;
 import com.fast.core.common.domain.vo.Vo;
+import com.fast.core.common.util.Com;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fast.core.common.validate.annotation.Display;
 import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -22,18 +30,24 @@ public class SysEncodingVO extends Vo {
 	 * id
 	 */
 	@Display("id")
+	@Null(message = Com.NotRequire, groups = {Save.class})
+	@NotNull(message = Com.Require, groups = {Update.class})
 	private String id;
 
 	/**
 	 * 规则代码
 	 */
 	@Display("规则代码")
+	@Size(max = Com.ShortLen, message = Com.MaxLen, groups = {Save.class, Update.class})
+	@NotBlank(message = Com.Require, groups = {Save.class, Update.class})
 	private String sysEncodingCode;
 
 	/**
 	 * 规则名称
 	 */
 	@Display("规则名称")
+	@Size(max = Com.ShortLen, message = Com.MaxLen)
+	@NotBlank(message = Com.Require, groups = {Save.class, Update.class})
 	private String sysEncodingName;
 
 
@@ -75,6 +89,7 @@ public class SysEncodingVO extends Vo {
 	 * 备注信息
 	 */
 	@Display("备注信息")
+	@Size(max = Com.LongLen, message = Com.MaxLen, groups = {Save.class, Update.class})
 	private String remark;
 
 

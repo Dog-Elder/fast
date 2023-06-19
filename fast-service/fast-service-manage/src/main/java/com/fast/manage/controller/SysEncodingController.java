@@ -3,11 +3,17 @@ package com.fast.manage.controller;
 import com.fast.common.controller.WebBaseController;
 import com.fast.common.entity.sys.SysEncoding;
 import com.fast.common.entity.sys.SysEncodingSet;
+import com.fast.common.entity.sys.SysEncodingSetRule;
 import com.fast.common.entity.verification.Qry;
+import com.fast.common.entity.verification.Save;
+import com.fast.common.entity.verification.Update;
 import com.fast.common.query.SysEncodingQuery;
 import com.fast.common.query.SysEncodingSetQuery;
+import com.fast.common.query.SysEncodingSetRuleQuery;
 import com.fast.common.service.ISysEncodingService;
+import com.fast.common.service.ISysEncodingSetRuleService;
 import com.fast.common.service.ISysEncodingSetService;
+import com.fast.common.vo.SysEncodingSetRuleVO;
 import com.fast.common.vo.SysEncodingSetVO;
 import com.fast.common.vo.SysEncodingVO;
 import com.fast.core.common.domain.domain.R;
@@ -33,6 +39,7 @@ import java.util.List;
 public class SysEncodingController extends WebBaseController{
     private final ISysEncodingService sysEncodingService;
     private final ISysEncodingSetService sysEncodingSetService;
+    private final ISysEncodingSetRuleService sysEncodingSetRuleService;
     /**
      * 分页
      */
@@ -99,7 +106,7 @@ public class SysEncodingController extends WebBaseController{
      */
     @PostMapping("/set")
     @ManageCheckPermission(value = "manage.encodingSet.save")
-    public R<List<SysEncodingSetVO>> setSave(@RequestBody @Validated ValidList<SysEncodingSetVO> vo){
+    public R<List<SysEncodingSetVO>> setSave(@RequestBody @Validated(Save.class) ValidList<SysEncodingSetVO> vo){
         return R.success(sysEncodingSetService.save(vo));
     }
 
@@ -109,7 +116,7 @@ public class SysEncodingController extends WebBaseController{
      */
     @PutMapping("/set")
     @ManageCheckPermission(value = "manage.encodingSet.update")
-    public R setUpdate(@RequestBody @Validated SysEncodingSetVO vo){
+    public R setUpdate(@RequestBody @Validated(Update.class) SysEncodingSetVO vo){
         return R.toVersion(sysEncodingSetService.update(vo));
     }
 
@@ -121,6 +128,60 @@ public class SysEncodingController extends WebBaseController{
     @ManageCheckPermission(value = "manage.encodingSet.delete")
     public R setDelete(@RequestBody List<String> idList){
         sysEncodingSetService.delete(idList);
+        return R.success();
+    }
+
+
+    /**
+     * 编码段分页
+     * @folder 编码/编码集/编码段
+     */
+    @GetMapping("/rule/page")
+    @ManageCheckPermission(value = "manage.encodingSetRule.page")
+    public R<TableDataInfo<SysEncodingSetRuleVO>> rulePage(@Validated(Qry.class) SysEncodingSetRuleQuery query){
+        startPage();
+        return R.success(getDataTable(sysEncodingSetRuleService.list(query)));
+    }
+
+    /**
+     * 编码段信息
+     * @folder 编码/编码集/编码段
+     */
+    @GetMapping("/rule/{id}")
+    @ManageCheckPermission(value = "manage.encodingSetRule.info")
+    public R<SysEncodingSetRuleVO> ruleGet(@PathVariable("id") String id){
+        SysEncodingSetRule entity = sysEncodingSetRuleService.getById(id);
+        return R.success(BUtil.copy(entity,SysEncodingSetRuleVO.class));
+    }
+
+    /**
+     * 编码段保存
+     * @folder 编码/编码集/编码段
+     */
+    @PostMapping("/rule")
+    @ManageCheckPermission(value = "manage.encodingSetRule.save")
+    public R<SysEncodingSetRuleVO> ruleSave(@RequestBody @Validated(Update.class) SysEncodingSetRuleVO vo){
+        return R.success(sysEncodingSetRuleService.save(vo));
+    }
+
+    /**
+     * 编码段修改
+     * @folder 编码/编码集/编码段
+     */
+    @PutMapping("/rule")
+    @ManageCheckPermission(value = "manage.encodingSetRule.update")
+    public R ruleUpdate(@RequestBody @Validated SysEncodingSetRuleVO vo){
+        return R.toVersion(sysEncodingSetRuleService.update(vo));
+    }
+
+    /**
+     * 编码段删除
+     * @folder 编码/编码集/编码段
+     */
+    @DeleteMapping("/rule")
+    @ManageCheckPermission(value = "manage.encodingSetRule.delete")
+    public R ruleDelete(@RequestBody List<String> idList){
+        sysEncodingSetRuleService.delete(idList);
         return R.success();
     }
 }
