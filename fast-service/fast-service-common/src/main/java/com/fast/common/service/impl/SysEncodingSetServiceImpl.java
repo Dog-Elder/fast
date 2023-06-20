@@ -23,6 +23,7 @@ import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.core.util.FastRedis;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -40,12 +41,12 @@ import java.util.Set;
  * @since 1.0.0 2023-06-12
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysEncodingSetServiceImpl extends BaseServiceImpl<SysEncodingSetDao, SysEncodingSet> implements ISysEncodingSetService {
     @Lazy
     @Resource
     private ISysEncodingService encodingService;
-    private ISysEncodingSetRuleService encodingSetRuleService;
+    private final ISysEncodingSetRuleService encodingSetRuleService;
     private final FastRedis redis;
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = true)
@@ -126,7 +127,7 @@ public class SysEncodingSetServiceImpl extends BaseServiceImpl<SysEncodingSetDao
         Util.isNotNull(exist, "编码已存在");
         if (SUtil.isY(entity.getSysEncodingSetStatus())) {
             //查询是否有编码段
-            int count = encodingSetRuleService.count(new LambdaQueryWrapper<SysEncodingSetRule>()
+            long count = encodingSetRuleService.count(new LambdaQueryWrapper<SysEncodingSetRule>()
                     .eq(SysEncodingSetRule::getSysEncodingCode, entity.getSysEncodingCode())
                     .eq(SysEncodingSetRule::getSysEncodingSetCode, entity.getSysEncodingSetCode()));
             if (count==0) {

@@ -61,7 +61,7 @@ public class SysEncodingSetRuleVO extends Vo {
 	 */
 	@Display("规则段类型")
 	@NotBlank(message = Com.Require, groups = {Save.class, Update.class})
-	@Lov(setCode = "SYS_ENCODING_SET_RULE_TYPE")
+	@Lov(value = "SYS_ENCODING_SET_RULE_TYPE")
 	private String sysEncodingSetRuleType;
 
 	/**
@@ -92,13 +92,13 @@ public class SysEncodingSetRuleVO extends Vo {
 	 * 开始值
 	 */
 	@Display("开始值")
-	private String sysEncodingSetInitialValue;
+	private Long sysEncodingSetInitialValue;
 
 	/**
 	 * 当前值
 	 */
 	@Display("当前值")
-	private String sysEncodingSetNowValue;
+	private Long sysEncodingSetNowValue;
 
 	/**
 	 * 上次重置时间

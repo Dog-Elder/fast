@@ -3,6 +3,7 @@ package com.fast.common.vo;
 import com.fast.common.entity.verification.Qry;
 import com.fast.common.entity.verification.Save;
 import com.fast.common.entity.verification.Update;
+import com.fast.core.common.annotation.lov.Lov;
 import com.fast.core.common.domain.vo.Vo;
 import com.fast.core.common.util.Com;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,6 +17,7 @@ import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * 编码集
@@ -51,6 +53,7 @@ public class SysEncodingSetVO extends Vo {
     /**
      * 状态 Y :启用 N:停用
      */
+    @Lov("STATUS")
     @Display("状态 Y :启用 N:停用 ")
     @NotBlank(message = Com.Require, groups = {Save.class, Update.class})
     private String sysEncodingSetStatus;
@@ -58,6 +61,7 @@ public class SysEncodingSetVO extends Vo {
     /**
      * 是否已经使用 Y :已使用 N:未使用
      */
+    @Lov("STATUS")
     @Display("是否已经使用 Y :已使用 N:未使用 ")
     @Null(message = Com.NotRequire, groups = {Save.class})
     private String sysEncodingSetUseStatus;

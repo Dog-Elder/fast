@@ -19,11 +19,14 @@ import com.fast.core.common.util.Util;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -33,7 +36,7 @@ import java.util.List;
  * @since 1.0.0 2023-06-12
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysEncodingServiceImpl extends BaseServiceImpl<SysEncodingDao, SysEncoding> implements ISysEncodingService {
     private final ISysEncodingSetService encodingSetService;
 

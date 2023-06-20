@@ -23,6 +23,7 @@ import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.core.util.FastRedis;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -46,7 +47,7 @@ import java.util.stream.Stream;
  */
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysEncodingSetRuleServiceImpl extends BaseServiceImpl<SysEncodingSetRuleDao, SysEncodingSetRule> implements ISysEncodingSetRuleService {
     private final FastRedis redis;
     @Lazy

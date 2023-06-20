@@ -16,6 +16,7 @@ import com.fast.common.service.ISysEncodingSetService;
 import com.fast.common.vo.SysEncodingSetRuleVO;
 import com.fast.common.vo.SysEncodingSetVO;
 import com.fast.common.vo.SysEncodingVO;
+import com.fast.core.common.annotation.lov.AutoLov;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.domain.ValidList;
 import com.fast.core.common.domain.page.TableDataInfo;
@@ -82,6 +83,7 @@ public class SysEncodingController extends WebBaseController{
      * 编码集分页
      * @folder 编码/编码集
      */
+    @AutoLov
     @GetMapping("/set/page")
     @ManageCheckPermission(value = "manage.encodingSet.page")
     public R<TableDataInfo<SysEncodingSetVO>> setPage(@Validated(Qry.class) SysEncodingSetQuery query){
@@ -93,6 +95,7 @@ public class SysEncodingController extends WebBaseController{
      * 编码集信息
      * @folder 编码/编码集
      */
+    @AutoLov
     @GetMapping("/set/{id}")
     @ManageCheckPermission(value = "manage.encodingSet.info")
     public R<SysEncodingSetVO> setGet(@PathVariable("id") String id){
@@ -104,6 +107,7 @@ public class SysEncodingController extends WebBaseController{
      * 编码集保存
      * @folder 编码/编码集
      */
+    @AutoLov
     @PostMapping("/set")
     @ManageCheckPermission(value = "manage.encodingSet.save")
     public R<List<SysEncodingSetVO>> setSave(@RequestBody @Validated(Save.class) ValidList<SysEncodingSetVO> vo){
@@ -136,6 +140,7 @@ public class SysEncodingController extends WebBaseController{
      * 编码段分页
      * @folder 编码/编码集/编码段
      */
+    @AutoLov
     @GetMapping("/rule/page")
     @ManageCheckPermission(value = "manage.encodingSetRule.page")
     public R<TableDataInfo<SysEncodingSetRuleVO>> rulePage(@Validated(Qry.class) SysEncodingSetRuleQuery query){
@@ -147,6 +152,7 @@ public class SysEncodingController extends WebBaseController{
      * 编码段信息
      * @folder 编码/编码集/编码段
      */
+    @AutoLov
     @GetMapping("/rule/{id}")
     @ManageCheckPermission(value = "manage.encodingSetRule.info")
     public R<SysEncodingSetRuleVO> ruleGet(@PathVariable("id") String id){
@@ -158,6 +164,7 @@ public class SysEncodingController extends WebBaseController{
      * 编码段保存
      * @folder 编码/编码集/编码段
      */
+    @AutoLov
     @PostMapping("/rule")
     @ManageCheckPermission(value = "manage.encodingSetRule.save")
     public R<SysEncodingSetRuleVO> ruleSave(@RequestBody @Validated(Update.class) SysEncodingSetRuleVO vo){

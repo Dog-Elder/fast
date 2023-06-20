@@ -55,7 +55,7 @@ public class SysSetVO extends Vo {
      * 值集状态（0:关闭 1:启用）
      */
     @Display("值集状态（0:关闭 1:启用）")
-    @Lov(setCode = "STATUS", decipherField = "setStateMessage")
+    @Lov( value = "STATUS", decipherField = "setStateMessage")
     @NotBlank(message = Com.Require, groups = {Save.class, Update.class})
     @PositiveInt(canBeZero = true, groups = {Save.class, Update.class})
     @Range(min = 0, max = 1, message = Com.MinMaxValue, groups = {Save.class, Update.class})
@@ -65,7 +65,7 @@ public class SysSetVO extends Vo {
      * 是否分页（0:关闭 1:启用）
      */
     @Display("是否分页（0:关闭 1:启用）")
-    @Lov(setCode = "STATUS", decipherField = "setPageMessage")
+    @Lov(value = "STATUS", decipherField = "setPageMessage")
     @NotBlank(message = Com.Require, groups = {Save.class, Update.class})
     @PositiveInt(canBeZero = true, groups = {Save.class, Update.class})
     @Range(min = 0, max = 1, message = Com.MinMaxValue, groups = {Save.class, Update.class})
