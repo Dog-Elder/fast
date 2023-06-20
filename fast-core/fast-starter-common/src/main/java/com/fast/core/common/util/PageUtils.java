@@ -25,7 +25,7 @@ public class PageUtils extends PageHelper {
         PageDomain pageDomain = TableSupport.buildPageRequest();
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
-        if (com.fast.core.common.util.Util.isNotNull(pageNum) && com.fast.core.common.util.Util.isNotNull(pageSize)) {
+        if (Util.isNotNull(pageNum) && Util.isNotNull(pageSize)) {
             //最多不能超过1000条查询
             if (pageSize > 1000) {
                 pageSize = 1000;

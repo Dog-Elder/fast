@@ -1,5 +1,7 @@
 package com.fast.core.common.annotation.lov;
 
+import org.springframework.core.annotation.AliasFor;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,7 +17,8 @@ public @interface Lov {
     /**
      * 值集code
      **/
-    String setCode() default "";
+    @AliasFor(value = "setCode")
+    String value() default "";
 
     /**
      * 翻译到那个字段

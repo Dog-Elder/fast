@@ -108,24 +108,24 @@ public class AutoLovAspect {
             return;
         }
         Class<?> aClass = object.getClass();
+        JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(object));
         for (Field field : fields) {
             try {
                 field.setAccessible(true);
                 if (Objects.isNull(field.get(object))) {
                     continue;
                 }
-                JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(object));
                 Lov annotation = field.getAnnotation(Lov.class);
                 if (annotation == null) {
                     continue;
                 }
                 //当前字段值
-                String currentFieldValue = String.valueOf(jsonObject.get(field.getName()));
+                String currentFieldValue = jsonObject.getString(field.getName());
                 if (SUtil.isBlank(currentFieldValue)) {
                     continue;
                 }
                 //值集code
-                String setCode = annotation.setCode();
+                String setCode = annotation.value();
                 if (SUtil.isBlank(setCode)) {
                     continue;
                 }
