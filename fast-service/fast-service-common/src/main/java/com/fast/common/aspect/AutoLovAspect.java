@@ -2,8 +2,6 @@ package com.fast.common.aspect;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.fast.common.entity.sys.SysSetValue;
 import com.fast.common.service.ISysSetValueService;
 import com.fast.core.common.annotation.lov.Lov;
 import com.fast.core.common.domain.domain.R;
@@ -24,9 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @description: 值集切面，用于解析值集注解并进行翻译
@@ -36,9 +32,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 @RequiredArgsConstructor
 public class AutoLovAspect {
-
-    // 用于缓存类和字段信息，避免重复反射获取
-    private static ConcurrentHashMap<Class<?>, List<Field>> classFieldMap = new ConcurrentHashMap<>();
 
     private final ISysSetValueService sysSetValueService;
 
@@ -93,7 +86,7 @@ public class AutoLovAspect {
             return;
         }
         Class<?> runClass = list.get(0).getClass();
-        List<Field> fields = classFieldMap.computeIfAbsent(runClass, key -> RUtil.getAllFields(runClass));
+        List<Field> fields = RUtil.getAllFields(runClass);
         list.forEach(ele -> convertLov(ele, fields));
     }
 
@@ -132,7 +125,6 @@ public class AutoLovAspect {
                 //获取翻译值
                 String valueMeaning = getValueMeaning(setCode, currentFieldValue);
                 putLovMap(aClass, object, field, valueMeaning);
-                //获取翻译值
                 if (SUtil.isEmpty(valueMeaning)) {
                     continue;
                 }
