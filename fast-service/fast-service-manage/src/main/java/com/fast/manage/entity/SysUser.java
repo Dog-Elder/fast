@@ -44,6 +44,4 @@ public class SysUser extends User {
         }
         return administrator == 1;
     }
-
-
 }
