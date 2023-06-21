@@ -1,6 +1,7 @@
 package com.fast.core.common.util;
 
 
+import com.fast.core.common.executor.LogicExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.LogFactory;
@@ -372,4 +373,31 @@ public class RUtil {
         }
         return clazz;
     }
+
+    /**
+     * 处理对象的字段上指定注解的逻辑，并根据提供的业务逻辑执行器执行相应操作。
+     *
+     * @param object            对象实例
+     * @param annotationClass   注解类型
+     * @param executor          业务逻辑执行器
+     * @param <T>               泛型参数
+     */
+    public static <T> void processAnnotations(Object object, Class<? extends Annotation> annotationClass, LogicExecutor<T> executor) {
+        Class<?> clazz = object.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+
+        for (Field field : fields) {
+            Annotation annotation = field.getDeclaredAnnotation(annotationClass);
+            if (annotation != null) {
+                try {
+                    field.setAccessible(true);
+                    Object value = executor.execute(field, annotation);
+                    field.set(object, value);
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 }
