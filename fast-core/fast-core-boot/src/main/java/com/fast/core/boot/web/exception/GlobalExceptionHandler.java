@@ -4,7 +4,7 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.exception.BaseException;
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.util.Util;
 import com.fast.core.common.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -82,8 +82,8 @@ public class GlobalExceptionHandler {
     /**
      * 业务异常
      */
-    @ExceptionHandler(CustomException.class)
-    public R businessException(CustomException e) {
+    @ExceptionHandler(ServiceException.class)
+    public R businessException(ServiceException e) {
         runLog(e);
         if (Util.isNotNull(e.getCode())) {
             return R.error(e.getMessage());

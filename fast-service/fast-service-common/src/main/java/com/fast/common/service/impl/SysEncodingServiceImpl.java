@@ -11,22 +11,19 @@ import com.fast.common.service.ISysEncodingService;
 import com.fast.common.service.ISysEncodingSetService;
 import com.fast.common.vo.SysEncodingVO;
 import com.fast.core.common.constant.Constants;
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.util.CUtil;
 import com.fast.core.common.util.PageUtils;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -64,13 +61,13 @@ public class SysEncodingServiceImpl extends BaseServiceImpl<SysEncodingDao, SysE
         //查询入参重复
         List<String> repeatCode = CUtil.getDuplicateElements(codeList);
         if (CUtil.isNotEmpty(repeatCode)) {
-            throw new CustomException("存在规则代码:" + repeatCode);
+            throw new ServiceException("存在规则代码:" + repeatCode);
         }
         //查询库中是否存在
         List<SysEncoding> entityExist = list(new LambdaQueryWrapper<SysEncoding>().in(SysEncoding::getSysEncodingCode, codeList).select(SysEncoding::getSysEncodingCode));
         List<String> existCode = CUtil.getPropertyList(entityExist, SysEncoding::getSysEncodingCode);
         if (CUtil.isNotEmpty(existCode)) {
-            throw new CustomException("规则代码已存在:" + existCode);
+            throw new ServiceException("规则代码已存在:" + existCode);
         }
         saveBatch(entityList);
         return BUtil.copyList(entityList, SysEncodingVO.class);

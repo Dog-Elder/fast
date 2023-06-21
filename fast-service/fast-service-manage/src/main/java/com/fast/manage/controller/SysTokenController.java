@@ -1,8 +1,7 @@
 package com.fast.manage.controller;
 
 import cn.hutool.json.JSONUtil;
-import com.fast.core.common.exception.CustomException;
-import com.fast.core.safe.entity.Authentication;
+import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.safe.service.SecurityManagerService;
 import com.fast.core.safe.util.ManageUtil;
@@ -42,7 +41,7 @@ public class SysTokenController {
         try {
             service.authenticate(req);
         } catch (AuthenticationException e) {
-            throw new CustomException(e.getMessage());
+            throw new ServiceException(e.getMessage());
         }
         return R.success(JSONUtil.parseObj(ManageUtil.getTokenInfo()));
     }

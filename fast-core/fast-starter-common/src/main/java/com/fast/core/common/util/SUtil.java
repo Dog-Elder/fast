@@ -1,7 +1,7 @@
 package com.fast.core.common.util;
 
 import cn.hutool.core.text.StrFormatter;
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 
 import java.util.*;
 
@@ -54,7 +54,7 @@ public class SUtil extends org.apache.commons.lang3.StringUtils {
      */
     public static void isEmpty(String str,String msg) {
         if (com.fast.core.common.util.Util.isNull(str) || NULLSTR.equals(str.trim())) {
-            throw new CustomException(msg);
+            throw new ServiceException(msg);
         }
     }
 

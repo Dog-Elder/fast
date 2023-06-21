@@ -16,7 +16,7 @@ import com.fast.common.service.ISysSetValueService;
 import com.fast.common.vo.CustomSetValueVO;
 import com.fast.common.vo.SysSetValueVO;
 import com.fast.core.common.constant.Constants;
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.util.CUtil;
 import com.fast.core.common.util.PageUtils;
 import com.fast.core.common.util.SUtil;
@@ -124,12 +124,12 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
     @Override
     public JSONObject customList(Map<String, String> map) {
         if (CUtil.isEmpty(map)) {
-            throw new CustomException("查询值集不能为空");
+            throw new ServiceException("查询值集不能为空");
         }
         Collection<String> values = map.values();
         Optional<String> any = values.stream().filter(SUtil::isBlank).findAny();
         if (any.isPresent()) {
-            throw new CustomException("参数值和参数名不能为空");
+            throw new ServiceException("参数值和参数名不能为空");
         }
         //过滤值集未启用的
         List<SysSet> validSets = sysSetService.list(new LambdaQueryWrapper<SysSet>().select(SysSet::getSetCode).in(SysSet::getSetCode, values).eq(SysSet::getSetState, Constants.Y));
@@ -303,7 +303,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         if (CUtil.isNotEmpty(different)) {
             StringBuilder sb = new StringBuilder();
             sb.append("对应的值集编码:").append(SUtil.join(different, ",")).append("不存在");
-            throw new CustomException(sb.toString());
+            throw new ServiceException(sb.toString());
         }
     }
 
@@ -337,7 +337,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
             List<String> setValueKeys = v.stream().map(SysSetValue::getSetValueKey).collect(Collectors.toList());
             List<String> duplicateElements = CUtil.getDuplicateElements(setValueKeys);
             if (CUtil.isNotEmpty(duplicateElements)) {
-                throw new CustomException("值集值key重复:" + duplicateElements);
+                throw new ServiceException("值集值key重复:" + duplicateElements);
             }
         });
         return reqMap.keySet();

@@ -1,7 +1,7 @@
 package com.fast.core.common.util;
 
 
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 
@@ -42,10 +42,10 @@ public class Md5Util {
     public static boolean verifyPassword(String srcPass, String md5Pass) {
         try {
             if (srcPass.length() > md5Pass.length()) {
-                throw new CustomException("参数异位");
+                throw new ServiceException("参数异位");
             }
             if (com.fast.core.common.util.SUtil.isEmpty(srcPass) || SUtil.isEmpty(md5Pass)) {
-                throw new CustomException("密码错误");
+                throw new ServiceException("密码错误");
             }
             char[] cs1 = new char[32];
             char[] cs2 = new char[16];

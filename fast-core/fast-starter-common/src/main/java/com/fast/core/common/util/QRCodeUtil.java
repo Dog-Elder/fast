@@ -4,7 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -73,10 +73,10 @@ public class QRCodeUtil {
      **/
     public static void byQrCodeDownloadFile(String path, String savePath, String filename, String suffix,boolean network) {
         if (com.fast.core.common.util.SUtil.isEmpty(suffix)) {
-            throw new CustomException("文件后缀为空");
+            throw new ServiceException("文件后缀为空");
         }
         if (SUtil.isEmpty(savePath)) {
-            throw new CustomException("文件保存路径不能为空");
+            throw new ServiceException("文件保存路径不能为空");
         }
         if(network){
             new Thread(() -> DownLoadFileUtil.downLoadByUrl(path, savePath, filename, suffix)).start();

@@ -4,7 +4,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.fast.core.common.util.SUtil;
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -100,7 +100,7 @@ public class WxUtils {
         String access_token = jsonObject.getStr("access_token");
         if (SUtil.isEmpty(openid) || SUtil.isEmpty(access_token)) {
             //log.error("openid或access_token参数为空");
-            throw new CustomException("openid或access_token参数为空");
+            throw new ServiceException("openid或access_token参数为空");
         }
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("openid", openid);

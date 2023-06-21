@@ -2,7 +2,7 @@ package com.fast.core.common.util;
 
 import cn.hutool.core.io.FileUtil;
 import com.fast.core.common.domain.domain.AttachBO;
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,7 +75,7 @@ public class UploadUtil {
         //判空
         for (MultipartFile file : files) {
             if (ObjectUtils.isEmpty(files) || file.getSize() <= 0) {
-                throw new CustomException("文件为空");
+                throw new ServiceException("文件为空");
             }
         }
         MultipartFile files1 = files[0];
@@ -144,7 +144,7 @@ public class UploadUtil {
                         .setAttachAlias(newName)
                 );
             } catch (IOException e) {
-                throw new CustomException("上传失败!:" + e);
+                throw new ServiceException("上传失败!:" + e);
             }
         }
         return attachVOS;

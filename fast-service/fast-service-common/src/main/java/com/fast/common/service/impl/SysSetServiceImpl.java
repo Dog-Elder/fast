@@ -1,6 +1,5 @@
 package com.fast.common.service.impl;
 
-import cn.hutool.core.util.BooleanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -13,14 +12,13 @@ import com.fast.common.service.ISysSetService;
 import com.fast.common.service.ISysSetValueService;
 import com.fast.common.vo.SysSetVO;
 import com.fast.core.common.constant.Constants;
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.util.*;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.core.util.FastRedis;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -73,12 +71,12 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
         //检查添加的数据中是否有重复编码数据
         Set<String> setCodes = entityList.stream().map(SysSet::getSetCode).collect(Collectors.toSet());
         if (setCodes.size() != entityList.size()) {
-            throw new CustomException("输入的值集编码有重复");
+            throw new ServiceException("输入的值集编码有重复");
         }
         //检查添的数据中的编码是否已在数据库中存在
         String repeatCode = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getSetCode, setCodes).list().stream().map(SysSet::getSetCode).collect(Collectors.joining(","));
         if (SUtil.isNotEmpty(repeatCode)) {
-            throw new CustomException("编码已存在:" + repeatCode);
+            throw new ServiceException("编码已存在:" + repeatCode);
         }
         //检查数据中的有父值集的是否存在
         Set<String> setParentCodes = entityList.stream().filter(ele -> ele.getSetParentCode() != null).map(SysSet::getSetParentCode).collect(Collectors.toSet());
@@ -90,7 +88,7 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
                 saveBatch(entityList);
                 return BUtil.copyList(entityList, SysSetVO.class);
             }
-            throw new CustomException("关联的值集编码不存在" + diffByHashSet);
+            throw new ServiceException("关联的值集编码不存在" + diffByHashSet);
         }
         saveBatch(entityList);
         return BUtil.copyList(entityList, SysSetVO.class);
@@ -105,11 +103,11 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
             //TODO 作者:@Dog_Elder 2022/3/25 17:27 待办  缺少操作权限校验
             if ((!SUtil.isEmpty(entity.getSetParentCode()) && !SUtil.isEmpty(ele.getSetParentCode()))) {
                 if (!entity.getSetParentCode().equals(ele.getSetParentCode())) {
-                    throw new CustomException("不可更换父级值集编码");
+                    throw new ServiceException("不可更换父级值集编码");
                 }
             }
             if (!ele.getSetCode().equals(entity.getSetCode())) {
-                throw new CustomException("不可更换值集编码");
+                throw new ServiceException("不可更换值集编码");
             }
         });
         boolean outcome = updateById(entity);
@@ -130,7 +128,7 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
             sb.append("需先删除的值集级子集:");
             dbList.forEach(ele -> sb.append(ele.getSetParentCode()).append(","));
             sb.deleteCharAt(sb.length() - 1);
-            throw new CustomException(sb.toString());
+            throw new ServiceException(sb.toString());
         }
         boolean removeSetValue = sysSetValueService.remove(Wrappers.<SysSetValue>lambdaQuery()
                 .in(SysSetValue::getSetCode, setCodes));

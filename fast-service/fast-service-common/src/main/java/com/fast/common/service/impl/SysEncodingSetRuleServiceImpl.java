@@ -17,12 +17,11 @@ import com.fast.common.service.ISysEncodingSetService;
 import com.fast.common.vo.SysEncodingSetRuleVO;
 import com.fast.common.vo.SysEncodingSetVO;
 import com.fast.core.common.constant.Constants;
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.util.*;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.core.util.FastRedis;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -113,7 +112,7 @@ public class SysEncodingSetRuleServiceImpl extends BaseServiceImpl<SysEncodingSe
         //保存规则
         save(entity);
         if (!encodingSetService.update(BUtil.copy(sysEncodingSet, SysEncodingSetVO.class))) {
-            throw new CustomException("编码集版本不一致请重新提交");
+            throw new ServiceException("编码集版本不一致请重新提交");
         }
         //存放Redis
         String ruleIn = SUtil.format(CacheConstant.SysSetRule._IN, entity.getSysEncodingSetCode(), entity.getSysEncodingSetCode());
@@ -138,7 +137,7 @@ public class SysEncodingSetRuleServiceImpl extends BaseServiceImpl<SysEncodingSe
         //匹配规则
         matchingRule(entity);
         if (!encodingSetService.update(BUtil.copy(sysEncodingSet,SysEncodingSetVO.class))) {
-            throw new CustomException("编码集版本不一致请重新提交");
+            throw new ServiceException("编码集版本不一致请重新提交");
         }
         //存放Redis
         String ruleIn = SUtil.format(CacheConstant.SysSetRule._IN, entity.getSysEncodingSetCode(), entity.getSysEncodingSetCode());
@@ -175,12 +174,12 @@ public class SysEncodingSetRuleServiceImpl extends BaseServiceImpl<SysEncodingSe
             //编码集不存在
             if (Util.isNull(ruleStatus)) {
                 log.error("获取编码异常,编码集不存在! 规则代码:{} 编码值:{}", req.getSysEncodingCode(), req.getSysEncodingSetCode());
-                throw new CustomException("编码集不存在,请联系管理员!");
+                throw new ServiceException("编码集不存在,请联系管理员!");
             }
             //编码集已关闭
             if (SUtil.equals(ruleStatus, Constants._N)) {
                 log.error("获取编码异常,编码集状态已关闭! 规则代码:{} 编码值:{}", req.getSysEncodingCode(), req.getSysEncodingSetCode());
-                throw new CustomException("编码集已关闭,请联系管理员!");
+                throw new ServiceException("编码集已关闭,请联系管理员!");
             }
 
             //从Redis中查询是否已经使用
@@ -200,7 +199,7 @@ public class SysEncodingSetRuleServiceImpl extends BaseServiceImpl<SysEncodingSe
                 if (!isSetRes) {
                     //释放分布式锁
                     redis.releaseTheLock(lockKey, uuid);
-                    throw new CustomException("生成编码操作失败,版本不一致!");
+                    throw new ServiceException("生成编码操作失败,版本不一致!");
                 }
                 //Redis处理编码集 状态
                 redis.setString(ruleOpen, Constants._Y);
@@ -209,8 +208,8 @@ public class SysEncodingSetRuleServiceImpl extends BaseServiceImpl<SysEncodingSe
             //编码集状态存在 获取code
             disposeRule(codeStr, req);
             //业务代码-结束----------------------
-        } catch (CustomException e) {
-            throw new CustomException(e.getMessage());
+        } catch (ServiceException e) {
+            throw new ServiceException(e.getMessage());
         } finally {
             //释放分布式锁
             redis.releaseTheLock(lockKey, uuid);
@@ -313,7 +312,7 @@ public class SysEncodingSetRuleServiceImpl extends BaseServiceImpl<SysEncodingSe
                 break;
             default:
                 log.error("获取编码异常,未匹配到对应的规则段类型! 规则代码:{} 编码值:{}", req.getSysEncodingCode(), req.getSysEncodingSetCode());
-                throw new CustomException("未匹配到对应的规则段类型!");
+                throw new ServiceException("未匹配到对应的规则段类型!");
         }
     }
 
@@ -376,7 +375,7 @@ public class SysEncodingSetRuleServiceImpl extends BaseServiceImpl<SysEncodingSe
                 rule.setSysEncodingSetRuleDateMask("yyyy");
                 break;
             default:
-                throw new CustomException("未匹配到对应的规则段类型!");
+                throw new ServiceException("未匹配到对应的规则段类型!");
         }
     }
     //处理序列规则
@@ -391,19 +390,19 @@ public class SysEncodingSetRuleServiceImpl extends BaseServiceImpl<SysEncodingSe
 
         if (Util.isNotNull(rule.getId()) && number.getId().equals(rule.getId())
                 || Util.isNull(rule.getId()) && Util.isNotNull(number)) {
-            throw new CustomException("序列规则类型只能有一个");
+            throw new ServiceException("序列规则类型只能有一个");
         }
         //位数
         Integer ruleDigit = rule.getSysEncodingSetRuleDigit();
         //检查位数
         if (Util.isNull(ruleDigit) || ruleDigit <= 0) {
-            throw new CustomException("位数不能为空或小于0");
+            throw new ServiceException("位数不能为空或小于0");
         }
         //开始值
         Long initialValue = rule.getSysEncodingSetInitialValue();
         //检查位数
         if (Util.isNull(initialValue) || initialValue <= 0) {
-            throw new CustomException("开始值不能为空或小于0");
+            throw new ServiceException("开始值不能为空或小于0");
         }
     }
 
@@ -412,7 +411,7 @@ public class SysEncodingSetRuleServiceImpl extends BaseServiceImpl<SysEncodingSe
         String sysEncodingSetRuleSectionCode = rule.getSysEncodingSetRuleSectionCode();
         //检查段值
         if (SUtil.isBlank(sysEncodingSetRuleSectionCode)) {
-            throw new CustomException("常量值不能为空");
+            throw new ServiceException("常量值不能为空");
         }
     }
 }

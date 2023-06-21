@@ -1,6 +1,6 @@
 package com.fast.core.common.util;
 
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -50,7 +50,7 @@ public class Util {
      */
     public static void isNull(Object object, String msg) {
         if (object == null) {
-            throw new CustomException(msg);
+            throw new ServiceException(msg);
         }
     }
 
@@ -60,7 +60,7 @@ public class Util {
      */
     public static void isTrue(boolean target,String msg) {
         if (target) {
-            throw new CustomException(msg);
+            throw new ServiceException(msg);
         }
     }
 
@@ -90,7 +90,7 @@ public class Util {
      */
     public static void isNotNull(Object object, String msg) {
         if (!Util.isNull(object)) {
-            throw new CustomException(msg);
+            throw new ServiceException(msg);
         }
     }
 

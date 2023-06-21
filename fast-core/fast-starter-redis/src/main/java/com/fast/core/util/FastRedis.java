@@ -1,6 +1,6 @@
 package com.fast.core.util;
 
-import com.fast.core.common.exception.CustomException;
+import com.fast.core.common.exception.ServiceException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -260,7 +260,7 @@ public class FastRedis {
             }
         }
         if (i == 3) {
-            throw new CustomException("网络繁忙，请稍候重试");
+            throw new ServiceException("网络繁忙，请稍候重试");
         }
         return true;
     }
@@ -311,7 +311,7 @@ public class FastRedis {
             }
             return false;
         } catch (Exception e) {
-            throw new CustomException("尝试获取分布式锁异常:key=" + lockKey + "value=" + requestId + " cause=" + e.getMessage());
+            throw new ServiceException("尝试获取分布式锁异常:key=" + lockKey + "value=" + requestId + " cause=" + e.getMessage());
         }
     }
 
@@ -332,7 +332,7 @@ public class FastRedis {
             }
             return false;
         } catch (Exception e) {
-            throw new CustomException("释放分布式锁方法异常:key=" + lockKey + "value=" + requestId + " cause=" + e.getMessage());
+            throw new ServiceException("释放分布式锁方法异常:key=" + lockKey + "value=" + requestId + " cause=" + e.getMessage());
         }
     }
 
