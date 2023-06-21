@@ -24,7 +24,8 @@
         <spring.boot.version>2.7.8</spring.boot.version>
         <druid.version>1.2.16</druid.version>
         <mysql.version>8.0.22</mysql.version>
-        <mybatis.plus.version>3.5.2</mybatis.plus.version>
+        <mybatis.plus.version>3.5.3.1</mybatis.plus.version>
+        <mybatis-plus-join-boot-starter.version>1.4.3.2</mybatis-plus-join-boot-starter.version>
         <commons.io.version>2.11.0</commons.io.version>
         <velocity.version>1.7</velocity.version>
         <commons.collections.version>3.2.2</commons.collections.version>
@@ -60,7 +61,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
+            <!-- DB 相关 -->
             <!-- Druid -->
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -80,6 +81,12 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis.plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.yulichang</groupId>
+                <artifactId>mybatis-plus-join-boot-starter</artifactId>
+                <version>${mybatis-plus-join-boot-starter.version}</version>
             </dependency>
 
             <!--io常用工具类 -->
