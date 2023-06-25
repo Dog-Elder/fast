@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotBlank;
 
 /**
+ * @author 黄嘉浩
  * @description: 生成编码请求对象
  **/
 @Data

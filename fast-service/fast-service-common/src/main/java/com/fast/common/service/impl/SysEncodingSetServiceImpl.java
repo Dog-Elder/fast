@@ -3,6 +3,7 @@ package com.fast.common.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fast.common.constant.cache.CacheConstant;
 import com.fast.common.dao.SysEncodingSetDao;
 import com.fast.common.entity.sys.SysEncoding;
@@ -20,7 +21,6 @@ import com.fast.core.common.util.PageUtils;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
 import com.fast.core.common.util.bean.BUtil;
-import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.core.util.FastRedis;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
@@ -41,7 +41,7 @@ import java.util.Set;
  */
 @Service
 @RequiredArgsConstructor
-public class SysEncodingSetServiceImpl extends BaseServiceImpl<SysEncodingSetDao, SysEncodingSet> implements ISysEncodingSetService {
+public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, SysEncodingSet> implements ISysEncodingSetService {
     @Lazy
     @Resource
     private ISysEncodingService encodingService;

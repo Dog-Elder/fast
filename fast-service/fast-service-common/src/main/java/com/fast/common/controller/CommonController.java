@@ -1,10 +1,12 @@
 package com.fast.common.controller;
 
+import cn.hutool.json.JSONObject;
 import com.fast.common.dto.SysCreateCode;
 import com.fast.common.entity.verification.Qry;
 import com.fast.common.query.SysSetValueQuery;
-import com.fast.common.service.ISysEncodingSetRuleService;
+import com.fast.common.service.ISysEncodingService;
 import com.fast.common.service.ISysSetValueService;
+import com.fast.common.vo.CustomSetValueVO;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.page.TableDataInfo;
 import lombok.AllArgsConstructor;
@@ -22,9 +24,9 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/common")
-public class SysSetValueCommonController extends WebBaseController{
+public class CommonController extends WebBaseController{
     private final ISysSetValueService sysSetValueService;
-    private final ISysEncodingSetRuleService sysEncodingSetRuleService;
+    private final ISysEncodingService sysEncodingService;
 
     /**
      * 定制查询多值集值列表(不分页)
@@ -32,7 +34,7 @@ public class SysSetValueCommonController extends WebBaseController{
      * @folder 公共服务/值集
      */
     @GetMapping("/set-value/custom-list")
-    public R customList(@RequestParam Map<String,String> map) {
+    public R<JSONObject> customList(@RequestParam Map<String,String> map) {
         return R.success(sysSetValueService.customList(map));
     }
 
@@ -41,7 +43,7 @@ public class SysSetValueCommonController extends WebBaseController{
      * @folder 公共服务/值集
      */
     @GetMapping("/set-value/cache-data-list")
-    public R<TableDataInfo> qryCacheDataList(@Validated(value = Qry.class) SysSetValueQuery req) {
+    public R<TableDataInfo<CustomSetValueVO>> qryCacheDataList(@Validated(value = Qry.class) SysSetValueQuery req) {
         return R.success(getDataTable(sysSetValueService.qryCacheDataList(req)));
     }
 
@@ -64,7 +66,7 @@ public class SysSetValueCommonController extends WebBaseController{
     @GetMapping("/get-code")
     @ResponseBody
     public R<String> createCode(@Validated(Qry.class) SysCreateCode req) {
-        String code = sysEncodingSetRuleService.createCode(req);
+        String code = sysEncodingService.createCode(req);
         return R.success(code);
     }
 }
