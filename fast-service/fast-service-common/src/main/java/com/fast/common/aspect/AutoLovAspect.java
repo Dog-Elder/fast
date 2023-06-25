@@ -25,7 +25,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * @description: 值集切面，用于解析值集注解并进行翻译
+ * 值集切面，用于解析值集注解并进行翻译
+ * @author 黄嘉浩
  **/
 @Slf4j
 @Aspect

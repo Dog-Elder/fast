@@ -12,5 +12,15 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Code {
-    String value() default "";
+
+    /**
+     * 规则code
+     **/
+    String rules();
+
+    /**
+     * 编码值
+     */
+    String encode();
+
 }

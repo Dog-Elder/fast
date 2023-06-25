@@ -318,6 +318,19 @@ public class RUtil {
         return fieldList;
     }
 
+
+    /**
+     * 获取类的所有字段（包括父类的字段）
+     *
+     * @param object 类(运行时)
+     * @return 包含所有字段的列表
+     */
+    private static List<Field> getFields(Object object) {
+        Class<?> clazz = getClass(object);
+        List<Field> fields = getAllFields(clazz);
+        return fields;
+    }
+
     /**
      * 获取指定类型的注解
      *
@@ -383,10 +396,9 @@ public class RUtil {
      * @param <T>               泛型参数
      */
     public static <T> void processAnnotations(Object object, Class<? extends Annotation> annotationClass, LogicExecutor<T> executor) {
-        Class<?> clazz = object.getClass();
-        Field[] fields = clazz.getDeclaredFields();
-
+        List<Field> fields = getFields(object);
         for (Field field : fields) {
+            //TODO 作者:黄嘉浩 可以进行优化 使用本地缓存
             Annotation annotation = field.getDeclaredAnnotation(annotationClass);
             if (annotation != null) {
                 try {
