@@ -1,7 +1,7 @@
 package com.fast.core.common.util;
 
 import cn.hutool.core.io.FileUtil;
-import com.fast.core.common.domain.domain.AttachBO;
+import com.fast.core.common.domain.vo.AttachVO;
 import com.fast.core.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -17,12 +17,17 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 文件上传
+ * 文件上传器
  **/
 @Slf4j
 @Component
-public class UploadUtil {
+public class FileUploader {
 
+    // 缓存文件桶记录
+    private static final Map<String, Map<String, Set<String>>> DOCUMENT_BARREL =
+            new ConcurrentHashMap<>();
+
+    // 上传地址路径配置
     /**
      * 应用名
      **/
@@ -40,36 +45,31 @@ public class UploadUtil {
 
     @Value(value = "${fast.apply-name}")
     public void setAPPLY_NAME(String applyName) {
-        UploadUtil.APPLY_NAME = applyName;
+        FileUploader.APPLY_NAME = applyName;
     }
 
-    @Value("${attach.profile-win}")
+    @Value("${fast.attach.profile-win}")
     public void setPROFILE_WIN(String profileWin) {
-        UploadUtil.PROFILE_WIN = profileWin;
+        FileUploader.PROFILE_WIN = profileWin;
     }
 
-    @Value("${attach.profile-linux}")
+    @Value("${fast.attach.profile-linux}")
     public void setPROFILE_LINUX(String profileLinux) {
-        UploadUtil.PROFILE_LINUX = profileLinux;
+        FileUploader.PROFILE_LINUX = profileLinux;
     }
 
-    /**
-     * 缓存文件桶 记录
-     * <k:文件桶名 , v:<目录名,目录对应的日期文件夹名>>
-     **/
-    private static final Map<String, Map<String, Set<String>>> DOCUMENT_BARREL =
-            new ConcurrentHashMap<String, Map<String, Set<String>>>();
 
     /**
-     * 附件位置 (profile-win/profile-win)+bucketName+directory+yyyy-MM-dd
+     * 上传文件
+     * 附件位置 (PROFILE_WIN/PROFILE_WIN)+应用名+bucketName+directory+yyyy-MM-dd
      *
-     * @param files:      文件数组
-     * @param bucketName: 文件桶(类)
-     * @param directory:  目录(子类)
-     * @Description: 附件上传
-     * @return: com.xxxxx.common.core.domain.AttachVO
-     **/
-    public static List<AttachBO> upload(MultipartFile[] files
+     * @param files      文件数组
+     * @param bucketName 文件桶名(类)
+     * @param directory  目录名(子类)
+     * @return 上传成功后的附件列表
+     * @throws ServiceException 如果文件为空或上传失败
+     */
+    public static List<AttachVO> upload(MultipartFile[] files
             , @NotBlank(message = "文件桶名不能为空") String bucketName
             , @NotBlank(message = "目录名不能为空") String directory) {
         //判空
@@ -78,7 +78,6 @@ public class UploadUtil {
                 throw new ServiceException("文件为空");
             }
         }
-        MultipartFile files1 = files[0];
         LocalDate now = LocalDate.now();
 
         //判断是否是win系统
@@ -116,18 +115,21 @@ public class UploadUtil {
             }
             DOCUMENT_BARREL.get(bucketName).get(directory).add(now.toString());
         }
-        List<AttachBO> attachVOS = new ArrayList<AttachBO>();
+
         //处理文件上传
         uploadPath.append("/");
         //附件存放地址
-        StringBuilder attachAddress = new StringBuilder();
-        attachAddress.append("/")
+        StringBuilder attachAddress = new StringBuilder()
+                .append(APPLY_NAME)
+                .append("/")
                 .append(bucketName)
                 .append("/")
                 .append(directory)
                 .append("/")
                 .append(now)
                 .append("/");
+
+        List<AttachVO> attachVOS = new ArrayList<>();
         for (MultipartFile file : files) {
             String oldName = file.getOriginalFilename();
             assert oldName != null;
@@ -136,7 +138,7 @@ public class UploadUtil {
             String newName = fileName + "_" + UUID.randomUUID().toString() + suffix;
             try {
                 file.transferTo(new File(uploadPath.toString(), newName));
-                attachVOS.add(new AttachBO()
+                attachVOS.add(new AttachVO()
                         .setAttachName(fileName)
                         .setAttachSuffix(suffix)
                         .setAttachUrl(attachAddress + newName)
@@ -149,4 +151,5 @@ public class UploadUtil {
         }
         return attachVOS;
     }
+
 }

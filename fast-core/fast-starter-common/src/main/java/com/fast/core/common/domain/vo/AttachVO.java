@@ -1,4 +1,4 @@
-package com.fast.core.common.domain.domain;
+package com.fast.core.common.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
-public class AttachBO {
+public class AttachVO {
 
     /** 附件名 */
     private String attachName;
