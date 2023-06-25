@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fast.manage.dao.SysAttachDao">
+
+    <resultMap type="com.fast.manage.entity.SysAttach" id="sysAttachMap">
+            <result property="id" column="id"/>
+            <result property="attachCode" column="attach_code"/>
+            <result property="attachUuid" column="attach_uuid"/>
+            <result property="attachName" column="attach_name"/>
+            <result property="attachAlias" column="attach_alias"/>
+            <result property="attachSuffix" column="attach_suffix"/>
+            <result property="attachUrl" column="attach_url"/>
+            <result property="attachAddress" column="attach_address"/>
+            <result property="attachSize" column="attach_size"/>
+            <result property="delFlag" column="del_flag"/>
+            <result property="createBy" column="create_by"/>
+            <result property="createTime" column="create_time"/>
+            <result property="updateBy" column="update_by"/>
+            <result property="updateTime" column="update_time"/>
+            <result property="remark" column="remark"/>
+    </resultMap>
+
+</mapper>
