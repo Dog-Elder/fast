@@ -31,7 +31,6 @@ public class SysMenu extends BaseVersionEntity {
      */
     @TableId
     @Display("菜单ID")
-    @TableField("id")
     private String id;
 
     /**

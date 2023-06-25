@@ -31,7 +31,6 @@ public class SysEncodingSet extends BaseVersionEntity {
 	 */
 	@TableId
 	@Display("id")
-	@TableField("id")
 	private String id;
 
 	/**

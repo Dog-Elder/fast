@@ -21,7 +21,7 @@ public class User extends BaseVersionEntity {
     /**
      * id
      */
-    private Long id;
+    private String id;
     /**
      * 用户编码
      **/

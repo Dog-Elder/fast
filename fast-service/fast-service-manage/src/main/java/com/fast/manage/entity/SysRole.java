@@ -1,6 +1,7 @@
 package com.fast.manage.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fast.core.mybatis.model.BaseVersionEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class SysRole extends BaseVersionEntity {
     /**
      * 角色ID
      */
+    @TableId
     private String id;
     /**
      * 角色名称

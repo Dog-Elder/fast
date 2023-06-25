@@ -25,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class SysTest {
 	@TableId
 	@Display("")
-	@TableField("id")
 	private Integer id;
 
 	@Code(rules = "USER", encode = "MANAGE")

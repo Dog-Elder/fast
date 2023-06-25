@@ -1,5 +1,6 @@
 package com.fast.manage.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fast.core.mybatis.model.BaseVersionEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,12 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class SysRoleMenu extends BaseVersionEntity {
-    private static final long serialVersionUID = 1L;
+
+    /**
+     * ID
+     */
+    @TableId
+    private String id;
 
     /**
      * 角色ID
