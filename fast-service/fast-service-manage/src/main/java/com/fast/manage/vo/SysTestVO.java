@@ -1,9 +1,5 @@
 package com.fast.manage.vo;
 
-import com.fast.core.common.annotation.encode.Code;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.alibaba.fastjson.annotation.JSONField;
-import com.fast.core.common.validate.annotation.Display;
 import lombok.Data;
 import java.io.Serializable;
 
@@ -18,7 +14,7 @@ public class SysTestVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-	@Code("test")
+
 	private String code;
 
 	private String name;

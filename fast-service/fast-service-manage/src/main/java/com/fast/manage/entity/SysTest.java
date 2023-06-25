@@ -1,11 +1,9 @@
 package com.fast.manage.entity;
 
+import com.fast.core.common.annotation.encode.Code;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fast.core.common.validate.annotation.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -30,6 +28,7 @@ public class SysTest {
 	@TableField("id")
 	private Integer id;
 
+	@Code(rules = "USER", encode = "MANAGE")
 	@Display("")
 	@TableField("code")
 	private String code;
