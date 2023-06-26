@@ -2,8 +2,10 @@ package com.fast.manage.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.fast.core.common.constant.AttachConstant;
+import com.fast.core.common.domain.vo.AttachVO;
+import com.fast.core.common.util.*;
 import lombok.RequiredArgsConstructor;
-import com.fast.core.common.util.PageUtils;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.manage.entity.SysAttach;
@@ -15,8 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
-import com.fast.core.common.util.Util;
-import com.fast.core.common.util.SUtil;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -68,4 +69,20 @@ public class SysAttachServiceImpl extends BaseServiceImpl<SysAttachDao, SysAttac
         return removeByIds(idList);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public AttachVO<SysAttach> upload(MultipartFile[] files, String attachCode) {
+        List<AttachVO> vos = FileUploader.upload(files, AttachConstant.SYS, AttachConstant.CURRENCY);
+        if (SUtil.isBlank(attachCode)) {
+            //TODO 待完成 [Huangjh,  2023-2-7 15:10]  code获取
+            attachCode = UUIDDigitUtil.generateString(32);
+        }
+        List<SysAttach> sysAttaches = BUtil.cloneList(vos, SysAttach.class);
+        for (SysAttach ele : sysAttaches) {
+            ele.setAttachUuid(UUIDDigitUtil.generateString(32));
+            ele.setAttachCode(attachCode);
+        }
+        saveBatch(sysAttaches);
+        return new AttachVO<SysAttach>().setAttachCode(attachCode).setAttach(sysAttaches);
+    }
 }

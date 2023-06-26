@@ -1,9 +1,11 @@
 package com.fast.manage.service;
 
+import com.fast.core.common.domain.vo.AttachVO;
 import com.fast.core.mybatis.service.BaseService;
 import com.fast.manage.vo.SysAttachVO;
 import com.fast.manage.query.SysAttachQuery;
 import com.fast.manage.entity.SysAttach;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,4 +24,6 @@ public interface ISysAttachService extends BaseService<SysAttach> {
     boolean update(SysAttachVO vo);
 
     boolean delete(List<String> idList);
+
+    AttachVO upload(MultipartFile[] files, String attachCode);
 }

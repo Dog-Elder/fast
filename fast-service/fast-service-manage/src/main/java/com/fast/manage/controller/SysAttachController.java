@@ -7,6 +7,7 @@ import com.fast.common.entity.verification.Update;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.domain.ValidList;
 import com.fast.core.common.domain.page.TableDataInfo;
+import com.fast.core.common.domain.vo.AttachVO;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.safe.annotation.manage.ManageCheckPermission;
 import com.fast.manage.entity.SysAttach;
@@ -16,6 +17,7 @@ import com.fast.manage.vo.SysAttachVO;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -56,8 +58,8 @@ public class SysAttachController extends WebBaseController{
      */
     @PostMapping
     @ManageCheckPermission(value = "manage.sysAttach.save")
-    public R<List<SysAttachVO>> save(@RequestBody @Validated(Save.class) ValidList<SysAttachVO> vo){
-        return R.success(sysAttachService.save(vo));
+    public R<AttachVO> save(@RequestParam("files") MultipartFile[] files, @RequestParam(name="attachCode",required = false)String attachCode){
+        return R.success(sysAttachService.upload(files,attachCode));
     }
 
     /**

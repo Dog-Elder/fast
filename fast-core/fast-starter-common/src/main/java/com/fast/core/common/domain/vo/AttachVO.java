@@ -1,35 +1,23 @@
 package com.fast.core.common.domain.vo;
 
+import com.fast.core.common.validate.annotation.Display;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * @author Administrator
+ */
 @Data
-@ToString(callSuper = true)
 @Accessors(chain = true)
-@NoArgsConstructor
-@AllArgsConstructor
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
-public class AttachVO {
+public class AttachVO<T> implements Serializable {
+    /** 附件CODE */
+    @Display("附件CODE")
+    private String attachCode;
 
-    /** 附件名 */
-    private String attachName;
-
-    /** 附件别名(持久化名) */
-    private String attachAlias;
-
-    /** 附件类型 */
-    private String attachSuffix;
-
-    /** 附件URL */
-    private String attachUrl;
-
-    /** 附件存放地址 */
-    private String attachAddress;
-
-    /** 附件大小 */
-    private Integer attachSize;
+    private List<T> attach;
 }
