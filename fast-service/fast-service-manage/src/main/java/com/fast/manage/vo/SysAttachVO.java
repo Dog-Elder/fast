@@ -17,11 +17,6 @@ import java.time.LocalDateTime;
 public class SysAttachVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * id
-	 */
-	@Display("id")
-	private String id;
 
 	/**
 	 * 附件CODE
@@ -71,7 +66,6 @@ public class SysAttachVO implements Serializable {
 	@Display("附件大小")
 	private String attachSize;
 
-
 	/**
 	 * 创建者
 	 */
@@ -85,26 +79,6 @@ public class SysAttachVO implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime createTime;
-
-	/**
-	 * 更新者
-	 */
-	@Display("更新者")
-	private String updateBy;
-
-	/**
-	 * 更新时间
-	 */
-	@Display("更新时间")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime updateTime;
-
-	/**
-	 * 备注信息
-	 */
-	@Display("备注信息")
-	private String remark;
 
 
 }

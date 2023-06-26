@@ -1,7 +1,7 @@
 package com.fast.core.common.util;
 
 import cn.hutool.core.io.FileUtil;
-import com.fast.core.common.domain.vo.AttachVO;
+import com.fast.core.common.domain.bo.AttachBO;
 import com.fast.core.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -69,7 +69,7 @@ public class FileUploader {
      * @return 上传成功后的附件列表
      * @throws ServiceException 如果文件为空或上传失败
      */
-    public static List<AttachVO> upload(MultipartFile[] files
+    public static List<AttachBO> upload(MultipartFile[] files
             , @NotBlank(message = "文件桶名不能为空") String bucketName
             , @NotBlank(message = "目录名不能为空") String directory) {
         //判空
@@ -129,7 +129,7 @@ public class FileUploader {
                 .append(now)
                 .append("/");
 
-        List<AttachVO> attachVOS = new ArrayList<>();
+        List<AttachBO> bo = new ArrayList<>();
         for (MultipartFile file : files) {
             String oldName = file.getOriginalFilename();
             assert oldName != null;
@@ -138,7 +138,7 @@ public class FileUploader {
             String newName = fileName + "_" + UUID.randomUUID().toString() + suffix;
             try {
                 file.transferTo(new File(uploadPath.toString(), newName));
-                attachVOS.add(new AttachVO()
+                bo.add(new AttachBO()
                         .setAttachName(fileName)
                         .setAttachSuffix(suffix)
                         .setAttachUrl(attachAddress + newName)
@@ -149,7 +149,7 @@ public class FileUploader {
                 throw new ServiceException("上传失败!:" + e);
             }
         }
-        return attachVOS;
+        return bo;
     }
 
 }

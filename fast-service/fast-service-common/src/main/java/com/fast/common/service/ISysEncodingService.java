@@ -2,6 +2,7 @@ package com.fast.common.service;
 
 import com.fast.common.dto.SysCreateCode;
 import com.fast.common.entity.sys.SysEncoding;
+import com.fast.common.enums.code.AttachEnum;
 import com.fast.common.query.SysEncodingQuery;
 import com.fast.common.vo.SysEncodingVO;
 import com.fast.core.mybatis.service.BaseService;
@@ -29,6 +30,15 @@ public interface ISysEncodingService extends BaseService<SysEncoding> {
      * @Date: 2022/9/25 22:23
      * @return: java.lang.String 编码
      **/
-    public String createCode(SysCreateCode req);
+    String createCode(SysCreateCode req);
 
+    /**
+     * 获取编码
+     **/
+    String createCode(String encodingCode, String encodingSetCode);
+
+    /**
+     * 获取编码
+     **/
+    String createCode(AttachEnum attachEnum);
 }

@@ -2,10 +2,7 @@ package com.fast.manage.controller;
 
 import com.fast.common.controller.WebBaseController;
 import com.fast.common.entity.verification.Qry;
-import com.fast.common.entity.verification.Save;
-import com.fast.common.entity.verification.Update;
 import com.fast.core.common.domain.domain.R;
-import com.fast.core.common.domain.domain.ValidList;
 import com.fast.core.common.domain.page.TableDataInfo;
 import com.fast.core.common.domain.vo.AttachVO;
 import com.fast.core.common.util.bean.BUtil;
@@ -54,27 +51,19 @@ public class SysAttachController extends WebBaseController{
     }
 
     /**
-     * 保存
+     * 文件上传
      */
     @PostMapping
     @ManageCheckPermission(value = "manage.sysAttach.save")
-    public R<AttachVO> save(@RequestParam("files") MultipartFile[] files, @RequestParam(name="attachCode",required = false)String attachCode){
+    public R<AttachVO<SysAttach>> save(@RequestParam("files") MultipartFile[] files, @RequestParam(name="attachCode",required = false)String attachCode){
         return R.success(sysAttachService.upload(files,attachCode));
-    }
-
-    /**
-     * 修改
-     */
-    @PutMapping
-    @ManageCheckPermission(value = "manage.sysAttach.update")
-    public R update(@RequestBody @Validated(Update.class) SysAttachVO vo){
-        return R.toVersion(sysAttachService.update(vo));
     }
 
     /**
      * 删除
      */
     @DeleteMapping
+    //TODO 作者:黄嘉浩  准备通过uuid删除
     @ManageCheckPermission(value = "manage.sysAttach.delete")
     public R delete(@RequestBody List<String> idList){
         sysAttachService.delete(idList);

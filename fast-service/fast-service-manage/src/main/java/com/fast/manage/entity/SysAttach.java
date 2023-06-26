@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fast.core.common.validate.annotation.Display;
-import com.fast.core.mybatis.model.BaseVersionEntity;
+import com.fast.core.mybatis.model.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +25,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
-public class SysAttach extends BaseVersionEntity {
+public class SysAttach extends BaseEntity {
 
 	/**
 	 * id

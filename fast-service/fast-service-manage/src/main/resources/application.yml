@@ -23,8 +23,8 @@ server:
 fast:
   apply-name: manage
   attach:
-    profile-win: D:/fast/manage
-    profile-linux: /doc/fast/manage
+    profile-win: D:/fast
+    profile-linux: /doc/fast
 
 
 

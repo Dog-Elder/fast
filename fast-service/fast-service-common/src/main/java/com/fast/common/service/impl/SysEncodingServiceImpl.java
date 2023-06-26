@@ -13,6 +13,7 @@ import com.fast.common.dto.SysCreateCode;
 import com.fast.common.entity.sys.SysEncoding;
 import com.fast.common.entity.sys.SysEncodingSet;
 import com.fast.common.entity.sys.SysEncodingSetRule;
+import com.fast.common.enums.code.AttachEnum;
 import com.fast.common.query.SysEncodingQuery;
 import com.fast.common.service.ISysEncodingService;
 import com.fast.common.service.ISysEncodingSetRuleService;
@@ -105,6 +106,15 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
         return updateById(entity);
     }
 
+
+    @Override
+    public String createCode(AttachEnum attachEnum) {
+        return createCode(attachEnum.getEncodingCode(),attachEnum.getEncodingSetCode());
+    }
+    @Override
+    public String createCode(String encodingCode, String encodingSetCode) {
+        return createCode(new SysCreateCode().setSysEncodingCode(encodingCode).setSysEncodingSetCode(encodingSetCode));
+    }
 
     /**
      * 获取编码

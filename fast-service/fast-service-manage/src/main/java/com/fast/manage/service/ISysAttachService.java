@@ -25,5 +25,5 @@ public interface ISysAttachService extends BaseService<SysAttach> {
 
     boolean delete(List<String> idList);
 
-    AttachVO upload(MultipartFile[] files, String attachCode);
+    AttachVO<SysAttach> upload(MultipartFile[] files, String attachCode);
 }
