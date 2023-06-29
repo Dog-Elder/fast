@@ -3,7 +3,7 @@ package com.fast.core.common.constant;
 /**
  * 通用常量信息
  * 
- * @author @Dog_Elder
+ * @author 黄嘉浩
  */
 public class Constants
 {

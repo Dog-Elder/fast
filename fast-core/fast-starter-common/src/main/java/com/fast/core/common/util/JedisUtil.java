@@ -16,7 +16,7 @@ package com.fast.core.common.util;//package com.fast.core.common.util;
 ///**
 // * redis工具类
 // *
-// * @author @Dog_Elder
+// * @author 黄嘉浩
 // */
 //@Component
 ////@Slf4j
@@ -299,7 +299,7 @@ package com.fast.core.common.util;//package com.fast.core.common.util;
 //     * @param key:   key
 //     * @param field: map中key
 //     * @Description: 获取hsah中field的value
-//     * @Author: @Dog_Elder
+//     * @Author: 黄嘉浩
 //     * @Date: 2020/11/18 14:09
 //     * @return: map中value
 //     **/
@@ -332,7 +332,7 @@ package com.fast.core.common.util;//package com.fast.core.common.util;
 //     * @param field: map中key
 //     * @param value: 可以是正数 也可以是负数
 //     * @Description: hash 值 增或加
-//     * @Author: @Dog_Elder
+//     * @Author: 黄嘉浩
 //     * @Date: 2020/11/19 14:35
 //     * @return: java.lang.Long
 //     **/
@@ -348,7 +348,7 @@ package com.fast.core.common.util;//package com.fast.core.common.util;
 //     * @param key:   key
 //     * @param fields : map中key
 //     * @Description: hash 值删除
-//     * @Author: @Dog_Elder
+//     * @Author: 黄嘉浩
 //     **/
 //    public static Long hdel(String key, String... fields) {
 //        try (Jedis jedis = jedisPool.getResource()) {

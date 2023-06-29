@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 /**
  * 值集Service业务层处理
  *
- * @author @Dog_Elder
+ * @author 黄嘉浩
  * @date 2022-03-24
  */
 @Slf4j
@@ -100,7 +100,7 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
         SysSet entity = BUtil.copy(vo, SysSet.class);
         List<SysSet> dbList = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getId, entity.getId()).list();
         dbList.forEach(ele -> {
-            //TODO 作者:@Dog_Elder 2022/3/25 17:27 待办  缺少操作权限校验
+            //TODO 作者:黄嘉浩 2022/3/25 17:27 待办  缺少操作权限校验
             if ((!SUtil.isEmpty(entity.getSetParentCode()) && !SUtil.isEmpty(ele.getSetParentCode()))) {
                 if (!entity.getSetParentCode().equals(ele.getSetParentCode())) {
                     throw new ServiceException("不可更换父级值集编码");

@@ -3,7 +3,7 @@ package com.fast.core.common.constant;
 /**
  * 返回状态码
  * 
- * @author @Dog_Elder
+ * @author 黄嘉浩
  */
 public class HttpConstants
 {

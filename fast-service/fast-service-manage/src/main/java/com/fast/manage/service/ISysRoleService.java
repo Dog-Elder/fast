@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * 角色Service接口
  * 
- * @author @Dog_Elder
+ * @author 黄嘉浩
  * @date 2021-06-29
  */
 public interface ISysRoleService extends BaseService<SysRole>

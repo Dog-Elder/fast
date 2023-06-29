@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * Entity基类
  *
- * @author @Dog_Elder
+ * @author 黄嘉浩
  */
 @AutoFill
 @ToString

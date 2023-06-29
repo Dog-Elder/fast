@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * 全局异常处理器
  *
- * @author @Dog_Elder
+ * @author 黄嘉浩
  */
 @Slf4j
 @RestControllerAdvice

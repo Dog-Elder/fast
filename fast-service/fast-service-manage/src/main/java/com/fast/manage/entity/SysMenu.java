@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 /**
  * 菜单权限对象 sys_menu
  *
- * @author @Dog_Elder
+ * @author 黄嘉浩
  * @date 2021-06-29
  */
 @Data

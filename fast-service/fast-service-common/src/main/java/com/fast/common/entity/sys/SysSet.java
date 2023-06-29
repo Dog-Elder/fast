@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * 值集对象 sys_set
  *
- * @author @Dog_Elder
+ * @author 黄嘉浩
  * @date 2022-03-24
  */
 @Data

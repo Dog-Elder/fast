@@ -8,7 +8,7 @@ import com.fast.core.common.util.SUtil;
 /**
  * 基础异常
  * 
- * @author @Dog_Elder
+ * @author 黄嘉浩
  */
 public class BaseException extends RuntimeException
 {

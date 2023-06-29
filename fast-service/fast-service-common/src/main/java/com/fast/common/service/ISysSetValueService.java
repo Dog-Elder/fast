@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * 值集值Service接口
  *
- * @author @Dog_Elder
+ * @author 黄嘉浩
  * @date 2022-03-25
  */
 public interface ISysSetValueService extends BaseService<SysSetValue> {

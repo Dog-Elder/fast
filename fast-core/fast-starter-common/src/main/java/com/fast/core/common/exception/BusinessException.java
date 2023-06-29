@@ -3,7 +3,7 @@ package com.fast.core.common.exception;
 /**
  * 业务异常
  * 
- * @author @Dog_Elder
+ * @author 黄嘉浩
  */
 public class BusinessException extends RuntimeException
 {

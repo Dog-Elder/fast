@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 /**
  * 角色和菜单关联对象 sys_role_menu
  *
- * @author @Dog_Elder
+ * @author 黄嘉浩
  * @date 2021-06-29
  */
 @Data

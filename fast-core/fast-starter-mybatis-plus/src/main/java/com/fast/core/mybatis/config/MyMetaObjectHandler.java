@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 /**
  * @program: xxxxx
  * @description: MyBatis-plus 创建时间/更新时间
- * @author: @Dog_Elder
+ * @author: 黄嘉浩
  * @create: 2021-03-22 14:29
  **/
 @Slf4j

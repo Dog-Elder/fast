@@ -6,7 +6,7 @@ import com.fast.core.common.util.SUtil;
 /**
  * 分页数据
  * 
- * @author @Dog_Elder
+ * @author 黄嘉浩
  */
 public class PageDomain
 {

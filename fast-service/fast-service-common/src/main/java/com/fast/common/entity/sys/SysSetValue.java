@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 /**
  * 值集值对象 sys_set_value
  *
- * @author @Dog_Elder
+ * @author 黄嘉浩
  * @date 2022-03-24
  */
 @Data

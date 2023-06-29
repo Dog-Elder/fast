@@ -3,7 +3,7 @@ package com.fast.core.common.exception;
 /**
  * 演示模式异常
  * 
- * @author @Dog_Elder
+ * @author 黄嘉浩
  */
 public class DemoModeException extends RuntimeException
 {

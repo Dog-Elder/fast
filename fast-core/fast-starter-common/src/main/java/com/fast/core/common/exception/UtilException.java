@@ -3,7 +3,7 @@ package com.fast.core.common.exception;
 /**
  * 工具类异常
  * 
- * @author @Dog_Elder
+ * @author 黄嘉浩
  */
 public class UtilException extends RuntimeException
 {

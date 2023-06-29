@@ -6,7 +6,7 @@ import com.fast.core.common.util.SUtil;
 /**
  * sql操作工具类
  * 
- * @author @Dog_Elder
+ * @author 黄嘉浩
  */
 public class SqlUtil
 {

@@ -10,7 +10,7 @@ import java.io.*;
 
 /**
  * Serializable工具(JDK)(也可以使用Protobuf自行百度)
- * @author @Dog_Elder
+ * @author 黄嘉浩
  * @date 2018/9/4 15:13
  */
 public class SerializableUtil {

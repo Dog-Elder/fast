@@ -192,11 +192,11 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
         sysEncodingSetRules.forEach(ele -> {
             matchGenerateCode(codeStr, req, ele);
         });
-        //TODO 作者:@Dog_Elder 2022/9/28 0:41 处理Redis值和数据库值 未来放到队列中不影响正常业务也避免了并发问题
+        //TODO 作者:黄嘉浩 2022/9/28 0:41 处理Redis值和数据库值 未来放到队列中不影响正常业务也避免了并发问题
         Optional<SysEncodingSetRule> optional = sysEncodingSetRules.stream().filter(ele -> "NUMBER".equals(ele.getSysEncodingSetRuleType())).findAny();
         if (optional.isPresent()) {
             SysEncodingSetRule numberRule = optional.get();
-            //TODO 作者:@Dog_Elder  [54.19% 3.7237ms ] com.xxxxx.service.impl.SysEncodingSetRuleServiceImpl:updateById() #146
+            //TODO 作者:黄嘉浩  [54.19% 3.7237ms ] com.xxxxx.service.impl.SysEncodingSetRuleServiceImpl:updateById() #146
             encodingSetRuleService.updateById(numberRule);
             //修改Redis
             String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, req.getSysEncodingSetCode(), req.getSysEncodingSetCode());

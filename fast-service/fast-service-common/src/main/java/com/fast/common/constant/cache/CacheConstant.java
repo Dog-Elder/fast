@@ -3,7 +3,7 @@ package com.fast.common.constant.cache;
 
 /**
  * @Description:常量
- * @Author: @Dog_Elder
+ * @Author: 黄嘉浩
  * @Date: 2018/9/3 16:03
  **/
 public class CacheConstant {

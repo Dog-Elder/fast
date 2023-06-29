@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 用户和角色关联Service接口
  * 
- * @author @Dog_Elder
+ * @author 黄嘉浩
  * @date 2021-06-29
  */
 public interface ISysUserRoleService extends BaseService<SysUserRole>
