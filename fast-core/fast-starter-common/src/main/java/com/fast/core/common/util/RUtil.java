@@ -4,7 +4,6 @@ package com.fast.core.common.util;
 import com.fast.core.common.executor.LogicExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.cglib.proxy.InvocationHandler;
 import org.springframework.cglib.proxy.Proxy;
 
@@ -395,7 +394,7 @@ public class RUtil {
      * @param executor          业务逻辑执行器
      * @param <T>               泛型参数
      */
-    public static <T> void processAnnotations(Object object, Class<? extends Annotation> annotationClass, LogicExecutor<T> executor) {
+    public static <T> void processFieldsWithAnnotation(Object object, Class<? extends Annotation> annotationClass, LogicExecutor<T> executor) {
         List<Field> fields = getFields(object);
         for (Field field : fields) {
             //TODO 作者:黄嘉浩 可以进行优化 使用本地缓存
@@ -403,7 +402,7 @@ public class RUtil {
             if (annotation != null) {
                 try {
                     field.setAccessible(true);
-                    Object value = executor.execute(field, annotation);
+                    Object value = executor.execute(annotation);
                     field.set(object, value);
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     e.printStackTrace();

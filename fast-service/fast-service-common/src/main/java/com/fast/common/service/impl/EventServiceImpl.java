@@ -5,7 +5,6 @@ import com.fast.common.service.ISysEncodingService;
 import com.fast.core.common.annotation.encode.Code;
 import com.fast.core.common.util.RUtil;
 import com.fast.core.mybatis.service.IEventService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class EventServiceImpl<T> implements IEventService<T> {
      **/
     @Override
     public void paddingCode(T entity) {
-        RUtil.processAnnotations(entity, Code.class, (field, annotation) -> {
+        RUtil.processFieldsWithAnnotation(entity, Code.class, (annotation) -> {
             Code autoCode = (Code) annotation;
             String rules = autoCode.rules();
             String encode = autoCode.encode();
