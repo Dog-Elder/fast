@@ -126,14 +126,14 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
     public String createCode(SysCreateCode req) {
         //使用分布式锁 避免脏数据
         String uuid = IdUtil.simpleUUID();
-        String lockKey = SUtil.format(CacheConstant.SysLock._CODE_IN, req.getSysEncodingCode(), req.getSysEncodingSetCode());
+        String lockKey = SUtil.format(CacheConstant.SysLock.LOCK_CODE, req.getSysEncodingCode(), req.getSysEncodingSetCode());
         redis.retryTheLockLasting(lockKey, uuid, 1000, 0);
 
         //业务代码-开始----------------------
         StringBuilder codeStr = new StringBuilder();
         try {
             //查询编码集状态是否关闭
-            String ruleStatusIn = SUtil.format(CacheConstant.SysSetRule._STATUS, req.getSysEncodingCode(), req.getSysEncodingSetCode());
+            String ruleStatusIn = SUtil.format(CacheConstant.SysSetRule.CODE_STATUS, req.getSysEncodingCode(), req.getSysEncodingSetCode());
             String ruleStatus = redis.getString(ruleStatusIn);
             //编码集不存在
             if (Util.isNull(ruleStatus)) {
@@ -147,7 +147,7 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
             }
 
             //从Redis中查询是否已经使用
-            String ruleOpen = SUtil.format(CacheConstant.SysSetRule._USE_OPEN, req.getSysEncodingCode(), req.getSysEncodingSetCode());
+            String ruleOpen = SUtil.format(CacheConstant.SysSetRule.CODE_USE_OPEN, req.getSysEncodingCode(), req.getSysEncodingSetCode());
             //编码集使用状态
             String sysEncodingSetStatus = redis.getString(ruleOpen);
             //编码集状态不存在
@@ -199,7 +199,7 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
             //TODO 作者:@Dog_Elder  [54.19% 3.7237ms ] com.xxxxx.service.impl.SysEncodingSetRuleServiceImpl:updateById() #146
             encodingSetRuleService.updateById(numberRule);
             //修改Redis
-            String ruleIn = SUtil.format(CacheConstant.SysSetRule._IN, req.getSysEncodingSetCode(), req.getSysEncodingSetCode());
+            String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, req.getSysEncodingSetCode(), req.getSysEncodingSetCode());
             JSONObject ruleJsonObject = JSONUtil.parseObj(numberRule);
             redis.setHash(ruleIn, numberRule.getId(), ruleJsonObject.toString());
         }
@@ -208,7 +208,7 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
     //从缓存中获取
     private List<SysEncodingSetRule> getCacheList(SysEncodingSetRule req) {
         //从Redis中取
-        String ruleIn = SUtil.format(CacheConstant.SysSetRule._IN, req.getSysEncodingSetCode(), req.getSysEncodingSetCode());
+        String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, req.getSysEncodingSetCode(), req.getSysEncodingSetCode());
         List<String> hvals = redis.getAllHashValues(ruleIn);
         return CUtil.jsonListStrToList(hvals, SysEncodingSetRule.class);
     }
@@ -222,7 +222,7 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
                 break;
             //序列
             case "NUMBER":
-                String ruleNumberIn = SUtil.format(CacheConstant.SysSetRule._NUMBER, req.getSysEncodingCode(), req.getSysEncodingSetCode());
+                String ruleNumberIn = SUtil.format(CacheConstant.SysSetRule.CODE_NUMBER, req.getSysEncodingCode(), req.getSysEncodingSetCode());
                 long number = getNumber(ruleNumberIn, ele);
                 //根据位数前置前置补零
                 codeStr.append(SUtil.zeroPr(number, ele.getSysEncodingSetRuleDigit()));

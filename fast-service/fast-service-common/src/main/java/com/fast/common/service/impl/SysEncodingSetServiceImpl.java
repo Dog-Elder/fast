@@ -100,7 +100,7 @@ public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, Sy
     }
 
     private void updateState(SysEncodingSet set) {
-        String ruleStatusIn = SUtil.format(CacheConstant.SysSetRule._STATUS, set.getSysEncodingCode(), set.getSysEncodingSetCode());
+        String ruleStatusIn = SUtil.format(CacheConstant.SysSetRule.CODE_STATUS, set.getSysEncodingCode(), set.getSysEncodingSetCode());
         redis.setString(ruleStatusIn, set.getSysEncodingSetStatus());
     }
 
