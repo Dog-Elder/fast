@@ -15,12 +15,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- 日志 -->
-<!--        <dependency>-->
-<!--            <groupId>com.fast</groupId>-->
-<!--            <artifactId>fast-starter-log</artifactId>-->
-<!--            <version>1.0.0</version>-->
-<!--        </dependency>-->
         <!--io常用工具类 -->
         <dependency>
             <groupId>commons-io</groupId>

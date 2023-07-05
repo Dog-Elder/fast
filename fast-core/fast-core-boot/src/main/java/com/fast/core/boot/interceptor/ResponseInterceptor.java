@@ -1,5 +1,7 @@
 package com.fast.core.boot.interceptor;
 
+import com.fast.core.boot.model.RequestContext;
+import com.fast.core.boot.util.RequestContextHolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -33,6 +35,9 @@ public class ResponseInterceptor implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
                                   Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        //组装请求模型
+        RequestContext context = RequestContextHolder.getContext();
+
         StringBuilder afterReqLog = new StringBuilder();
         List<Object> afterReqArgs = new ArrayList<>();
         afterReqLog.append("\n");
@@ -42,13 +47,14 @@ public class ResponseInterceptor implements ResponseBodyAdvice<Object> {
             String responseBody = objectMapper.writeValueAsString(body);
             afterReqLog.append("接口响应参数 {} \n");
             afterReqArgs.add(responseBody);
+
+            context.setResponderBody(responseBody);
         } catch (Exception e) {
             afterReqLog.append("转换响应参数失败:{}");
             afterReqArgs.add(e);
         }
         afterReqLog.append("\n");
         afterReqLog.append("===================响应 End=================== \n");
-
         log.info(afterReqLog.toString(), afterReqArgs.toArray());
         return body;
     }
