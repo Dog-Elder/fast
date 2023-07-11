@@ -1,6 +1,6 @@
-package com.fast.core.boot.util;
+package com.fast.core.log.util;
 
-import com.fast.core.boot.model.RequestContext;
+import com.fast.core.log.model.RequestContext;
 
 /**
  * 请求上下文持有者
@@ -9,17 +9,17 @@ import com.fast.core.boot.model.RequestContext;
  * @date 2023-07-01 14:31
  **/
 public class RequestContextHolder {
-    private static final ThreadLocal<RequestContext> contextHolder = new ThreadLocal<>();
+    private static final ThreadLocal<RequestContext> CONTEXT_HOLDER = new ThreadLocal<>();
 
     public static void setContext(RequestContext requestContext) {
-        contextHolder.set(requestContext);
+        CONTEXT_HOLDER.set(requestContext);
     }
 
     public static RequestContext getContext() {
-        return contextHolder.get();
+        return CONTEXT_HOLDER.get();
     }
 
     public static void clearContext() {
-        contextHolder.remove();
+        CONTEXT_HOLDER.remove();
     }
 }

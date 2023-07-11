@@ -1,7 +1,5 @@
-package com.fast.core.boot.model;
+package com.fast.core.log.model;
 
-import cn.hutool.core.util.IdUtil;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -11,7 +9,6 @@ import lombok.Data;
  * @date 2023-07-01 14:27
  **/
 @Data
-@AllArgsConstructor
 public class RequestContext {
     /**
      * 请求标识
@@ -58,10 +55,6 @@ public class RequestContext {
      **/
     private Long requestEndTimes;
 
-    public RequestContext() {
-        this.requestId = IdUtil.fastSimpleUUID();
-        this.requestEntryTime = System.currentTimeMillis();
-    }
 
     public void setRequestEndTimes() {
         this.requestEndTimes = System.currentTimeMillis();

@@ -1,12 +1,15 @@
 package com.fast.core.log.event;
 
 
+import lombok.Data;
+
 /**
  * Api访问事件
  *
  * @author 黄嘉浩
  * @date 2023-07-05 17:08
  **/
+@Data
 public class ApiLogEvent {
     /**
      * 请求标识
@@ -60,7 +63,7 @@ public class ApiLogEvent {
     /**
      * 获取执行时间(毫秒)
      **/
-    private long getDuration() {
+    public long getDuration() {
         return requestEndTimes - requestEntryTime;
     }
 }
