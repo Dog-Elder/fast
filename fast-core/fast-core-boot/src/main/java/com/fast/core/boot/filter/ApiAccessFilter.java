@@ -1,10 +1,10 @@
 package com.fast.core.boot.filter;
 
 import cn.hutool.core.util.IdUtil;
-import com.fast.core.log.model.RequestContext;
-import com.fast.core.log.util.RequestContextHolder;
 import com.fast.core.common.util.WebUtil;
+import com.fast.core.log.model.RequestContext;
 import com.fast.core.log.publisher.ApiLogPublisher;
+import com.fast.core.log.util.RequestContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +30,7 @@ public class ApiAccessFilter implements Filter {
         RequestContext requestContext = new RequestContext();
         requestContext.setRequestId(requestId);
         requestContext.setRequestEntryTime(start);
+        requestContext.setIp(WebUtil.getIP(request));
 
         // 将请求上下文绑定到当前线程
         RequestContextHolder.setContext(requestContext);
