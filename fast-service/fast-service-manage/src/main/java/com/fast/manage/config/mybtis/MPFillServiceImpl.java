@@ -28,13 +28,13 @@ public class MPFillServiceImpl implements MPFillService {
             return;
         }
         try {
-            Object loginId = ManageUtil.getLoginId();
             if (autoFill.createBy()) {
                 //特殊实现逻辑
-                handler.setFieldValByName("createBy", loginId, metaObject);
-            }if (autoFill.updateBy()) {
+                handler.setFieldValByName("createBy", ManageUtil.getLoginId(), metaObject);
+            }
+            if (autoFill.updateBy()) {
                 //特殊实现逻辑
-                handler.setFieldValByName("updateBy", loginId, metaObject);
+                handler.setFieldValByName("updateBy", ManageUtil.getLoginId(), metaObject);
             }
         } catch (Exception e) {
             log.warn(e.getMessage());
@@ -49,10 +49,9 @@ public class MPFillServiceImpl implements MPFillService {
             return;
         }
         try {
-            Object loginId = ManageUtil.getLoginId();
             if (autoFill.updateBy()) {
                 //特殊实现逻辑
-                handler.setFieldValByName("updateBy", loginId, metaObject);
+                handler.setFieldValByName("updateBy", ManageUtil.getLoginId(), metaObject);
             }
         } catch (Exception e) {
             log.warn(e.getMessage());
