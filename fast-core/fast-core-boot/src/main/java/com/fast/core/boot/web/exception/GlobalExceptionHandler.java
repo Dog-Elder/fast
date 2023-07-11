@@ -3,7 +3,6 @@ package com.fast.core.boot.web.exception;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import com.fast.core.common.domain.domain.R;
-import com.fast.core.common.exception.BaseException;
 import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.util.Util;
 import com.fast.core.common.util.WebUtil;
@@ -31,15 +30,6 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
-    /**
-     * 基础异常
-     */
-    @ExceptionHandler(BaseException.class)
-    public R baseException(BaseException e) {
-        runLog(e);
-        return R.error(e.getMessage());
-    }
 
     /**
      * 文件上传异常
@@ -111,7 +101,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 查询超时
+     * 错误的请求
      **/
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public R httpMessageNotReadableException(HttpMessageNotReadableException e) {
