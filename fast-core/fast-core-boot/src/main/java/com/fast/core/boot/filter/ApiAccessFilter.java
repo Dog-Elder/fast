@@ -1,9 +1,10 @@
 package com.fast.core.boot.filter;
 
 import cn.hutool.core.util.IdUtil;
-import com.fast.core.boot.model.RequestContext;
-import com.fast.core.boot.util.RequestContextHolder;
+import com.fast.core.log.model.RequestContext;
+import com.fast.core.log.util.RequestContextHolder;
 import com.fast.core.common.util.WebUtil;
+import com.fast.core.log.publisher.ApiLogPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -22,14 +23,16 @@ public class ApiAccessFilter implements Filter {
                          FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
+        long  start= System.currentTimeMillis(); // 请求进入时间
+
+        // 设置其他请求相关信息...
         String requestId = IdUtil.fastSimpleUUID();
         RequestContext requestContext = new RequestContext();
-        // 设置其他请求相关信息...
+        requestContext.setRequestId(requestId);
+        requestContext.setRequestEntryTime(start);
 
         // 将请求上下文绑定到当前线程
         RequestContextHolder.setContext(requestContext);
-
-        long start = System.currentTimeMillis(); // 请求进入时间
 
         log.info("[Api Access] start. id: {}, uri: {}, method: {}, client: {}", requestId,
                 request.getRequestURI(), request.getMethod(), WebUtil.getIP(request));
@@ -38,7 +41,7 @@ public class ApiAccessFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
             RequestContext context = RequestContextHolder.getContext();
             context.setRequestEndTimes();
-            System.out.println("响应结束 = " + context);
+            ApiLogPublisher.publishEvent(context);
         } finally {
             // 清理请求上下文
             RequestContextHolder.clearContext();

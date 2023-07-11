@@ -1,19 +1,16 @@
 package com.fast.core.boot.interceptor;
 
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.fast.core.boot.model.RequestContext;
-import com.fast.core.boot.util.RequestContextHolder;
-import com.fast.core.common.util.CUtil;
+import com.fast.core.log.model.RequestContext;
+import com.fast.core.log.util.RequestContextHolder;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.spring.RequestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 

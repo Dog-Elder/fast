@@ -1,7 +1,7 @@
 package com.fast.core.boot.interceptor;
 
-import com.fast.core.boot.model.RequestContext;
-import com.fast.core.boot.util.RequestContextHolder;
+import com.fast.core.log.model.RequestContext;
+import com.fast.core.log.util.RequestContextHolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
