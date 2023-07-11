@@ -1,21 +1,19 @@
 package com.fast.common.entity.sys;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fast.core.common.validate.annotation.Display;
 import com.fast.core.mybatis.annotation.AutoFill;
 import com.fast.core.mybatis.model.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import com.baomidou.mybatisplus.annotation.*;
-import com.fast.core.common.validate.annotation.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.time.LocalDateTime;
-
-import com.fast.core.mybatis.model.BaseVersionEntity;
+import static com.fast.core.mybatis.constant.PublicFieldConstant.*;
 
 /**
  * 接口请求日志
@@ -27,7 +25,7 @@ import com.fast.core.mybatis.model.BaseVersionEntity;
 @NoArgsConstructor
 @Accessors(chain = true)
 @ToString(callSuper = true)
-@TableName("sys_request_logs")
+@TableName(value = "sys_request_logs", excludeProperty = {CREATE_BY, UPDATE_BY, UPDATE_TIME})
 @EqualsAndHashCode(callSuper = false)
 @AutoFill(createBy = false, updateBy = false, updateTime = false)
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
