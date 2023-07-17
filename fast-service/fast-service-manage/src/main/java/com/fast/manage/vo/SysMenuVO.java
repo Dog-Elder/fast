@@ -3,14 +3,19 @@ package com.fast.manage.vo;
 import com.fast.common.entity.verification.Save;
 import com.fast.core.common.domain.vo.Vo;
 import com.fast.core.common.util.Com;
+import com.fast.core.common.util.tree.forest.BaseNode;
+import com.fast.core.common.util.tree.forest.TreeNode;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fast.core.common.validate.annotation.Display;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 菜单权限表
@@ -19,7 +24,7 @@ import java.time.LocalDateTime;
  * @since 1.0.0 2023-06-12
  */
 @Data
-public class SysMenuVO extends Vo {
+public class SysMenuVO extends Vo implements TreeNode<SysMenuVO> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -132,6 +137,34 @@ public class SysMenuVO extends Vo {
     @Display("版本")
     private Integer version;
 
+    /**
+     * id链，所有上级id集合，“,”分割
+     */
+    private String idChain;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<SysMenuVO> data;
 
+    /**
+     * 是否有子孙节点
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Boolean hasChildren;
+
+    @Override
+    public List<SysMenuVO> getData() {
+        if (this.data == null) {
+            this.data = new ArrayList<>();
+        }
+        return this.data;
+    }
+
+    @Override
+    public Boolean getHasChildren() {
+        return this.data != null && !data.isEmpty();
+    }
+    @Override
+    public Integer getNodeOrder() {
+        return orderNum;
+    }
 }

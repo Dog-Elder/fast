@@ -6,7 +6,10 @@ import com.fast.common.controller.WebBaseController;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.domain.ValidList;
 import com.fast.core.common.domain.page.TableDataInfo;
+import com.fast.core.common.util.CUtil;
+import com.fast.core.common.util.CacheUtil;
 import com.fast.core.common.util.bean.BUtil;
+import com.fast.core.common.util.tree.forest.ForestMerger;
 import com.fast.core.safe.annotation.manage.ManageCheckPermission;
 import com.fast.manage.entity.SysMenu;
 import com.fast.manage.query.SysMenuQuery;
@@ -36,9 +39,18 @@ public class SysMenuController extends WebBaseController {
      */
     @GetMapping("/page")
     @ManageCheckPermission(value = "manage.menu.page")
-    public R<TableDataInfo> page(@Validated(Qry.class) SysMenuQuery query){
+    public R<TableDataInfo> page(@Validated(Qry.class) SysMenuQuery query) {
         startPage();
         return R.success(getDataTable(sysMenuService.list(query)));
+    }
+
+    /**
+     * 树
+     */
+    @GetMapping("/tree")
+    @ManageCheckPermission(value = "manage.menu.tree")
+    public R<List<SysMenuVO>> tree(@Validated(Qry.class) SysMenuQuery query) {
+        return R.success(ForestMerger.merge(CUtil.sort(sysMenuService.list(query), SysMenuVO::getNodeOrder, true)));
     }
 
     /**
@@ -46,9 +58,9 @@ public class SysMenuController extends WebBaseController {
      */
     @GetMapping("{id}")
     @ManageCheckPermission(value = "manage.menu.info")
-    public R<SysMenuVO> get(@PathVariable("id") String id){
+    public R<SysMenuVO> get(@PathVariable("id") String id) {
         SysMenu entity = sysMenuService.getById(id);
-        return R.success(BUtil.copy(entity,SysMenuVO.class));
+        return R.success(BUtil.copy(entity, SysMenuVO.class));
     }
 
     /**
@@ -56,7 +68,7 @@ public class SysMenuController extends WebBaseController {
      */
     @PostMapping
     @ManageCheckPermission(value = "manage.menu.save")
-    public R save(@RequestBody @Validated(Save.class) ValidList<SysMenuVO> vo){
+    public R save(@RequestBody @Validated(Save.class) ValidList<SysMenuVO> vo) {
         return R.success(sysMenuService.save(vo));
     }
 
@@ -65,7 +77,7 @@ public class SysMenuController extends WebBaseController {
      */
     @PutMapping
     @ManageCheckPermission(value = "manage.menu.update")
-    public R update(@RequestBody @Validated SysMenuVO vo){
+    public R update(@RequestBody @Validated SysMenuVO vo) {
         return R.toVersion(sysMenuService.update(vo));
     }
 
@@ -74,7 +86,7 @@ public class SysMenuController extends WebBaseController {
      */
     @DeleteMapping
     @ManageCheckPermission(value = "manage.menu.delete")
-    public R delete(@RequestBody List<String> idList){
+    public R delete(@RequestBody List<String> idList) {
         sysMenuService.delete(idList);
         return R.success();
     }
