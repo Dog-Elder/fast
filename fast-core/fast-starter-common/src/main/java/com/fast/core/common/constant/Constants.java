@@ -68,6 +68,11 @@ public class Constants
     public static final String RESOURCE_PREFIX = "/profile";
 
     /**
+     * 根节点id
+     */
+    public static final String ROOT_NODE_ID = "0";
+
+    /**
      * 表示肯定(开启,是)
      */
     public static final String Y = "1";
