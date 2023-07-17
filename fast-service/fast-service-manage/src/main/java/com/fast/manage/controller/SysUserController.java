@@ -4,6 +4,7 @@ import com.fast.common.controller.WebBaseController;
 import com.fast.common.entity.verification.Qry;
 import com.fast.common.entity.verification.Save;
 import com.fast.common.entity.verification.Update;
+import com.fast.core.common.annotation.lov.AutoLov;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.domain.ValidList;
 import com.fast.core.common.domain.page.TableDataInfo;
@@ -20,11 +21,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
-* 后台用户
-*
-* @author 黄嘉浩 1300286201@qq.com
-* @since 1.0.0 2023-06-20
-*/
+ * 后台用户
+ *
+ * @author 黄嘉浩 1300286201@qq.com
+ * @since 1.0.0 2023-06-20
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/manage-api/user")
@@ -34,9 +35,10 @@ public class SysUserController extends WebBaseController {
     /**
      * 分页
      */
+    @AutoLov
     @GetMapping("/page")
     @ManageCheckPermission(value = "manage.user.page")
-    public R<TableDataInfo<SysUserVO>> page(@Validated(Qry.class) SysUserQuery query){
+    public R<TableDataInfo<SysUserVO>> page(@Validated(Qry.class) SysUserQuery query) {
         startPage();
         return R.success(getDataTable(sysUserService.list(query)));
     }
@@ -44,19 +46,21 @@ public class SysUserController extends WebBaseController {
     /**
      * 信息
      */
+    @AutoLov
     @GetMapping("{id}")
     @ManageCheckPermission(value = "manage.user.info")
-    public R<SysUserVO> get(@PathVariable("id") String id){
+    public R<SysUserVO> get(@PathVariable("id") String id) {
         SysUser entity = sysUserService.getById(id);
-        return R.success(BUtil.copy(entity,SysUserVO.class));
+        return R.success(BUtil.copy(entity, SysUserVO.class));
     }
 
     /**
      * 保存
      */
+    @AutoLov
     @PostMapping
     @ManageCheckPermission(value = "manage.user.save")
-    public R<List<SysUserVO>> save(@RequestBody @Validated(Save.class) ValidList<SysUserVO> vo){
+    public R<List<SysUserVO>> save(@RequestBody @Validated(Save.class) ValidList<SysUserVO> vo) {
         return R.success(sysUserService.save(vo));
     }
 
@@ -65,7 +69,7 @@ public class SysUserController extends WebBaseController {
      */
     @PutMapping
     @ManageCheckPermission(value = "manage.user.update")
-    public R update(@RequestBody @Validated(Update.class) SysUserVO vo){
+    public R update(@RequestBody @Validated(Update.class) SysUserVO vo) {
         return R.toVersion(sysUserService.update(vo));
     }
 
@@ -74,7 +78,7 @@ public class SysUserController extends WebBaseController {
      */
     @DeleteMapping
     @ManageCheckPermission(value = "manage.user.delete")
-    public R delete(@RequestBody List<String> idList){
+    public R delete(@RequestBody List<String> idList) {
         sysUserService.delete(idList);
         return R.success();
     }

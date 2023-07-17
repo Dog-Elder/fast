@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.fast.common.entity.verification.Save;
 import com.fast.common.entity.verification.Update;
 import com.fast.core.common.annotation.lov.Lov;
+import com.fast.core.common.domain.vo.Vo;
 import com.fast.core.common.util.Com;
 import com.fast.core.common.validate.annotation.Display;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -22,7 +23,7 @@ import java.time.LocalDateTime;
  * @since 1.0.0 2023-06-20
  */
 @Data
-public class SysUserVO implements Serializable {
+public class SysUserVO extends Vo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
