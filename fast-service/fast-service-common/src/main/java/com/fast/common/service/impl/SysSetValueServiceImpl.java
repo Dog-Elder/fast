@@ -68,18 +68,18 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
     public List<SysSetValueVO> list(SysSetValueQuery query) {
         List<SysSetValueVO> vo;
         List<SysSetValue> sysSetValues = list(getWrapper(query));
-        //取所有的关联值集值的key
+        // 取所有的关联值集值的key
         Set<String> setRelationKeys = sysSetValues.stream().map(SysSetValue::getSetRelationKey).collect(Collectors.toSet());
         vo = PageUtils.copy(sysSetValues, SysSetValueVO.class);
         if (CUtil.isEmpty(setRelationKeys)) {
             return vo;
         }
-        //获取当前对象找到关联的值集
+        // 获取当前对象找到关联的值集
         SysSet set = sysSetService.getOne(new LambdaQueryWrapper<SysSet>().eq(SysSet::getSetCode, query.getSetCode()));
         if (Util.isNull(set) || SUtil.isEmpty(set.getSetParentCode())) {
             return vo;
         }
-        //找到关联父级值集
+        // 找到关联父级值集
         List<SysSetValue> parentSetValues = new LambdaQueryChainWrapper<>(baseMapper).eq(SysSetValue::getSetCode, set.getSetParentCode()).in(SysSetValue::getSetValueKey, setRelationKeys).list();
         Map<String, SysSetValue> parentSetValueMap = CUtil.toMap(parentSetValues, SysSetValue::getSetValueKey);
         vo.forEach(ele -> {
@@ -131,9 +131,9 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         if (any.isPresent()) {
             throw new ServiceException("参数值和参数名不能为空");
         }
-        //过滤值集未启用的
+        // 过滤值集未启用的
         List<SysSet> validSets = sysSetService.list(new LambdaQueryWrapper<SysSet>().select(SysSet::getSetCode).in(SysSet::getSetCode, values).eq(SysSet::getSetState, Constants.Y));
-        //获取有效的值集编码
+        // 获取有效的值集编码
         Set<String> setCodes = CUtil.getPropertySet(validSets.stream().filter(Objects::nonNull), SysSet::getSetCode);
         if (CUtil.isEmpty(setCodes)) {
             return JSONUtil.createObj();
@@ -160,7 +160,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
      */
     @Override
     public List<CustomSetValueVO> dataList(SysSetValueQuery req) {
-        //查询值集是否已经被删除或关闭
+        // 查询值集是否已经被删除或关闭
         SysSet set = sysSetService.getOne(new LambdaQueryWrapper<SysSet>().eq(SysSet::getSetCode, req.getSetCode()).eq(SysSet::getSetState, Constants.Y));
         if (Util.isNull(set)) {
             return null;
@@ -175,13 +175,13 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
                 .like(SUtil.isNotBlank(req.getSetValueValue()), SysSetValue::getSetValueValue, req.getSetValueValue())
                 .list();
         List<CustomSetValueVO> vos = PageUtils.copy(list, CustomSetValueVO.class);
-        //获取关联的上级值集值
+        // 获取关联的上级值集值
         if (SUtil.isBlank(set.getSetParentCode())) {
             return vos;
         }
-        //获取上级值集值key
+        // 获取上级值集值key
         List<String> parentKeys = CUtil.getPropertyList(vos.stream().filter(ele -> SUtil.isNotBlank(ele.getSetRelationKey())), CustomSetValueVO::getSetRelationKey);
-        //查询上级值集值
+        // 查询上级值集值
         List<SysSetValue> parentValues = new LambdaQueryChainWrapper<>(baseMapper)
                 .eq(SysSetValue::getSetCode, set.getSetParentCode())
                 .in(CUtil.isNotEmpty(parentKeys), SysSetValue::getSetValueKey, parentKeys)
@@ -201,11 +201,11 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
 
     @Override
     public List<CustomSetValueVO> qryCacheDataList(SysSetValueQuery req) {
-        //查询值集是否已经被删除或关闭
+        // 查询值集是否已经被删除或关闭
         if (!sysSetService.isEnableBySetCode(req.getSetCode())) {
             return null;
         }
-        //查询缓存
+        // 查询缓存
         String jsonArrayValue = redis.getHash(CacheConstant.SetValue.SET_VALUE, req.getSetCode());
         if (SUtil.isNotBlank(jsonArrayValue)) {
             JSONArray jsonArray = JSONUtil.parseArray(jsonArrayValue);
@@ -216,12 +216,12 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
 
             return PageUtils.createPage(qry.collect(Collectors.toList()));
         }
-        //查询不到缓存就查询数据库
+        // 查询不到缓存就查询数据库
         List<CustomSetValueVO> customSetValueVOS = dataList(req);
         if (CUtil.isEmpty(customSetValueVOS)) {
             return customSetValueVOS;
         }
-        //这里主要为了获得只根据setCode关联的值集数据
+        // 这里主要为了获得只根据setCode关联的值集数据
         JSONArray objects = JSONUtil.parseArray(dataList(new SysSetValueQuery().setSetCode(req.getSetCode()).setDb(Constants.N)));
         redis.setHash(CacheConstant.SetValue.SET_VALUE, req.getSetCode(), objects.toString());
         return customSetValueVOS;
@@ -229,13 +229,13 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
 
     @Override
     public String qryValues(String setCode, String setValueKeys) {
-        //查询值集是否已经被删除或关闭
+        // 查询值集是否已经被删除或关闭
         if (!sysSetService.isEnableBySetCode(setCode)) {
             return null;
         }
         List<String> valueKeys = SUtil.strToList(setValueKeys, ",");
 
-        //查询缓存
+        // 查询缓存
         String jsonArrayValue = redis.getHash(CacheConstant.SetValue.SET_VALUE, setCode);
         List<CustomSetValueVO> customSetValueVOS;
         if (SUtil.isNotBlank(jsonArrayValue)) {
@@ -243,13 +243,13 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
             customSetValueVOS = JSONUtil.toList(jsonArray, CustomSetValueVO.class);
         }
 
-        //查询不到缓存就查询数据库
+        // 查询不到缓存就查询数据库
         else {
             customSetValueVOS = dataList(new SysSetValueQuery().setSetCode(setCode));
             if (CUtil.isEmpty(customSetValueVOS)) {
                 return null;
             }
-            //这里主要为了获得只根据setCode关联的值集数据
+            // 这里主要为了获得只根据setCode关联的值集数据
             JSONArray objects = JSONUtil.parseArray(dataList(new SysSetValueQuery().setSetCode(setCode).setDb(Constants.N)));
             redis.setHash(CacheConstant.SetValue.SET_VALUE, setCode, objects.toString());
         }
@@ -272,7 +272,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
     private void removeCache(List<SysSetValue> sysSetValue) {
         Set<String> setCodes = CUtil.getPropertySet(sysSetValue, SysSetValue::getSetCode);
         Set<String> fields = new HashSet<>(setCodes);
-        //查询所有的
+        // 查询所有的
         getRelevanceSetCode(fields, setCodes);
         log.info("清除值集值===要删除的key(SysSet.setCode):" + fields);
         fields.forEach(ele -> {
@@ -294,11 +294,11 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
      * 检查要添加的值集值对应的值集是否存在
      **/
     private void checkSet(List<SysSetValue> sysSetValue) {
-        //获取要添加值集值对应的值集code
+        // 获取要添加值集值对应的值集code
         Set<String> setCodeList = CUtil.getPropertySet(sysSetValue.stream().filter(ele -> SUtil.isNotBlank(ele.getSetCode())), SysSetValue::getSetCode);
-        //根据获取的值集code查询
+        // 根据获取的值集code查询
         List<SysSet> list = sysSetService.list(new LambdaQueryWrapper<SysSet>().in(SysSet::getSetCode, setCodeList));
-        //找出两个集合的不同元素
+        // 找出两个集合的不同元素
         Collection<String> different = CUtil.getDiffByHashSet(setCodeList, CUtil.getPropertyList(list, SysSet::getSetCode));
         if (CUtil.isNotEmpty(different)) {
             StringBuilder sb = new StringBuilder();
@@ -311,10 +311,10 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
      * 校验重复
      **/
     private void verifyRepeat(List<SysSetValue> req) {
-        //检查入参中值集值key重复
+        // 检查入参中值集值key重复
         Set<String> setCodes = checkRepeat(req);
-        //检查库中值集值key重复
-        //如果是修改则排除要修改id的
+        // 检查库中值集值key重复
+        // 如果是修改则排除要修改id的
         Set<String> ids = req.stream().filter(ele -> Util.isNotNull(ele.getId())).map(SysSetValue::getId).collect(Collectors.toSet());
         List<SysSetValue> sysSetValues = new LambdaQueryChainWrapper<>(baseMapper)
                 .notIn(CUtil.isNotEmpty(ids), SysSetValue::getId, ids)
@@ -331,7 +331,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
      * 检查是否重复
      **/
     private Set<String> checkRepeat(List<SysSetValue> req) {
-        //检查入参中值集值key重复
+        // 检查入参中值集值key重复
         Map<String, List<SysSetValue>> reqMap = req.stream().collect(Collectors.groupingBy(SysSetValue::getSetCode));
         reqMap.forEach((k, v) -> {
             List<String> setValueKeys = v.stream().map(SysSetValue::getSetValueKey).collect(Collectors.toList());

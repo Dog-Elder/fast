@@ -19,6 +19,6 @@ import org.springframework.stereotype.Component;
 public class AutoUtil {
     private final FastRedis fastRedis;
 
-    //TODO 作者:黄嘉浩 授权工具
-//    private User
+    // TODO 作者:黄嘉浩 授权工具
+//     private User
 }

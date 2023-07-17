@@ -53,7 +53,7 @@ public class BUtil extends BeanUtils {
             throw new RuntimeException(e);
         }
     }
-    //浅拷贝
+    // 浅拷贝
     public static <S, T> List<T> copyList(List<S> sources, Class<T> targetClazz) {
         List<T> targets = new ArrayList<>();
         for (S source : sources) {
@@ -93,8 +93,8 @@ public class BUtil extends BeanUtils {
     public static <S, T> void copy(S source, T target, HashMap<PropertyDescriptor, PropertyDescriptor> pdMap, boolean ignoreNull) {
         pdMap.forEach((PropertyDescriptor targetPd, PropertyDescriptor sourcePd) -> {
             Method writeMethod = targetPd.getWriteMethod();
-            if (writeMethod != null && sourcePd != null) { // && (ignoreList == null ||
-                // !ignoreList.contains(targetPd.getName()))) {
+            if (writeMethod != null && sourcePd != null) { //  && (ignoreList == null ||
+                //  !ignoreList.contains(targetPd.getName()))) {
                 Method readMethod = sourcePd.getReadMethod();
                 if (readMethod != null
                         && ClassUtils.isAssignable(writeMethod.getParameterTypes()[0], readMethod.getReturnType())) {
@@ -103,7 +103,7 @@ public class BUtil extends BeanUtils {
                             readMethod.setAccessible(true);
                         }
                         Object value = readMethod.invoke(source);
-                        if (ignoreNull && value == null) return; // 忽略掉值为null的
+                        if (ignoreNull && value == null) return; //  忽略掉值为null的
                         if (!Modifier.isPublic(writeMethod.getDeclaringClass().getModifiers())) {
                             writeMethod.setAccessible(true);
                         }
@@ -131,7 +131,7 @@ public class BUtil extends BeanUtils {
         }
     }
 
-    //以下是深拷贝 ------------
+    // 以下是深拷贝 ------------
 
     /**
      * 复制对象到指定类（深度拷贝）

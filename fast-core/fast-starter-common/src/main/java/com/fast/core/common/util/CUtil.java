@@ -94,15 +94,15 @@ public class CUtil {
      */
     public static <T> List<T> random(List<T> list, int count) {
         List<T> listRandom = new ArrayList<T>();
-        //随机取出n条不重复的数据,这里我设置随机取 count 条数据
+        // 随机取出n条不重复的数据,这里我设置随机取 count 条数据
         for (int i = count; i >= 1; i--) {
             Random random = new Random();
             Math.random();
-            //在数组大小之间产生一个随机数 j
+            // 在数组大小之间产生一个随机数 j
             int j = random.nextInt(list.size() - 1);
-            //取得list 中下标为j 的数据存储到 listRandom 中
+            // 取得list 中下标为j 的数据存储到 listRandom 中
             listRandom.add(list.get(j));
-            //把已取到的数据移除,避免下次再次取到出现重复
+            // 把已取到的数据移除,避免下次再次取到出现重复
             list.remove(j);
         }
         return listRandom;
@@ -117,19 +117,19 @@ public class CUtil {
      */
     public static <T> Collection<T> getDiffByHashSet(Collection<T> collection1, Collection<T> collection2) {
         Collection<T> temp = new ArrayList<>();
-        //hashSet底层通过hashMap实现的
+        // hashSet底层通过hashMap实现的
         Set<T> set = new HashSet<>((int) ((float) (collection1.size() + collection2.size()) / 0.75F + 1.0F));
         for (T s1 : collection1) {
             set.add(s1);
         }
         for (T s2 : collection2) {
-            //添加不成功说明元素共有
+            // 添加不成功说明元素共有
             if (!set.add(s2)) {
                 temp.add(s2);
             }
             set.add(s2);
         }
-        //删除set中存在temp的元素
+        // 删除set中存在temp的元素
         set.removeAll(temp);
         return set;
     }
@@ -142,11 +142,11 @@ public class CUtil {
      **/
     public static <T> List<T> getDuplicateElements(Collection<T> list) {
         return list.stream()
-                .collect(Collectors.toMap(e -> e, e -> 1, Integer::sum)) // 获得元素出现频率的 Map，键为元素，值为元素出现的次数
-                .entrySet().stream() // Set<Entry>转换为Stream<Entry>
-                .filter(entry -> entry.getValue() > 1) // 过滤出元素出现次数大于 1 的 entry
-                .map(Map.Entry::getKey) // 获得 entry 的键（重复元素）对应的 Stream
-                .collect(Collectors.toList()); // 转化为 List
+                .collect(Collectors.toMap(e -> e, e -> 1, Integer::sum)) //  获得元素出现频率的 Map，键为元素，值为元素出现的次数
+                .entrySet().stream() //  Set<Entry>转换为Stream<Entry>
+                .filter(entry -> entry.getValue() > 1) //  过滤出元素出现次数大于 1 的 entry
+                .map(Map.Entry::getKey) //  获得 entry 的键（重复元素）对应的 Stream
+                .collect(Collectors.toList()); //  转化为 List
     }
 
 

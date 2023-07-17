@@ -68,21 +68,21 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
     @Transactional(rollbackFor = RuntimeException.class)
     public List<SysSetVO> save(List<SysSetVO> vo) {
         List<SysSet> entityList = BUtil.copyList(vo, SysSet.class);
-        //检查添加的数据中是否有重复编码数据
+        // 检查添加的数据中是否有重复编码数据
         Set<String> setCodes = entityList.stream().map(SysSet::getSetCode).collect(Collectors.toSet());
         if (setCodes.size() != entityList.size()) {
             throw new ServiceException("输入的值集编码有重复");
         }
-        //检查添的数据中的编码是否已在数据库中存在
+        // 检查添的数据中的编码是否已在数据库中存在
         String repeatCode = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getSetCode, setCodes).list().stream().map(SysSet::getSetCode).collect(Collectors.joining(","));
         if (SUtil.isNotEmpty(repeatCode)) {
             throw new ServiceException("编码已存在:" + repeatCode);
         }
-        //检查数据中的有父值集的是否存在
+        // 检查数据中的有父值集的是否存在
         Set<String> setParentCodes = entityList.stream().filter(ele -> ele.getSetParentCode() != null).map(SysSet::getSetParentCode).collect(Collectors.toSet());
         if (CUtil.isNotEmpty(setParentCodes)) {
             List<SysSet> parentSet = new LambdaQueryChainWrapper<>(baseMapper).select(SysSet::getSetCode).in(SysSet::getSetCode, setParentCodes).list();
-            //查找不同的元素
+            // 查找不同的元素
             Collection<String> diffByHashSet = CUtil.getDiffByHashSet(setParentCodes, parentSet.stream().map(SysSet::getSetCode).collect(Collectors.toSet()));
             if (CUtil.isEmpty(diffByHashSet)) {
                 saveBatch(entityList);
@@ -100,7 +100,7 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
         SysSet entity = BUtil.copy(vo, SysSet.class);
         List<SysSet> dbList = new LambdaQueryChainWrapper<>(baseMapper).in(SysSet::getId, entity.getId()).list();
         dbList.forEach(ele -> {
-            //TODO 作者:黄嘉浩 2022/3/25 17:27 待办  缺少操作权限校验
+            // TODO 作者:黄嘉浩 2022/3/25 17:27 待办  缺少操作权限校验
             if ((!SUtil.isEmpty(entity.getSetParentCode()) && !SUtil.isEmpty(ele.getSetParentCode()))) {
                 if (!entity.getSetParentCode().equals(ele.getSetParentCode())) {
                     throw new ServiceException("不可更换父级值集编码");
@@ -111,7 +111,7 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
             }
         });
         boolean outcome = updateById(entity);
-        //关闭值集需要删除值集状态缓存
+        // 关闭值集需要删除值集状态缓存
         if (outcome) setState(entity.getSetCode(), entity.getSetState());
         return outcome;
     }
@@ -136,7 +136,7 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
             return false;
         }
         boolean removeSysSets = removeByIds(idList);
-        //删除缓存操作
+        // 删除缓存操作
         setCodes.forEach(ele -> {
             if (removeSysSets) {
                 redis.deleteKey(SUtil.format(CacheConstant.SetValue.SET_STATE, ele));

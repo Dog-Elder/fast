@@ -25,7 +25,7 @@ public class Util {
     public static boolean isIdea;
 
     static {
-        //是否是win系统
+        // 是否是win系统
         isWin = File.separatorChar == '\\';
         log.info("是否是win系统:{}",isWin);
         isIdea = System.getProperty("java.class.path").contains("idea_rt.jar");

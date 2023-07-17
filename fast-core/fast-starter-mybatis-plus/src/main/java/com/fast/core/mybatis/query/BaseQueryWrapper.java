@@ -105,7 +105,7 @@ public class BaseQueryWrapper<T> extends QueryWrapper<T> {
         return this;
     }
 
-    // ========== 重写父类方法，方便链式调用 ==========
+    //  ========== 重写父类方法，方便链式调用 ==========
 
     @Override
     public BaseQueryWrapper<T> eq(boolean condition, String column, Object val) {

@@ -35,7 +35,7 @@ public class WxUtils {
     /**
      * 域名
      */
-    private static final String DOMAIN_NAME = "http://8sg95s.natappfree.cc";
+    private static final String DOMAIN_NAME = "http:// 8sg95s.natappfree.cc";
 
 
     /**
@@ -45,11 +45,11 @@ public class WxUtils {
      * @return 重定向
      */
     public String getWxCode(HttpServletResponse response) {
-        // 第一步：用户同意授权，获取code
+        //  第一步：用户同意授权，获取code
         StringBuilder path = new StringBuilder();
-        //微信公众号appid
-        path.append("https://open.weixin.qq.com/connect/oauth2/authorize?appid=").append(APPID);
-        //重定向的地址
+        // 微信公众号appid
+        path.append("https:// open.weixin.qq.com/connect/oauth2/authorize?appid=").append(APPID);
+        // 重定向的地址
         path.append("&redirect_uri=").append(DOMAIN_NAME).append("/getWxgzhUser");
         path.append("&response_type=code");
         /*
@@ -64,7 +64,7 @@ public class WxUtils {
         } catch (IOException e) {
             log.error("获取微信code失败: " + e.getMessage());
         }
-        //必须重定向，否则不能成功
+        // 必须重定向，否则不能成功
         return "redirect:" + path.toString();
     }
 
@@ -88,18 +88,18 @@ public class WxUtils {
             , @NotBlank(message = "微信secret不能为空/空串") String secret
             , @NotBlank(message = "微信code不能为空/空串") String code) {
         StringBuilder path = new StringBuilder();
-        path.append("https://api.weixin.qq.com/sns/oauth2/access_token?appid=").append(appid);
+        path.append("https:// api.weixin.qq.com/sns/oauth2/access_token?appid=").append(appid);
         path.append("&secret=").append(secret);
         path.append("&code=").append(code);
         path.append("&grant_type=authorization_code");
 
-        //发送请求 响应微信返回的参数
+        // 发送请求 响应微信返回的参数
         String res = HttpUtil.get(path.toString());
         JSONObject jsonObject = JSONUtil.parseObj(res);
         String openid = jsonObject.getStr("openid");
         String access_token = jsonObject.getStr("access_token");
         if (SUtil.isEmpty(openid) || SUtil.isEmpty(access_token)) {
-            //log.error("openid或access_token参数为空");
+            // log.error("openid或access_token参数为空");
             throw new ServiceException("openid或access_token参数为空");
         }
         Map<String, Object> map = new HashMap<String, Object>();
@@ -117,7 +117,7 @@ public class WxUtils {
      */
     public Map<String, Object> getUserInfo(@NotBlank(message = "微信openid不能为空/空串")String openid,@NotBlank(message = "微信accessToken不能为空/空串") String accessToken) {
         StringBuilder path = new StringBuilder();
-        path.append("https://api.weixin.qq.com/sns/userinfo?access_token=").append(accessToken);
+        path.append("https:// api.weixin.qq.com/sns/userinfo?access_token=").append(accessToken);
         path.append("&openid=").append(openid);
         String res = HttpUtil.get(path.toString());
         JSONObject jsonObject = JSONUtil.parseObj(res);

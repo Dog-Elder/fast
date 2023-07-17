@@ -29,11 +29,11 @@ public class MPFillServiceImpl implements MPFillService {
         }
         try {
             if (autoFill.createBy()) {
-                //特殊实现逻辑
+                // 特殊实现逻辑
                 handler.setFieldValByName("createBy", ManageUtil.getLoginId(), metaObject);
             }
             if (autoFill.updateBy()) {
-                //特殊实现逻辑
+                // 特殊实现逻辑
                 handler.setFieldValByName("updateBy", ManageUtil.getLoginId(), metaObject);
             }
         } catch (Exception e) {
@@ -50,7 +50,7 @@ public class MPFillServiceImpl implements MPFillService {
         }
         try {
             if (autoFill.updateBy()) {
-                //特殊实现逻辑
+                // 特殊实现逻辑
                 handler.setFieldValByName("updateBy", ManageUtil.getLoginId(), metaObject);
             }
         } catch (Exception e) {

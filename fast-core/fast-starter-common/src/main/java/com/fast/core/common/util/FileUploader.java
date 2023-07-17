@@ -23,11 +23,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class FileUploader {
 
-    // 缓存文件桶记录
+    //  缓存文件桶记录
     private static final Map<String, Map<String, Set<String>>> DOCUMENT_BARREL =
             new ConcurrentHashMap<>();
 
-    // 上传地址路径配置
+    //  上传地址路径配置
     /**
      * 应用名
      **/
@@ -72,7 +72,7 @@ public class FileUploader {
     public static List<AttachBO> upload(MultipartFile[] files
             , @NotBlank(message = "文件桶名不能为空") String bucketName
             , @NotBlank(message = "目录名不能为空") String directory) {
-        //判空
+        // 判空
         for (MultipartFile file : files) {
             if (ObjectUtils.isEmpty(files) || file.getSize() <= 0) {
                 throw new ServiceException("文件为空");
@@ -80,25 +80,25 @@ public class FileUploader {
         }
         LocalDate now = LocalDate.now();
 
-        //判断是否是win系统
+        // 判断是否是win系统
         String profilePath = Util.isWin ? PROFILE_WIN : PROFILE_LINUX;
         StringBuilder uploadPath = new StringBuilder();
         uploadPath.append(profilePath);
 
-        //判断桶是否在缓存里
+        // 判断桶是否在缓存里
         uploadPath.append("/").append(bucketName);
         if (!DOCUMENT_BARREL.containsKey(bucketName)) {
-            //判断文件夹是否存在
+            // 判断文件夹是否存在
             if (!FileUtil.exist(uploadPath.toString())) {
                 FileUtil.mkdir(uploadPath.toString());
             }
             DOCUMENT_BARREL.put(bucketName, new HashMap<>());
         }
 
-        //判断目录是否在缓存里
+        // 判断目录是否在缓存里
         uploadPath.append("/").append(directory);
         if (!DOCUMENT_BARREL.get(bucketName).containsKey(directory)) {
-            //判断文件夹是否存在
+            // 判断文件夹是否存在
             if (!FileUtil.exist(uploadPath.toString())) {
                 FileUtil.mkdir(uploadPath.toString());
             }
@@ -106,19 +106,19 @@ public class FileUploader {
             stringSetMap.putIfAbsent(directory, new HashSet<>());
         }
 
-        //判断日期文件夹是否在缓存
+        // 判断日期文件夹是否在缓存
         uploadPath.append("/").append(now);
         if (!DOCUMENT_BARREL.get(bucketName).get(directory).contains(now.toString())) {
-            //判断文件夹是否存在
+            // 判断文件夹是否存在
             if (!FileUtil.exist(uploadPath.toString())) {
                 FileUtil.mkdir(uploadPath.toString());
             }
             DOCUMENT_BARREL.get(bucketName).get(directory).add(now.toString());
         }
 
-        //处理文件上传
+        // 处理文件上传
         uploadPath.append("/");
-        //附件存放地址
+        // 附件存放地址
         StringBuilder attachAddress = new StringBuilder()
                 .append(APPLY_NAME)
                 .append("/")

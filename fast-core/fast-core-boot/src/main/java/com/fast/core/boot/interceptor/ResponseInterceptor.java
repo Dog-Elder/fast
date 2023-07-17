@@ -28,14 +28,14 @@ public class ResponseInterceptor implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
-        // 指定拦截的响应类型，可以根据需要进行调整
+        //  指定拦截的响应类型，可以根据需要进行调整
         return true;
     }
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
                                   Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        //组装请求模型
+        // 组装请求模型
         RequestContext context = RequestContextHolder.getContext();
 
         StringBuilder afterReqLog = new StringBuilder();

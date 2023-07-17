@@ -36,16 +36,16 @@ public class AutoLovAspect {
 
     private final ISysSetValueService sysSetValueService;
 
-    // 定义切点，匹配带有 @AutoLov 注解的方法
+    //  定义切点，匹配带有 @AutoLov 注解的方法
     @Pointcut("@annotation(com.fast.core.common.annotation.lov.AutoLov)")
     public void execute() {
     }
 
     @Around("execute()")
     public Object lovManage(ProceedingJoinPoint pjp) throws Throwable {
-        // 执行原方法，并获取返回结果
+        //  执行原方法，并获取返回结果
         Object proceed = pjp.proceed();
-        // 解析翻译值集文本
+        //  解析翻译值集文本
         parseLovText(proceed);
         return proceed;
     }
@@ -61,12 +61,12 @@ public class AutoLovAspect {
             R r = (R) proceed;
             if (r.isSuccess()) {
                 Object data = r.getData();
-                // 分页数据
+                //  分页数据
                 if (data instanceof TableDataInfo) {
                     List<?> rows = ((TableDataInfo) data).getRows();
                     convertList(rows);
                 }
-                // 常规数据
+                //  常规数据
                 else if (data instanceof List) {
                     List<?> list = (List<?>) data;
                     convertList(list);
@@ -113,17 +113,17 @@ public class AutoLovAspect {
                 if (annotation == null) {
                     continue;
                 }
-                //当前字段值
+                // 当前字段值
                 String currentFieldValue = jsonObject.getString(field.getName());
                 if (SUtil.isBlank(currentFieldValue)) {
                     continue;
                 }
-                //值集code
+                // 值集code
                 String setCode = annotation.value();
                 if (SUtil.isBlank(setCode)) {
                     continue;
                 }
-                //获取翻译值
+                // 获取翻译值
                 String valueMeaning = getValueMeaning(setCode, currentFieldValue);
                 putLovMap(aClass, object, field, valueMeaning);
                 if (SUtil.isEmpty(valueMeaning)) {
@@ -133,7 +133,7 @@ public class AutoLovAspect {
                 if (SUtil.isBlank(annotation.decipherField())) {
                     continue;
                 }
-                //存放在自定义的属性中
+                // 存放在自定义的属性中
                 setMethodName = "set" + annotation.decipherField().substring(0, 1).toUpperCase() + annotation.decipherField().substring(1);
                 Method method = aClass.getMethod(setMethodName, String.class);
                 method.invoke(object, valueMeaning);
@@ -150,7 +150,7 @@ public class AutoLovAspect {
      **/
     private void putLovMap(Class<?> aClass, Object object, Field field, String valueMeaning) {
         try {
-            //尝试放入lovMap
+            // 尝试放入lovMap
             Method putLovMapMethod = aClass.getMethod("putLovMap", String.class, Object.class);
             putLovMapMethod.invoke(object, field.getName(), valueMeaning);
         } catch (IllegalAccessException | InvocationTargetException e) {

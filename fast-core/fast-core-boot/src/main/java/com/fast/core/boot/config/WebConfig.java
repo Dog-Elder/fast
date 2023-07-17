@@ -1,7 +1,7 @@
 package com.fast.core.boot.config;
 
 
-//import com.fast.core.boot.interceptor.RequestInterceptor;
+// import com.fast.core.boot.interceptor.RequestInterceptor;
 
 import com.fast.core.boot.interceptor.RequestInterceptor;
 import com.fast.core.boot.interceptor.servlet.DispatcherServlet;
@@ -35,7 +35,7 @@ public class WebConfig implements WebMvcConfigurer {
      **/
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //判断是否是win系统
+        // 判断是否是win系统
         String profilePath = Util.isWin ? FileUploader.PROFILE_WIN : FileUploader.PROFILE_LINUX;
         log.info("加载静态资源路径:[{}]", profilePath);
         registry.addResourceHandler(RESOURCE_PREFIX + "/**")

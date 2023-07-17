@@ -16,7 +16,7 @@ public class FileNotNullValidator implements ConstraintValidator<FileNotNull, Ob
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         boolean b;
 
-        //
+        // 
         if (value == null) {
             b = false;
         } else {

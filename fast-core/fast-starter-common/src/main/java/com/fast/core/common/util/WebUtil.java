@@ -31,7 +31,7 @@ public class WebUtil {
                     message = StringUtils.replace(message, "{display}", property);
                 }
             } catch (SecurityException e1) {
-                LogUtil.err(target.getClass(), e1); // 记录日志
+                LogUtil.err(target.getClass(), e1); //  记录日志
             }
         }
 
@@ -51,7 +51,7 @@ public class WebUtil {
         if (!property.contains(".")) {
             return property;
         }
-        //集合中校验出来属性名的是这样的 list[0].属性名 这样在下面获取标注必会报错
+        // 集合中校验出来属性名的是这样的 list[0].属性名 这样在下面获取标注必会报错
         return property.substring(property.lastIndexOf(".") + 1);
     }
 
@@ -81,7 +81,7 @@ public class WebUtil {
         String XFor = request.getHeader("X-Forwarded-For");
         String UNKNOWN_IP = "unknown";
         if (StringUtils.isNotEmpty(XFor) && !UNKNOWN_IP.equalsIgnoreCase(XFor)) {
-            //多次反向代理后会有多个ip值，第一个ip才是真实ip
+            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
             int index = XFor.indexOf(",");
             if (index != -1) {
                 return XFor.substring(0, index);

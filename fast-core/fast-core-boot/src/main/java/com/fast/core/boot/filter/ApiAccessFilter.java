@@ -23,16 +23,16 @@ public class ApiAccessFilter implements Filter {
                          FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
-        long  start= System.currentTimeMillis(); // 请求进入时间
+        long  start= System.currentTimeMillis(); //  请求进入时间
 
-        // 设置其他请求相关信息...
+        //  设置其他请求相关信息...
         String requestId = IdUtil.fastSimpleUUID();
         RequestContext requestContext = new RequestContext();
         requestContext.setRequestId(requestId);
         requestContext.setRequestEntryTime(start);
         requestContext.setIp(WebUtil.getIP(request));
 
-        // 将请求上下文绑定到当前线程
+        //  将请求上下文绑定到当前线程
         RequestContextHolder.setContext(requestContext);
 
         log.info("[Api Access] start. id: {}, uri: {}, method: {}, client: {}", requestId,
@@ -44,7 +44,7 @@ public class ApiAccessFilter implements Filter {
             context.setRequestEndTimes();
             ApiLogPublisher.publishEvent(context);
         } finally {
-            // 清理请求上下文
+            //  清理请求上下文
             RequestContextHolder.clearContext();
         }
 

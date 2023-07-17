@@ -17,18 +17,18 @@ public class Com {
     public static final String TestTip = "测试账户不支持此操作";
 
 
-    //以1开头11位手机号
+    // 以1开头11位手机号
     public static final String PatternPhone = "^1[0-9]{10}$";
     public static final String PatternPhoneOrEmpty = "^(\\d{1,20})|(\\s?)$";
     public static final String PatternRatio = "[1-9]\\d*x[1-9]\\d*";
 
-    //ip或域名
+    // ip或域名
     public static final String PatternIpOrDomain = "^(?:(?:\\w+\\.)+[a-zA-Z]+)$|^(?:(?:25[0-5]|2[0-4]\\d|(?:(?:1\\d{2})|(?:[1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|(?:(?:1\\d{2})|(?:[1-9]?\\d)))$";
 
-    //ip
+    // ip
     public static final String PatternIp = "^(?:(?:[1-9]?\\d|1\\d{2}|2[0-4]\\d|25[0-5])\\.){3}(?:[1-9]?\\d|1\\d{2}|2[0-4]\\d|25[0-5])$";
-    // https?://(域名|ip)(:端口)?(/路径)*
-    public static final String PatternUrl = "^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+    //  https?:// (域名|ip)(:端口)?(/路径)*
+    public static final String PatternUrl = "^(https?):// [-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
     public static final String IdNo = "(^\\d{15}$)|(^\\d{18}$)|(^\\d{17}(\\d|X|x)$)";
 
@@ -111,7 +111,7 @@ public class Com {
             put(81, "+81");
             put(82, "+82");
             put(84, "+84");
-            put(86, "+86"); // 默认是中国
+            put(86, "+86"); //  默认是中国
             put(90, "+90");
             put(91, "+91");
             put(92, "+92");

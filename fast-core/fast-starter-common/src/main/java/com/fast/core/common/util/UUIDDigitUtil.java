@@ -9,7 +9,7 @@ public class UUIDDigitUtil {
 
     public static final String allChar = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    public static String generateString(int length) // 参数为返回随机数的长度
+    public static String generateString(int length) //  参数为返回随机数的长度
     {
         StringBuffer sb = new StringBuffer();
         Random random = new Random();

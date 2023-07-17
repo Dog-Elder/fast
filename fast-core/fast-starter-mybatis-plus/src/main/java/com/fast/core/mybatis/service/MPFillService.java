@@ -21,9 +21,9 @@ public interface MPFillService {
      *获取POJO上类注解
      **/
     default AutoFill getAutoFill(MetaObject metaObject) {
-        //获取运行类
+        // 获取运行类
         Class<?> performClass = metaObject.getOriginalObject().getClass();
-        //获取类标注
+        // 获取类标注
         return RUtil.getAnnotation(performClass,AutoFill.class);
     }
 

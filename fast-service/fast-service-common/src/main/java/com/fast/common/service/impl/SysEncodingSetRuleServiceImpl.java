@@ -57,9 +57,9 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<SysEncodingSetRuleVO> list(SysEncodingSetRuleQuery query) {
         SysEncodingSetRule entity = BUtil.copy(query, SysEncodingSetRule.class);
-        //从Redis中取
+        // 从Redis中取
         List<SysEncodingSetRule> sysEncodingSetRules = getCacheList(entity);
-        //查询不为空则分页返回
+        // 查询不为空则分页返回
         if (CUtil.isNotEmpty(sysEncodingSetRules)) {
             Stream<SysEncodingSetRule> qry = sysEncodingSetRules.stream();
             qry = qry.filter(ele -> SUtil.filterContains(ele.getSysEncodingCode(), query.getSysEncodingCode()));
@@ -68,7 +68,7 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
             return PageUtils.createPage(qry, SysEncodingSetRuleVO.class);
         }
         String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, query.getSysEncodingSetCode(), query.getSysEncodingSetCode());
-        //存放Redis
+        // 存放Redis
         taskExecutor.execute(() -> {
             List<SysEncodingSetRule> list = list(new LambdaQueryWrapper<SysEncodingSetRule>()
                     .eq(SUtil.isNotEmpty(query.getSysEncodingCode()), SysEncodingSetRule::getSysEncodingCode, query.getSysEncodingCode())
@@ -78,7 +78,7 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
                 redis.setHash(ruleIn, String.valueOf(ele.getId()), ruleJsonObject.toString());
             });
         });
-        //启动分页
+        // 启动分页
         PageUtils.startPage();
         List<SysEncodingSetRule> entityList = list(getWrapper(query));
         return PageUtils.copy(entityList, SysEncodingSetRuleVO.class);
@@ -98,16 +98,16 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
     public SysEncodingSetRuleVO save(SysEncodingSetRuleVO vo) {
         SysEncodingSetRule entity = BUtil.copy(vo, SysEncodingSetRule.class);
         SysEncodingSet sysEncodingSet = checkToUse(entity);
-        //查询序号是否已经存在
+        // 查询序号是否已经存在
         SysEncodingSetRule setRule = getOne(new QueryWrapper<SysEncodingSetRule>().lambda()
                 .eq(SysEncodingSetRule::getSysEncodingSetRuleNumber, entity.getSysEncodingSetRuleNumber())
                 .eq(SysEncodingSetRule::getSysEncodingCode, entity.getSysEncodingCode())
                 .eq(SysEncodingSetRule::getSysEncodingSetCode, entity.getSysEncodingSetCode())
         );
         Util.isNotNull(setRule, "序号已存在");
-        //匹配规则
+        // 匹配规则
         matchingRule(entity);
-        //保存规则
+        // 保存规则
         save(entity);
         updateAndCache(entity, sysEncodingSet);
         return BUtil.copy(entity, SysEncodingSetRuleVO.class);
@@ -118,7 +118,7 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
     public boolean update(SysEncodingSetRuleVO vo) {
         SysEncodingSetRule entity = BUtil.copy(vo, SysEncodingSetRule.class);
         SysEncodingSet sysEncodingSet = checkToUse(entity);
-        //查询序号是否已经存在
+        // 查询序号是否已经存在
         SysEncodingSetRule setRule = getOne(new QueryWrapper<SysEncodingSetRule>().lambda()
                 .eq(SysEncodingSetRule::getSysEncodingSetRuleNumber, entity.getSysEncodingSetRuleNumber())
                 .eq(SysEncodingSetRule::getSysEncodingCode, entity.getSysEncodingCode())
@@ -126,7 +126,7 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
                 .ne(SysEncodingSetRule::getId, entity.getId())
         );
         Util.isNotNull(setRule, "序号已存在");
-        //匹配规则
+        // 匹配规则
         matchingRule(entity);
         updateAndCache(entity, sysEncodingSet);
         return updateById(entity);
@@ -142,15 +142,15 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
         if (!encodingSetService.update(BUtil.copy(sysEncodingSet, SysEncodingSetVO.class))) {
             throw new ServiceException("编码集版本不一致请重新提交");
         }
-        //存放Redis
+        // 存放Redis
         String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, entity.getSysEncodingSetCode(), entity.getSysEncodingSetCode());
         JSONObject ruleJsonObject = JSONUtil.parseObj(entity);
         redis.setHash(ruleIn, entity.getId(), ruleJsonObject.toString());
     }
 
-    //从缓存中获取
+    // 从缓存中获取
     private List<SysEncodingSetRule> getCacheList(SysEncodingSetRule req) {
-        //从Redis中取
+        // 从Redis中取
         String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, req.getSysEncodingSetCode(), req.getSysEncodingSetCode());
         List<String> hvals = redis.getAllHashValues(ruleIn);
         return CUtil.jsonListStrToList(hvals, SysEncodingSetRule.class);
@@ -161,7 +161,7 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
      * 返回对象主要是防止并发,利用乐观锁重新更新一次
      **/
     public SysEncodingSet checkToUse(SysEncodingSetRule sysEncodingSetRule) {
-        //查询编码集是否已经使用
+        // 查询编码集是否已经使用
         SysEncodingSet sysEncodingSet = encodingSetService.getOne(new QueryWrapper<SysEncodingSet>().lambda()
                 .eq(SysEncodingSet::getSysEncodingCode, sysEncodingSetRule.getSysEncodingCode())
                 .eq(SysEncodingSet::getSysEncodingSetCode, sysEncodingSetRule.getSysEncodingSetCode())
@@ -172,42 +172,42 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
         return sysEncodingSet;
     }
 
-    //匹配规则
+    // 匹配规则
     private void matchingRule(SysEncodingSetRule rule) {
         switch (rule.getSysEncodingSetRuleType()) {
-            //常量
+            // 常量
             case "CONSTANT":
                 checkConstant(rule);
                 break;
-            //序列
+            // 序列
             case "NUMBER":
                 disposeNumber(rule);
                 break;
-            //UUID(8位数)
+            // UUID(8位数)
             case "UUID_8":
                 rule.setSysEncodingSetRuleDigit(8);
                 break;
-            //UUID(16位数)
+            // UUID(16位数)
             case "UUID_16":
                 rule.setSysEncodingSetRuleDigit(16);
                 break;
-            //UUID(22位数)
+            // UUID(22位数)
             case "UUID_22":
                 rule.setSysEncodingSetRuleDigit(22);
                 break;
-            //UUID(32位数)
+            // UUID(32位数)
             case "UUID_32":
                 rule.setSysEncodingSetRuleDigit(32);
                 break;
-            //日期(yyyyMMdd)
+            // 日期(yyyyMMdd)
             case "DATE_yyyyMMdd":
                 rule.setSysEncodingSetRuleDateMask("yyyyMMdd");
                 break;
-            //日期(yyyyMM)
+            // 日期(yyyyMM)
             case "DATE_yyyyMM":
                 rule.setSysEncodingSetRuleDateMask("yyyyMM");
                 break;
-            //日期(yyyy)
+            // 日期(yyyy)
             case "DATE_yyyy":
                 rule.setSysEncodingSetRuleDateMask("yyyy");
                 break;
@@ -215,13 +215,13 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
                 throw new ServiceException("未匹配到对应的规则段类型!");
         }
     }
-    //处理序列规则
+    // 处理序列规则
     private void disposeNumber(SysEncodingSetRule rule) {
-        //序列规则类型只能添加一个
+        // 序列规则类型只能添加一个
         SysEncodingSetRule number = getOne(new QueryWrapper<SysEncodingSetRule>().lambda()
                 .eq(SysEncodingSetRule::getSysEncodingCode, rule.getSysEncodingCode())
                 .eq(SysEncodingSetRule::getSysEncodingSetCode, rule.getSysEncodingSetCode())
-                //规则段类型 NUMBER	序列
+                // 规则段类型 NUMBER	序列
                 .eq(SysEncodingSetRule::getSysEncodingSetRuleType, "NUMBER")
         );
 
@@ -229,24 +229,24 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
                 || Util.isNull(rule.getId()) && Util.isNotNull(number)) {
             throw new ServiceException("序列规则类型只能有一个");
         }
-        //位数
+        // 位数
         Integer ruleDigit = rule.getSysEncodingSetRuleDigit();
-        //检查位数
+        // 检查位数
         if (Util.isNull(ruleDigit) || ruleDigit <= 0) {
             throw new ServiceException("位数不能为空或小于0");
         }
-        //开始值
+        // 开始值
         Long initialValue = rule.getSysEncodingSetInitialValue();
-        //检查位数
+        // 检查位数
         if (Util.isNull(initialValue) || initialValue <= 0) {
             throw new ServiceException("开始值不能为空或小于0");
         }
     }
 
-    //检查常量规则
+    // 检查常量规则
     private void checkConstant(SysEncodingSetRule rule) {
         String sysEncodingSetRuleSectionCode = rule.getSysEncodingSetRuleSectionCode();
-        //检查段值
+        // 检查段值
         if (SUtil.isBlank(sysEncodingSetRuleSectionCode)) {
             throw new ServiceException("常量值不能为空");
         }

@@ -245,14 +245,14 @@ public class FastRedis {
     public boolean retryTheLock(String lockKey, String requestId, long expireTime) {
         boolean lock = false;
         int i = 0;
-        // 重复三次获取锁
+        //  重复三次获取锁
         for (i = 0; i < 3; i++) {
             lock = acquiringALock(lockKey, requestId, expireTime);
             if (lock) {
                 break;
             } else {
                 try {
-                    // 一秒后重试获取锁
+                    //  一秒后重试获取锁
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -283,7 +283,7 @@ public class FastRedis {
             }
             if (retryInterval > 0) {
                 try {
-                    // 重试获取锁
+                    //  重试获取锁
                     Thread.sleep(retryInterval);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

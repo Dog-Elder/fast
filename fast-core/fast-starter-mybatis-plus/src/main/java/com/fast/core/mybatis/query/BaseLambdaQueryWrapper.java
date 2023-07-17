@@ -101,7 +101,7 @@ public class BaseLambdaQueryWrapper<T> extends LambdaQueryWrapper<T> {
         return betweenIfPresent(column, val1, val2);
     }
 
-    // ========== 重写父类方法，方便链式调用 ==========
+    //  ========== 重写父类方法，方便链式调用 ==========
 
     @Override
     public BaseLambdaQueryWrapper<T> eq(boolean condition, SFunction<T, ?> column, Object val) {

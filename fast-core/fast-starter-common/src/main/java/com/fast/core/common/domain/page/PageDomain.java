@@ -19,7 +19,7 @@ public class PageDomain
     /** 排序的方向 "desc" 或者 "asc". */
     private String isAsc;
 
-    //数据库层面用法
+    // 数据库层面用法
     public String getOrderBy()
     {
         if (SUtil.isEmpty(orderByColumn))
@@ -29,7 +29,7 @@ public class PageDomain
         return SUtil.toUnderScoreCase(orderByColumn) + " " + isAsc;
     }
 
-    //list数据处理
+    // list数据处理
     public String getOrderBy2()
     {
         if (SUtil.isEmpty(orderByColumn))

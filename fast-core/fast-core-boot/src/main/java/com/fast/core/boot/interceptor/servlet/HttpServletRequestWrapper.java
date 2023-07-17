@@ -22,7 +22,7 @@ public class HttpServletRequestWrapper extends javax.servlet.http.HttpServletReq
 
     public HttpServletRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
-        //因为请求 内容类型 可能不同所以需要根据不同的 内容类型 进行缓存
+        // 因为请求 内容类型 可能不同所以需要根据不同的 内容类型 进行缓存
         if (RequestUtils.isJsonContentType(request)) {
             body = StreamUtils.copyToByteArray(request.getInputStream());
         } else {
@@ -70,10 +70,10 @@ public class HttpServletRequestWrapper extends javax.servlet.http.HttpServletReq
      * 缓存 multipart/form-data
      **/
     void cacheParameters(HttpServletRequest request) throws IOException {
-        // 可以选择缓存请求参数
+        //  可以选择缓存请求参数
         Map<String, String[]> parameterMap = request.getParameterMap();
         String queryString = request.getQueryString();
-        // 将请求参数转换为字节数组
+        //  将请求参数转换为字节数组
         String parameterString = "";
         if (queryString != null) {
             parameterString = queryString;

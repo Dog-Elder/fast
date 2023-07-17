@@ -34,9 +34,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     }
 
     private AutoFill getAutoFill(MetaObject metaObject) {
-        //获取运行类
+        // 获取运行类
         Class<?> performClass = metaObject.getOriginalObject().getClass();
-        //获取类标注
+        // 获取类标注
         return performClass.getAnnotation(AutoFill.class);
     }
 

@@ -47,7 +47,7 @@ public class ValidateUtil {
         if (value.scale() > scale) {
             return false;
         } else {
-            //数据长度限制
+            // 数据长度限制
             if (value.precision() > Com.MoneyPrecision + Com.DecimalPrecision) {
                 return false;
             }

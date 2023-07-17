@@ -32,25 +32,25 @@ public class QRCodeUtil {
             BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);
             Map<DecodeHintType, Object> hints = new HashMap<DecodeHintType, Object>();
             hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
-            Result result = new MultiFormatReader().decode(binaryBitmap, hints);//解码
+            Result result = new MultiFormatReader().decode(binaryBitmap, hints);// 解码
             content = result.getText();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NotFoundException e) {
-            //这里判断如果识别不了带LOGO的图片，重新添加上一个属性
+            // 这里判断如果识别不了带LOGO的图片，重新添加上一个属性
             try {
                 image = ImageIO.read(new File(path));
                 LuminanceSource source = new BufferedImageLuminanceSource(image);
                 Binarizer binarizer = new HybridBinarizer(source);
                 BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);
                 Map<DecodeHintType, Object> hints = new HashMap<DecodeHintType, Object>();
-                //设置编码格式
+                // 设置编码格式
                 hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
-                //设置优化精度
+                // 设置优化精度
                 hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-                //设置复杂模式开启（我使用这种方式就可以识别微信的二维码了）
+                // 设置复杂模式开启（我使用这种方式就可以识别微信的二维码了）
                 hints.put(DecodeHintType.PURE_BARCODE, Boolean.TYPE);
-                Result result = new MultiFormatReader().decode(binaryBitmap, hints);//解码
+                Result result = new MultiFormatReader().decode(binaryBitmap, hints);// 解码
                 content = result.getText();
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -81,7 +81,7 @@ public class QRCodeUtil {
         if(network){
             new Thread(() -> DownLoadFileUtil.downLoadByUrl(path, savePath, filename, suffix)).start();
         }else {
-//            DownLoadFileUtil.downLoadByUrl(byPathParsing(path), savePath, filename, suffix);
+//             DownLoadFileUtil.downLoadByUrl(byPathParsing(path), savePath, filename, suffix);
             new Thread(() -> DownLoadFileUtil.downLoadByUrl(byPathParsing(path), savePath, filename, suffix)).start();
         }
     }
@@ -89,12 +89,12 @@ public class QRCodeUtil {
     public static void main(String[] args) {
         String paperFilePath = "D:\\111";
         String savePath = "D:\\111\\222";
-        //获取文件夹下所有的二维码
+        // 获取文件夹下所有的二维码
         List<String> strings = FileUtil.listFileNames(paperFilePath);
 
         strings.forEach(ele -> {
             byQrCodeDownloadFile(paperFilePath + "\\" + ele, savePath, null, ".mp4",false);
-//            byQrCodeDownloadFile(ele, savePath, null, ".png",true);
+//             byQrCodeDownloadFile(ele, savePath, null, ".png",true);
                 }
         );
     }

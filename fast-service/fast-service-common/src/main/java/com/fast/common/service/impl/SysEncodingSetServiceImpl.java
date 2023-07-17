@@ -72,7 +72,7 @@ public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, Sy
         if (CUtil.toGrouping(entityList, SysEncodingSet::getSysEncodingCode).keySet().size() > 1) {
             throw new ServiceException("批量添加只能添加相同<规则代码>的编码集");
         }
-        //获取编码 规则代码
+        // 获取编码 规则代码
         String sysEncodingCode = entityList.get(0).getSysEncodingCode();
         SysEncoding encoding = encodingService.getOne(new QueryWrapper<SysEncoding>().lambda().eq(SysEncoding::getSysEncodingCode, sysEncodingCode));
         Util.isNull(encoding, "编码不存在");
@@ -91,7 +91,7 @@ public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, Sy
             throw new ServiceException("编码值" + propertySet + "已存在");
         }
         entityList.forEach(ele->{
-            //添加时必须更新为null
+            // 添加时必须更新为null
             ele.setSysEncodingSetStatus(Constants._N);
             updateState(ele);
         });
@@ -109,23 +109,23 @@ public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, Sy
     public boolean update(SysEncodingSetVO vo) {
         SysEncodingSet entity = BUtil.copy(vo,SysEncodingSet.class);
         SysEncodingSet encodingSet = super.getById(entity.getId());
-        //是否已经使用 Y :已使用 时只能修改备注或状态
+        // 是否已经使用 Y :已使用 时只能修改备注或状态
         if (SUtil.isY(encodingSet.getSysEncodingSetUseStatus())) {
             encodingSet.setRemark(entity.getRemark());
             encodingSet.setSysEncodingSetStatus(entity.getSysEncodingSetStatus());
             updateState(encodingSet);
             return updateById(encodingSet);
         }
-        //未使用主要是判断是否有重名的编码规则
+        // 未使用主要是判断是否有重名的编码规则
         SysEncodingSet exist = super.getOne(new QueryWrapper<SysEncodingSet>().lambda()
                 .eq(SysEncodingSet::getSysEncodingCode, entity.getSysEncodingCode())
                 .eq(SysEncodingSet::getSysEncodingSetCode, entity.getSysEncodingSetCode())
-                //不是当前id
+                // 不是当前id
                 .ne(SysEncodingSet::getId, entity.getId())
         );
         Util.isNotNull(exist, "编码已存在");
         if (SUtil.isY(entity.getSysEncodingSetStatus())) {
-            //查询是否有编码段
+            // 查询是否有编码段
             long count = encodingSetRuleService.count(new LambdaQueryWrapper<SysEncodingSetRule>()
                     .eq(SysEncodingSetRule::getSysEncodingCode, entity.getSysEncodingCode())
                     .eq(SysEncodingSetRule::getSysEncodingSetCode, entity.getSysEncodingSetCode()));

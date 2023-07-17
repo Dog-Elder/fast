@@ -63,7 +63,7 @@ public class SysAttachController extends WebBaseController{
      * 删除
      */
     @DeleteMapping
-    //TODO 作者:黄嘉浩  准备通过uuid删除
+    // TODO 作者:黄嘉浩  准备通过uuid删除
     @ManageCheckPermission(value = "manage.sysAttach.delete")
     public R delete(@RequestBody List<String> idList){
         sysAttachService.delete(idList);

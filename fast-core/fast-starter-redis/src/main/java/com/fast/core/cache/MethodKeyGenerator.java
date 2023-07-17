@@ -16,8 +16,8 @@ public class MethodKeyGenerator implements KeyGenerator {
 
     @Override
     public Object generate(Object target, Method method, Object... params) {
-        // 自定义缓存键的生成逻辑
-        // 根据类名、方法名和参数生成缓存键
+        //  自定义缓存键的生成逻辑
+        //  根据类名、方法名和参数生成缓存键
         StringBuilder keyBuilder = new StringBuilder();
         keyBuilder.append(target.getClass().getSimpleName());
         keyBuilder.append("-");

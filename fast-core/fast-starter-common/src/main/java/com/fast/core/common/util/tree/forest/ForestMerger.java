@@ -39,7 +39,7 @@ public class ForestMerger {
         list.add(ForestNode.builder().id("10").parentId("9L").value("节点10").build());
         List<ForestNode> result = merge(list);
         log.info("================ WebixForestNode 生成的树森林 =======================");
-//        log.info(JSON.toJSONString(result, JSONWriter.Feature.PrettyFormat));
+//         log.info(JSON.toJSONString(result, JSONWriter.Feature.PrettyFormat));
 
     }
 

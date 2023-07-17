@@ -207,7 +207,7 @@ public class SUtil extends org.apache.commons.lang3.StringUtils {
             return list;
         }
 
-        // 过滤空白字符串
+        //  过滤空白字符串
         if (filterBlank && SUtil.isBlank(str)) {
             return list;
         }
@@ -233,11 +233,11 @@ public class SUtil extends org.apache.commons.lang3.StringUtils {
             return null;
         }
         StringBuilder sb = new StringBuilder();
-        // 前置字符是否大写
+        //  前置字符是否大写
         boolean preCharIsUpperCase = true;
-        // 当前字符是否大写
+        //  当前字符是否大写
         boolean curreCharIsUpperCase = true;
-        // 下一字符是否大写
+        //  下一字符是否大写
         boolean nexteCharIsUpperCase = true;
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
@@ -290,22 +290,22 @@ public class SUtil extends org.apache.commons.lang3.StringUtils {
      */
     public static String convertToCamelCase(String name) {
         StringBuilder result = new StringBuilder();
-        // 快速检查
+        //  快速检查
         if (name == null || name.isEmpty()) {
-            // 没必要转换
+            //  没必要转换
             return "";
         } else if (!name.contains("_")) {
-            // 不含下划线，仅将首字母大写
+            //  不含下划线，仅将首字母大写
             return name.substring(0, 1).toUpperCase() + name.substring(1);
         }
-        // 用下划线将原始字符串分割
+        //  用下划线将原始字符串分割
         String[] camels = name.split("_");
         for (String camel : camels) {
-            // 跳过原始字符串中开头、结尾的下换线或双重下划线
+            //  跳过原始字符串中开头、结尾的下换线或双重下划线
             if (camel.isEmpty()) {
                 continue;
             }
-            // 首字母大写
+            //  首字母大写
             result.append(camel.substring(0, 1).toUpperCase());
             result.append(camel.substring(1).toLowerCase());
         }

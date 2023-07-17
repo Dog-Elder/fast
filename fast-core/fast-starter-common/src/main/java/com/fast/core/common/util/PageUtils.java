@@ -26,7 +26,7 @@ public class PageUtils extends PageHelper {
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
         if (Util.isNotNull(pageNum) && Util.isNotNull(pageSize)) {
-            //最多不能超过1000条查询
+            // 最多不能超过1000条查询
             if (pageSize > 1000) {
                 pageSize = 1000;
             }
@@ -45,7 +45,7 @@ public class PageUtils extends PageHelper {
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
         if (com.fast.core.common.util.Util.isNotNull(pageNum) && com.fast.core.common.util.Util.isNotNull(pageSize)) {
-            //最多不能超过1000条查询
+            // 最多不能超过1000条查询
             if (pageSize > 1000) {
                 pageDomain.setPageSize(1000);
             }
@@ -79,9 +79,9 @@ public class PageUtils extends PageHelper {
      * 集合分页(不排序)
      *
      * 简单实现PageHelper分页功能
-     * int total=15;//总条数
-     * int pageSize= 10;//请求页展示条数
-     * int pageNum=1;//请求第几页
+     * int total=15;// 总条数
+     * int pageSize= 10;// 请求页展示条数
+     * int pageNum=1;// 请求第几页
      * int firstIndex=(pageNum-1)*pageSize;
      * int totalPage = total % pageSize == 0 ? total/pageSize : total/pageSize + 1;
      * System.out.println("起始条数 = " + firstIndex);
@@ -93,11 +93,11 @@ public class PageUtils extends PageHelper {
         }
         Page<S> page = new Page<>();
         int total = list.size();
-        //如果总数为0的情况下直接返回list
+        // 如果总数为0的情况下直接返回list
         if (total == 0) {
             return list;
         }
-        //如果现实条数为0 就返回空集合
+        // 如果现实条数为0 就返回空集合
         if (pageSize == 0) {
             list.clear();
             return list;
@@ -105,15 +105,15 @@ public class PageUtils extends PageHelper {
         if (pageNum == 0) {
             pageNum = 1;
         }
-        //计算总页数
+        // 计算总页数
         int totalPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
         page.setPageNum(pageNum);
         page.setPages(totalPage);
         page.setPageSize(pageSize);
         page.setTotal(total);
-        //请求 起始条数
+        // 请求 起始条数
         int firstIndex = (pageNum - 1) * pageSize;
-        //起始条数<总条数
+        // 起始条数<总条数
         if (firstIndex < total) {
             list = list.stream().skip(firstIndex).limit(pageSize).collect(Collectors.toList());
         } else {

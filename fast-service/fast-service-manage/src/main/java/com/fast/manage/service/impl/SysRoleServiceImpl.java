@@ -125,23 +125,23 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
 
     @Override
     public List<String> qryPermsById(String userId) {
-        //获取用户所有对应角色
+        // 获取用户所有对应角色
         List<SysUserRole> sysUserRoles = listUserRoleAll();
         Set<String> roleIds = sysUserRoles.stream().filter(ele -> userId.equals(ele.getUserId())).map(SysUserRole::getRoleId).collect(Collectors.toSet());
-        //获取角色对应权限
+        // 获取角色对应权限
         List<SysRoleMenu> sysRoleMenus = listRoleMenuAll();
         Set<String> menuIds = sysRoleMenus.stream().filter(ele -> roleIds.contains(ele.getRoleId())).map(SysRoleMenu::getMenuId).collect(Collectors.toSet());
-        //获取菜单权限
+        // 获取菜单权限
         List<SysMenu> menus = listMenuAll();
         return menus.stream().filter(ele -> menuIds.contains(ele.getId())).map(SysMenu::getPerms).collect(Collectors.toList());
     }
 
     @Override
     public List<String> qryRoleById(String userId) {
-        //获取用户所有对应角色
+        // 获取用户所有对应角色
         List<SysUserRole> sysUserRoles = listUserRoleAll();
         Set<String> roleIds = sysUserRoles.stream().filter(ele -> userId.equals(ele.getUserId())).map(SysUserRole::getRoleId).collect(Collectors.toSet());
-        //获取角色对应权限
+        // 获取角色对应权限
         List<SysRole> roles = listRoleAll();
         return roles.stream().filter(ele -> roleIds.contains(ele.getId())).map(SysRole::getKey).collect(Collectors.toList());
     }

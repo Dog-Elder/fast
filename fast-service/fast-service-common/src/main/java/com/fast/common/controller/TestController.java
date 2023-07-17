@@ -69,7 +69,7 @@ public class TestController extends WebBaseController {
     @GetMapping("/set3/{v2}")
     @Cache(value = "test@ttl=30")
     public R<List<SysSet>> list3(@RequestParam("v1") String aa, @PathVariable("v2") String v2) {
-//        List<SysSet> list = );
+//         List<SysSet> list = );
         return R.success(sysSetService.list());
     }
 }

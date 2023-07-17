@@ -34,10 +34,10 @@ public class RequestInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        //组装请求模型
+        // 组装请求模型
         RequestContext context = RequestContextHolder.getContext();
 
-        // 打印请求路径和请求体
+        //  打印请求路径和请求体
         StringBuilder beforeReqLog = new StringBuilder();
         List<Object> beforeReqArgs = new ArrayList<>();
         beforeReqLog.append("\n");
@@ -47,7 +47,7 @@ public class RequestInterceptor implements HandlerInterceptor {
         beforeReqArgs.add(request.getMethod());
         beforeReqArgs.add(request.getRequestURI());
 
-        //组装请求模型
+        // 组装请求模型
         context.setRequestManner(request.getMethod());
         context.setRequestPath(request.getRequestURI());
 
@@ -66,9 +66,9 @@ public class RequestInterceptor implements HandlerInterceptor {
             context.setRequestParameters(request.getQueryString());
         }
 
-        // 获取RequestBody中的数据
+        //  获取RequestBody中的数据
         if (RequestUtils.isJsonContentType(request)) {
-            //获取请求body
+            // 获取请求body
             byte[] bodyBytes = StreamUtils.copyToByteArray(request.getInputStream());
             String body = new String(bodyBytes, request.getCharacterEncoding());
             if (SUtil.isNotBlank(body)) {
@@ -92,7 +92,7 @@ public class RequestInterceptor implements HandlerInterceptor {
             }
         }
 
-        // 获取所有请求参数
+        //  获取所有请求参数
         Map<String, String[]> parameterMap = request.getParameterMap();
         for (String paramName : parameterMap.keySet()) {
             String[] paramValues = parameterMap.get(paramName);
@@ -101,7 +101,7 @@ public class RequestInterceptor implements HandlerInterceptor {
         }
         beforeReqLog.append("\n");
 
-        // 获取Headers
+        //  获取Headers
         Enumeration<String> headerNames = request.getHeaderNames();
         List<String> headers = new ArrayList<>();
         while (headerNames.hasMoreElements()) {

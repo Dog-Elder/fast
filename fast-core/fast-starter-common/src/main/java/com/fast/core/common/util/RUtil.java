@@ -23,13 +23,13 @@ import java.util.function.Function;
  */
 @Slf4j
 public class RUtil {
-    // 缓存对象的运行时类
+    //  缓存对象的运行时类
     private static final Map<Object, Class<?>> classCache = new ConcurrentHashMap<>();
-    // 缓存类的注解
+    //  缓存类的注解
     private static final Map<Class<?>, Map<Class<? extends Annotation>, Annotation>> annotationCache = new HashMap<>();
-    // 缓存类的字段
+    //  缓存类的字段
     private static final Map<Class<?>, Map<String, Field>> fieldCache = new HashMap<>();
-    // 缓存类的所有字段，包括父类的字段
+    //  缓存类的所有字段，包括父类的字段
     private static final Map<Class<?>, List<Field>> allFieldsCache = new ConcurrentHashMap<>();
 
     /**
@@ -67,11 +67,11 @@ public class RUtil {
         Map<String, Object> ret = new HashMap<>();
         allFields(bean.getClass(), field -> {
             if (ret.containsKey(field.getName())) {
-                return; // 避免将值覆盖为null，因为在继承关系中，如果存在同名的属性，则通过反射从父类获取的是null
+                return; //  避免将值覆盖为null，因为在继承关系中，如果存在同名的属性，则通过反射从父类获取的是null
             }
             boolean isStatic = Modifier.isStatic(field.getModifiers());
             if (isStatic) {
-                return; // 忽略静态字段
+                return; //  忽略静态字段
             }
             field.setAccessible(true);
             Object val = null;
@@ -81,11 +81,11 @@ public class RUtil {
                 throw new RuntimeException(e);
             }
             if (val == null) {
-                if (field.getType() == BigDecimal.class) { // BigDecimal 默认为 0
+                if (field.getType() == BigDecimal.class) { //  BigDecimal 默认为 0
                     val = BigDecimal.ZERO;
                 }
             }
-            if (val instanceof Enum<?>) { // 枚举对象取ordinal值
+            if (val instanceof Enum<?>) { //  枚举对象取ordinal值
                 Enum<?> en = (Enum<?>) val;
                 val = en.ordinal();
             }
@@ -106,11 +106,11 @@ public class RUtil {
         Map<String, Object> ret = new HashMap<>();
         allFields(bean.getClass(), field -> {
             if (ret.containsKey(field.getName())) {
-                return; // 避免将值覆盖为null，因为在继承关系中，如果存在同名的属性，则通过反射从父类获取的是null
+                return; //  避免将值覆盖为null，因为在继承关系中，如果存在同名的属性，则通过反射从父类获取的是null
             }
             boolean isStatic = Modifier.isStatic(field.getModifiers());
             if (isStatic) {
-                return; // 忽略静态字段
+                return; //  忽略静态字段
             }
             boolean isOk = targetPropList == null;
             Optional<String> item = Optional.empty();
@@ -129,13 +129,13 @@ public class RUtil {
                     throw new RuntimeException(e);
                 }
                 if (val == null) {
-                    if (field.getType() == BigDecimal.class) { // BigDecimal 默认为 0
+                    if (field.getType() == BigDecimal.class) { //  BigDecimal 默认为 0
                         val = BigDecimal.ZERO;
                     } else {
                         return;
                     }
                 }
-                if (val instanceof Enum<?>) { // 枚举对象取ordinal值
+                if (val instanceof Enum<?>) { //  枚举对象取ordinal值
                     Enum<?> en = (Enum<?>) val;
                     val = en.ordinal();
                 }
@@ -275,7 +275,7 @@ public class RUtil {
                 classFieldCache.put(propertyName, field);
                 break;
             } catch (NoSuchFieldException e) {
-                //如果找不到则继续向父类查找
+                // 如果找不到则继续向父类查找
             }
         }
 
@@ -308,12 +308,12 @@ public class RUtil {
         if (fields != null) {
             return fields;
         }
-        final List<Field> fieldList = new ArrayList<>(); // 使用 final 声明列表变量
+        final List<Field> fieldList = new ArrayList<>(); //  使用 final 声明列表变量
         allFields(clazz, field -> {
             fieldList.add(field);
             return true;
         });
-        allFieldsCache.put(clazz, fieldList); // 缓存字段列表
+        allFieldsCache.put(clazz, fieldList); //  缓存字段列表
         return fieldList;
     }
 
@@ -397,7 +397,7 @@ public class RUtil {
     public static <T> void processFieldsWithAnnotation(Object object, Class<? extends Annotation> annotationClass, LogicExecutor<T> executor) {
         List<Field> fields = getFields(object);
         for (Field field : fields) {
-            //TODO 作者:黄嘉浩 可以进行优化 使用本地缓存
+            // TODO 作者:黄嘉浩 可以进行优化 使用本地缓存
             Annotation annotation = field.getDeclaredAnnotation(annotationClass);
             if (annotation != null) {
                 try {
