@@ -8,6 +8,8 @@ import org.apache.ibatis.reflection.MetaObject;
 
 import java.time.LocalDateTime;
 
+import static com.fast.core.mybatis.constant.PublicFieldConstant.*;
+
 /**
  * Mybatis-plus对象处理服务
  * 因为MyBatis-plus对象处理服务切入强耦 表中没有设计字段 会导致填充报错
@@ -39,13 +41,13 @@ public interface MPFillService {
             return;
         }
         if (autoFill.createTime()) {
-            handler.setFieldValByName("createTime", LocalDateTime.now(), metaObject);
+            handler.setFieldValByName(CREATE_TIME, LocalDateTime.now(), metaObject);
         }
         if (autoFill.updateTime()) {
-            handler.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
+            handler.setFieldValByName(UPDATE_TIME, LocalDateTime.now(), metaObject);
         }
         if (autoFill.defaultVersion()) {
-            handler.setFieldValByName("version", 1, metaObject);
+            handler.setFieldValByName(VERSION, 1, metaObject);
         }
     }
     /**
@@ -57,7 +59,7 @@ public interface MPFillService {
             return;
         }
         if (autoFill.updateTime()) {
-            handler.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
+            handler.setFieldValByName(UPDATE_TIME, LocalDateTime.now(), metaObject);
         }
     }
 }

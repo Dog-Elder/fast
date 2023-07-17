@@ -20,4 +20,8 @@ public class PublicFieldConstant {
      * 更新时间
      */
     public static final String UPDATE_TIME = "updateTime";
+    /**
+     * 版本
+     **/
+    public static final String VERSION = "version";
 }
