@@ -7,8 +7,8 @@ import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
@@ -41,8 +41,9 @@ public class BUtil extends BeanUtils {
      * 创建一个targetClazz的实例（利用其默认构造），然后将source的非null的属性复制到target上的同名属性
      */
     public static <S, T> T copy(S source, Class<T> targetClazz) {
-        Assert.notNull(source, "Source must not be null");
-        Assert.notNull(targetClazz, "TargetClazz must not be null");
+        if (ObjectUtils.isEmpty(source)||ObjectUtils.isEmpty(targetClazz)) {
+            return null;
+        }
         Class<?> sourceClass = source.getClass();
         HashMap<PropertyDescriptor, PropertyDescriptor> pdMap = getPropertyDescriptorsMap(sourceClass, targetClazz);
         try {
