@@ -23,10 +23,6 @@ public class User extends BaseVersionEntity {
      */
     private String id;
     /**
-     * 用户编码
-     **/
-    private String code;
-    /**
      * 用户名
      */
     private String username;

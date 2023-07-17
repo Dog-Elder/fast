@@ -1,8 +1,10 @@
 package com.fast.manage.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.fast.common.entity.base.User;
+import com.fast.core.common.constant.Constants;
 import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.util.CUtil;
 import com.fast.core.common.util.PageUtils;
@@ -87,6 +89,14 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean delete(List<String> idList) {
+        // 判断是否删除系统管理员
+        LambdaQueryWrapper<SysUser> lambdaQuery = Wrappers.<SysUser>lambdaQuery()
+                .in(SysUser::getId, idList)
+                .eq(SysUser::getAdministrator, Constants.Y);
+        SysUser adminUser = getOne(lambdaQuery);
+        if (ObjectUtils.isNotEmpty(adminUser)) {
+            throw new ServiceException("不能删除系统管理员");
+        }
         return removeByIds(idList);
     }
 

@@ -1,8 +1,8 @@
 package com.fast.manage.entity;
 
 import com.fast.common.entity.base.User;
+import com.fast.core.common.annotation.encode.Code;
 import com.fast.core.common.util.Util;
-import com.fast.core.mybatis.model.BaseVersionEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -23,7 +23,11 @@ import java.time.LocalDateTime;
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
 public class SysUser extends User {
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 用户编码
+     **/
+    @Code(rules = "USER", encode = "MANAGE")
+    private String code;
     /**
      * 管理员 1 : 是
      */
