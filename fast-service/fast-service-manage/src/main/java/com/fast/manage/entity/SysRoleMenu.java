@@ -1,6 +1,8 @@
 package com.fast.manage.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fast.core.mybatis.constant.PublicFieldConstant;
 import com.fast.core.mybatis.model.BaseVersionEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
+@TableName(value = "sys_role_menu", excludeProperty = {PublicFieldConstant.ID})
 public class SysRoleMenu extends BaseVersionEntity {
 
     /**

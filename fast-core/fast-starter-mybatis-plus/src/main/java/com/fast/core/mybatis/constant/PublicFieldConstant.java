@@ -5,6 +5,10 @@ package com.fast.core.mybatis.constant;
  **/
 public class PublicFieldConstant {
     /**
+     * id
+     */
+    public static final String ID = "id";
+    /**
      * 创建者
      */
     public static final String CREATE_BY = "createBy";
