@@ -48,10 +48,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
         wrapper.like(Util.isNotNull(query.getNickname()) && SUtil.isNotEmpty(query.getNickname()), SysUser::getNickname, query.getNickname());
         wrapper.eq(Util.isNotNull(query.getEmail()) && SUtil.isNotEmpty(query.getEmail()), SysUser::getEmail, query.getEmail());
         wrapper.like(Util.isNotNull(query.getRealName()) && SUtil.isNotEmpty(query.getRealName()), SysUser::getRealName, query.getRealName());
-        wrapper.eq(SysUser::getSex, query.getSex());
+        wrapper.eq(Util.isNotNull(query.getSex()), SysUser::getSex, query.getSex());
         wrapper.eq(Util.isNotNull(query.getPhoneNumber()) && SUtil.isNotEmpty(query.getPhoneNumber()), SysUser::getPhoneNumber, query.getPhoneNumber());
-        wrapper.eq(SysUser::getAdministrator, query.getAdministrator());
-        wrapper.eq(SysUser::getStatus, query.getStatus());
+        wrapper.eq(Util.isNotNull(query.getStatus()), SysUser::getStatus, query.getStatus());
         return wrapper;
     }
 
@@ -72,7 +71,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
         }
         List<SysUser> elementUser = list(new LambdaQueryWrapper<SysUser>().select(User::getUsername).in(User::getUsername, username));
         if (CUtil.isNotEmpty(elementUser)) {
-            throw new ServiceException("用户名已存在:" + CUtil.getPropertyList(elementUser,SysUser::getUsername));
+            throw new ServiceException("用户名已存在:" + CUtil.getPropertyList(elementUser, SysUser::getUsername));
         }
         saveBatch(entityList);
         return BUtil.copyList(entityList, SysUserVO.class);
