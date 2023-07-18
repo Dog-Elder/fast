@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.fast.common.config.secure.BaseAutoUtil;
+import com.fast.common.config.secure.BaseAuthUtil;
 import com.fast.common.dao.SysRequestLogsDao;
 import com.fast.common.entity.sys.SysRequestLogs;
 import com.fast.common.query.SysRequestLogsQuery;
@@ -69,21 +69,21 @@ public class SysRequestLogsServiceImpl extends BaseServiceImpl<SysRequestLogsDao
 
         JSONObject headerJson = requestLogs.getRequestHeaderJson();
 
-        String tokenValue = headerJson.getStr(BaseAutoUtil.getLowerCaseTokenName());
+        String tokenValue = headerJson.getStr(BaseAuthUtil.getLowerCaseTokenName());
         if (SUtil.isBlank(tokenValue)) {
             super.save(requestLogs);
             return;
         }
 
         // 该方法是在公共项目中,并且异步状态下无法获取当前操作人,所以需要根据token
-        Object loginIdByToken = BaseAutoUtil.getLoginIdByToken(tokenValue);
+        Object loginIdByToken = BaseAuthUtil.getLoginIdByToken(tokenValue);
         if (ObjectUtil.isEmpty(loginIdByToken)) {
             super.save(requestLogs);
             return;
         }
 
         String loginId = loginIdByToken.toString();
-        String loginAccountType = BaseAutoUtil.getLoginAccountType(tokenValue);
+        String loginAccountType = BaseAuthUtil.getLoginAccountType(tokenValue);
         requestLogs.setCreateBy(loginId);
         requestLogs.setCreateByType(loginAccountType);
 

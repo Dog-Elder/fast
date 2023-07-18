@@ -1,5 +1,8 @@
 package com.fast.common.config.secure;
 
+import cn.hutool.core.util.ObjUtil;
+import com.fast.core.common.util.SUtil;
+import com.fast.core.log.util.RequestContextHolder;
 import com.fast.core.safe.config.AccountManage;
 import com.fast.core.util.FastRedis;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +20,7 @@ import java.util.List;
  **/
 @Slf4j
 @Component
-public class BaseAutoUtil {
+public class BaseAuthUtil {
     private static List<AccountManage> accountManages;
     private static FastRedis fastRedis;
 
@@ -31,8 +34,8 @@ public class BaseAutoUtil {
      */
     @Autowired
     public void init(List<AccountManage> accountManages, FastRedis fastRedis) {
-        BaseAutoUtil.accountManages = accountManages;
-        BaseAutoUtil.fastRedis = fastRedis;
+        BaseAuthUtil.accountManages = accountManages;
+        BaseAuthUtil.fastRedis = fastRedis;
     }
 
     @Value("${sa-token.token-name}")
@@ -49,9 +52,26 @@ public class BaseAutoUtil {
         return TOKEN_NAME.toLowerCase();
     }
 
+
     /**
-     * 可在非web环境使用
+     * 获得令牌
+     * 只有web环境才能获取到
+     * 非web环境获取不到
+     * Header中没有命名token
+     *
+     * @return {@link String}
+     */
+    public static String getToken() {
+        // 从上下文线程中获取参数
+        return RequestContextHolder
+                .getContext()
+                .getRequestHeaderJson()
+                .getStr(getLowerCaseTokenName());
+    }
+
+    /**
      * 获取登录id根据tokenValue
+     * 可在非web环境使用
      *
      * @param tokenValue 令牌值
      * @return {@link Object}
@@ -63,6 +83,16 @@ public class BaseAutoUtil {
             }
         }
         return null;
+    }
+
+    /**
+     * 获取登录id根据tokenValue
+     * 仅在web环境使用
+     *
+     * @return {@link Object}
+     */
+    public static Object getLoginIdByToken() {
+        return getLoginIdByToken(getToken());
     }
 
     /**
@@ -80,4 +110,15 @@ public class BaseAutoUtil {
         }
         return null;
     }
+
+    /**
+     * 获取登录账户类型
+     * 仅在web环境使用
+     *
+     * @return {@link String} 账号类型
+     */
+    public static String getLoginAccountType() {
+        return getLoginAccountType(getToken());
+    }
+
 }
