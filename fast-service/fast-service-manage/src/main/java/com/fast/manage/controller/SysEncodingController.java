@@ -125,6 +125,17 @@ public class SysEncodingController extends WebBaseController{
     }
 
     /**
+     * 刷新缓存
+     * @folder 编码
+     */
+    @PutMapping("/refreshCache/{id}")
+    @ManageCheckPermission(value = "manage.encodingSet.refreshCache")
+    public R refreshCache(@PathVariable("id") String id){
+        sysEncodingSetService.refreshCache(id);
+        return R.success();
+    }
+
+    /**
      * 编码集删除
      * @folder 编码/编码集
      */

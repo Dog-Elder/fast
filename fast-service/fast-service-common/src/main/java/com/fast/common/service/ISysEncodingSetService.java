@@ -22,4 +22,6 @@ public interface ISysEncodingSetService extends BaseService<SysEncodingSet> {
     boolean update(SysEncodingSetVO vo);
 
     boolean delete(List<String> idList);
+
+    void refreshCache(String id);
 }

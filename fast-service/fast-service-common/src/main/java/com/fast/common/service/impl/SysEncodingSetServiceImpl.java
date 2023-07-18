@@ -47,20 +47,21 @@ public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, Sy
     private ISysEncodingService encodingService;
     private final ISysEncodingSetRuleService encodingSetRuleService;
     private final FastRedis redis;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<SysEncodingSetVO> list(SysEncodingSetQuery query) {
         List<SysEncodingSet> entityList = list(getWrapper(query));
-        return PageUtils.copy(entityList,SysEncodingSetVO.class);
+        return PageUtils.copy(entityList, SysEncodingSetVO.class);
     }
 
-    private LambdaQueryWrapper<SysEncodingSet> getWrapper(SysEncodingSetQuery query){
+    private LambdaQueryWrapper<SysEncodingSet> getWrapper(SysEncodingSetQuery query) {
         LambdaQueryWrapper<SysEncodingSet> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(Util.isNotNull(query.getId())&& SUtil.isNotEmpty(query.getId()), SysEncodingSet::getId, query.getId());
-        wrapper.eq(Util.isNotNull(query.getSysEncodingCode())&& SUtil.isNotEmpty(query.getSysEncodingCode()), SysEncodingSet::getSysEncodingCode, query.getSysEncodingCode());
-        wrapper.eq(Util.isNotNull(query.getSysEncodingSetCode())&& SUtil.isNotEmpty(query.getSysEncodingSetCode()), SysEncodingSet::getSysEncodingSetCode, query.getSysEncodingSetCode());
-        wrapper.eq(Util.isNotNull(query.getSysEncodingSetStatus())&& SUtil.isNotEmpty(query.getSysEncodingSetStatus()), SysEncodingSet::getSysEncodingSetStatus, query.getSysEncodingSetStatus());
-        wrapper.eq(Util.isNotNull(query.getSysEncodingSetUseStatus())&& SUtil.isNotEmpty(query.getSysEncodingSetUseStatus()), SysEncodingSet::getSysEncodingSetUseStatus, query.getSysEncodingSetUseStatus());
+        wrapper.eq(Util.isNotNull(query.getId()) && SUtil.isNotEmpty(query.getId()), SysEncodingSet::getId, query.getId());
+        wrapper.eq(Util.isNotNull(query.getSysEncodingCode()) && SUtil.isNotEmpty(query.getSysEncodingCode()), SysEncodingSet::getSysEncodingCode, query.getSysEncodingCode());
+        wrapper.eq(Util.isNotNull(query.getSysEncodingSetCode()) && SUtil.isNotEmpty(query.getSysEncodingSetCode()), SysEncodingSet::getSysEncodingSetCode, query.getSysEncodingSetCode());
+        wrapper.eq(Util.isNotNull(query.getSysEncodingSetStatus()) && SUtil.isNotEmpty(query.getSysEncodingSetStatus()), SysEncodingSet::getSysEncodingSetStatus, query.getSysEncodingSetStatus());
+        wrapper.eq(Util.isNotNull(query.getSysEncodingSetUseStatus()) && SUtil.isNotEmpty(query.getSysEncodingSetUseStatus()), SysEncodingSet::getSysEncodingSetUseStatus, query.getSysEncodingSetUseStatus());
         wrapper.like(Util.isNotNull(query.getRemark()) && SUtil.isNotEmpty(query.getRemark()), SysEncodingSet::getRemark, query.getRemark());
         return wrapper;
     }
@@ -68,7 +69,7 @@ public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, Sy
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<SysEncodingSetVO> save(List<SysEncodingSetVO> vo) {
-        List<SysEncodingSet> entityList = BUtil.copyList(vo,SysEncodingSet.class);
+        List<SysEncodingSet> entityList = BUtil.copyList(vo, SysEncodingSet.class);
         if (CUtil.toGrouping(entityList, SysEncodingSet::getSysEncodingCode).keySet().size() > 1) {
             throw new ServiceException("批量添加只能添加相同<规则代码>的编码集");
         }
@@ -90,15 +91,20 @@ public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, Sy
             Set<String> propertySet = CUtil.getPropertySet(existing, SysEncodingSet::getSysEncodingSetCode);
             throw new ServiceException("编码值" + propertySet + "已存在");
         }
-        entityList.forEach(ele->{
+        entityList.forEach(ele -> {
             // 添加时必须更新为null
             ele.setSysEncodingSetStatus(Constants._N);
             updateState(ele);
         });
         saveBatch(entityList);
-        return BUtil.copyList(entityList,SysEncodingSetVO.class);
+        return BUtil.copyList(entityList, SysEncodingSetVO.class);
     }
 
+    /**
+     * 更新状态
+     *
+     * @param set 集
+     */
     private void updateState(SysEncodingSet set) {
         String ruleStatusIn = SUtil.format(CacheConstant.SysSetRule.CODE_STATUS, set.getSysEncodingCode(), set.getSysEncodingSetCode());
         redis.setString(ruleStatusIn, set.getSysEncodingSetStatus());
@@ -107,7 +113,7 @@ public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, Sy
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean update(SysEncodingSetVO vo) {
-        SysEncodingSet entity = BUtil.copy(vo,SysEncodingSet.class);
+        SysEncodingSet entity = BUtil.copy(vo, SysEncodingSet.class);
         SysEncodingSet encodingSet = super.getById(entity.getId());
         // 是否已经使用 Y :已使用 时只能修改备注或状态
         if (SUtil.isY(encodingSet.getSysEncodingSetUseStatus())) {
@@ -129,7 +135,7 @@ public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, Sy
             long count = encodingSetRuleService.count(new LambdaQueryWrapper<SysEncodingSetRule>()
                     .eq(SysEncodingSetRule::getSysEncodingCode, entity.getSysEncodingCode())
                     .eq(SysEncodingSetRule::getSysEncodingSetCode, entity.getSysEncodingSetCode()));
-            if (count==0) {
+            if (count == 0) {
                 throw new ServiceException("未配置编码段,不能开启");
             }
         }
@@ -161,4 +167,15 @@ public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, Sy
         throw new ServiceException("数据已被使用无法删除:" + propertySet);
     }
 
+    /**
+     * 刷新缓存
+     *
+     * @param id id
+     */
+    @Override
+    public void refreshCache(String id) {
+        SysEncodingSet entity = getById(id);
+        Util.isNull(entity, "数据不存在!");
+        updateState(entity);
+    }
 }
