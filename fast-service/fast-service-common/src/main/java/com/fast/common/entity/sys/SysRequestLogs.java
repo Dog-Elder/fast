@@ -1,5 +1,6 @@
 package com.fast.common.entity.sys;
 
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -13,7 +14,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import static com.fast.core.mybatis.constant.PublicFieldConstant.*;
+import static com.fast.core.mybatis.constant.PublicFieldConstant.UPDATE_BY;
+import static com.fast.core.mybatis.constant.PublicFieldConstant.UPDATE_TIME;
 
 /**
  * 接口请求日志
@@ -25,7 +27,7 @@ import static com.fast.core.mybatis.constant.PublicFieldConstant.*;
 @NoArgsConstructor
 @Accessors(chain = true)
 @ToString(callSuper = true)
-@TableName(value = "sys_request_logs", excludeProperty = {CREATE_BY, UPDATE_BY, UPDATE_TIME})
+@TableName(value = "sys_request_logs", excludeProperty = {UPDATE_BY, UPDATE_TIME})
 @EqualsAndHashCode(callSuper = false)
 @AutoFill(createBy = false, updateBy = false, updateTime = false)
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
@@ -65,6 +67,12 @@ public class SysRequestLogs extends BaseEntity {
     @Display("请求头")
     @TableField("request_headers")
     private String requestHeaders;
+
+    /**
+     * 请求头JSON
+     */
+    @TableField(exist = false)
+    private JSONObject requestHeaderJson;
 
     /**
      * 请求路径
@@ -118,6 +126,10 @@ public class SysRequestLogs extends BaseEntity {
     @Display("耗时")
     @TableField("take")
     private Long take;
+
+    @Display("操作账户类型")
+    @TableField("create_by_type")
+    private String createByType;
 
 
 }

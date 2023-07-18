@@ -1,5 +1,6 @@
 package com.fast.core.log.model;
 
+import cn.hutool.json.JSONObject;
 import lombok.Data;
 
 /**
@@ -26,6 +27,10 @@ public class RequestContext {
      * 请求头
      **/
     private String requestHeaders;
+    /**
+     * 请求头JSON
+     */
+    private JSONObject requestHeaderJson;
     /**
      * 请求路径
      **/

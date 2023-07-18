@@ -1,15 +1,13 @@
 package com.fast.manage.config.security.provider;
 
-import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaLoginModel;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fast.common.entity.base.User;
 import com.fast.common.service.AuthenticationProvider;
-import com.fast.core.common.util.CacheUtil;
 import com.fast.core.common.util.Md5Util;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
+import com.fast.core.safe.config.AccountManage;
 import com.fast.core.safe.entity.Authentication;
 import com.fast.core.safe.util.ManageUtil;
 import com.fast.manage.config.security.authentication.UserPasswordAuthentication;
@@ -42,10 +40,12 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
             throw new AuthenticationException("用户名或密码不能为空");
         }
         // TODO 作者:黄嘉浩   待办 密码加密
-        SysUser user = userService.getOne(new LambdaQueryWrapper<>(SysUser.class).eq(User::getUsername,username).or().eq(User::getCode,username));
+        SysUser user = userService.getOne(new LambdaQueryWrapper<>(SysUser.class).eq(User::getUsername, username).or().eq(User::getCode, username));
         if (Util.isNotNull(user) && Md5Util.verifyPassword(password, user.getPassword())) {
             ManageUtil.login(user.getCode(), SaLoginModel.create()
-                    .setExtra("administrator",user.isGod()));
+                    .setExtra("administrator", user.isGod())
+                    .setExtra(AccountManage.LOGIC_TYPE, ManageUtil.TYPE)
+            );
         } else {
             //  认证失败
             throw new AuthenticationException("用户名或密码无效");

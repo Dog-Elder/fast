@@ -3,10 +3,10 @@ package com.fast.core.boot.interceptor;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.fast.core.log.model.RequestContext;
-import com.fast.core.log.util.RequestContextHolder;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.spring.RequestUtils;
+import com.fast.core.log.model.RequestContext;
+import com.fast.core.log.util.RequestContextHolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -103,17 +103,17 @@ public class RequestInterceptor implements HandlerInterceptor {
 
         //  获取Headers
         Enumeration<String> headerNames = request.getHeaderNames();
-        List<String> headers = new ArrayList<>();
+        JSONObject headerJson = JSONUtil.createObj();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             String headerValue = request.getHeader(headerName);
             beforeReqLog.append("===>Header {}\n");
             beforeReqArgs.add(headerName + " = " + headerValue);
-            headers.add(headerName + " = " + headerValue);
+            headerJson.putOpt(headerName, headerValue);
         }
 
-        String headerStr = String.join(",", headers);
-        context.setRequestHeaders(headerStr);
+        context.setRequestHeaders(headerJson.toString());
+        context.setRequestHeaderJson(headerJson);
 
         beforeReqLog.append("\n");
         beforeReqLog.append("===================请求id:" + context.getRequestId() + " End=================== \n");

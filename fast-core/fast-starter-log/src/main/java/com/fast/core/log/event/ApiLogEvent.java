@@ -1,6 +1,7 @@
 package com.fast.core.log.event;
 
 
+import cn.hutool.json.JSONObject;
 import lombok.Data;
 
 /**
@@ -27,6 +28,10 @@ public class ApiLogEvent {
      * 请求头
      **/
     private String requestHeaders;
+    /**
+     * 请求头JSON
+     */
+    private JSONObject requestHeaderJson;
     /**
      * 请求路径
      **/
