@@ -1,6 +1,7 @@
 package com.fast.manage.config.security.realms;
 
 import cn.hutool.core.collection.ListUtil;
+import com.fast.core.safe.constant.JwtConstant;
 import com.fast.core.safe.entity.Authentication;
 import com.fast.common.service.AuthenticationProvider;
 import com.fast.core.safe.service.SecurityManagerService;
@@ -46,7 +47,7 @@ public class ManageRealms implements SecurityManagerService {
 
     @Override
     public List<String> getPermissionList(Object loginId) {
-        Object administrator = ManageUtil.getExtra("administrator");
+        Object administrator = ManageUtil.getExtra(JwtConstant.ADMINISTRATOR);
         if ((Boolean) administrator) {
             return ListUtil.of("*");
         }
@@ -55,7 +56,7 @@ public class ManageRealms implements SecurityManagerService {
 
     @Override
     public List<String> getRoleList(Object loginId) {
-        Object administrator = ManageUtil.getExtra("administrator");
+        Object administrator = ManageUtil.getExtra(JwtConstant.ADMINISTRATOR);
         if ((Boolean) administrator) {
             return ListUtil.of("*");
         }

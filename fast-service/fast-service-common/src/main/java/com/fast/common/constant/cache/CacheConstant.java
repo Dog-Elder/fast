@@ -24,11 +24,19 @@ public class CacheConstant {
     public final static int EXRP_DAY = 60 * 60 * 24;
 
     /**
+     * 框架统一前缀
+     **/
+    public static final String FAST = "fast:";
+
+    /**
      * 后台缓存前缀
      **/
-    public static final String MANAGE = "manage:";
+    public static final String MANAGE = FAST + "manage:";
 
-    public static final String SYS = "sys:";
+    /**
+     * 系统配置前缀
+     **/
+    public static final String SYS = FAST + "sys:";
 
     /**
      * 对应值集相关缓存常量

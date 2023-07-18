@@ -10,10 +10,6 @@ import com.fast.core.safe.entity.Authentication;
  **/
 public interface AccountManage {
 
-    /**
-     * 逻辑类型
-     */
-    String LOGIC_TYPE = "LogicType";
 
     /**
      * 从jwt中获取登录类型,来进行判断

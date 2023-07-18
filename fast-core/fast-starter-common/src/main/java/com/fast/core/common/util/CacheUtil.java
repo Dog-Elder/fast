@@ -1,12 +1,8 @@
 package com.fast.core.common.util;
 
 import cn.hutool.extra.spring.SpringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * 缓存管理
@@ -53,6 +49,14 @@ public class CacheUtil {
         cache.evict(cacheKey);
     }
 
+    /**
+     * 生成缓存键
+     *
+     * @param methodName   方法名称
+     * @param automaticKey 自定key
+     * @param params       参数个数
+     * @return {@link String} 缓存键
+     */
     private static String generateCacheKey(String methodName, Boolean automaticKey, Object... params) {
         StringBuilder keyBuilder = new StringBuilder();
         keyBuilder.append(methodName);

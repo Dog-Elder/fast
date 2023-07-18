@@ -9,6 +9,7 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpLogic;
 import cn.hutool.core.util.ObjectUtil;
 import com.fast.core.safe.config.AccountManage;
+import com.fast.core.safe.constant.JwtConstant;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class ManageUtil implements AccountManage {
      **/
     @Override
     public boolean supports(String token) {
-        Object logicalType = getExtra(token, LOGIC_TYPE);
+        Object logicalType = getExtra(token, JwtConstant.LOGIC_TYPE);
         if (ObjectUtil.isEmpty(logicalType)) {
             return false;
         }

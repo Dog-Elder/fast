@@ -7,7 +7,7 @@ import com.fast.common.service.AuthenticationProvider;
 import com.fast.core.common.util.Md5Util;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
-import com.fast.core.safe.config.AccountManage;
+import com.fast.core.safe.constant.JwtConstant;
 import com.fast.core.safe.entity.Authentication;
 import com.fast.core.safe.util.ManageUtil;
 import com.fast.manage.config.security.authentication.UserPasswordAuthentication;
@@ -43,8 +43,9 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         SysUser user = userService.getOne(new LambdaQueryWrapper<>(SysUser.class).eq(User::getUsername, username).or().eq(User::getCode, username));
         if (Util.isNotNull(user) && Md5Util.verifyPassword(password, user.getPassword())) {
             ManageUtil.login(user.getCode(), SaLoginModel.create()
-                    .setExtra("administrator", user.isGod())
-                    .setExtra(AccountManage.LOGIC_TYPE, ManageUtil.TYPE)
+                    .setExtra(JwtConstant.ADMINISTRATOR, user.isGod())
+                    .setExtra(JwtConstant.LOGIC_TYPE, ManageUtil.TYPE)
+                    .setExtra(JwtConstant.USER_ID, user.getId())
             );
         } else {
             //  认证失败
