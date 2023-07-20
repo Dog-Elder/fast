@@ -39,6 +39,13 @@ public class CacheConstant {
     public static final String SYS = FAST + "sys:";
 
     /**
+     * 用户
+     **/
+    public interface User {
+        String USER = "user:";
+    }
+
+    /**
      * 对应值集相关缓存常量
      **/
     public interface SetValue {
