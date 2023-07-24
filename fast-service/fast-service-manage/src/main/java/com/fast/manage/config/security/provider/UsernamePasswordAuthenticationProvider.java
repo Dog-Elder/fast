@@ -2,6 +2,7 @@ package com.fast.manage.config.security.provider;
 
 import cn.dev33.satoken.stp.SaLoginModel;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.fast.common.config.secure.BaseAuthUtil;
 import com.fast.common.entity.base.User;
 import com.fast.common.service.AuthenticationProvider;
 import com.fast.core.common.util.Md5Util;
@@ -10,6 +11,7 @@ import com.fast.core.common.util.Util;
 import com.fast.core.safe.constant.JwtConstant;
 import com.fast.core.safe.entity.Authentication;
 import com.fast.core.safe.util.ManageUtil;
+import com.fast.core.util.FastRedis;
 import com.fast.manage.config.security.authentication.UserPasswordAuthentication;
 import com.fast.manage.entity.SysUser;
 import com.fast.manage.service.ISysUserService;
@@ -24,6 +26,7 @@ import javax.naming.AuthenticationException;
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
     private final ISysUserService userService;
+    private final FastRedis fastRedis;
 
     @Override
     public boolean supports(Class<?> authenticationType) {
@@ -47,6 +50,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
                     .setExtra(JwtConstant.LOGIC_TYPE, ManageUtil.TYPE)
                     .setExtra(JwtConstant.USER_ID, user.getId())
             );
+            fastRedis.setObject(BaseAuthUtil.getUserInfoKeyPath(user.getCode()), user);
         } else {
             //  认证失败
             throw new AuthenticationException("用户名或密码无效");

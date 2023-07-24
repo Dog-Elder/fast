@@ -39,7 +39,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
     private final ISysUserRoleService userRoleService;
     private final ISysRoleMenuService roleMenuService;
     private final ISysMenuService menuService;
-    private final FastRedis fastRedis;
 
     /**
      * 查询角色

@@ -30,8 +30,8 @@ public class FastRedis {
      * @param key 要检查的键
      * @return 如果键存在，则返回 true；否则返回 false
      */
-    public Boolean exists(String ruleNumberIn) {
-        return redisTemplate.hasKey(ruleNumberIn);
+    public Boolean exists(String key) {
+        return redisTemplate.hasKey(key);
     }
 
     /**

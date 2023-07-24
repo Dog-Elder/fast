@@ -1,8 +1,11 @@
 package com.fast.common.config.secure;
 
+import com.fast.common.constant.cache.CacheConstant;
 import com.fast.core.common.context.ContextHolder;
+import com.fast.core.common.util.SUtil;
 import com.fast.core.log.model.RequestContext;
 import com.fast.core.safe.config.AccountManage;
+import com.fast.core.safe.util.ManageUtil;
 import com.fast.core.util.FastRedis;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,4 +123,19 @@ public class BaseAuthUtil {
         return getLoginAccountType(getToken());
     }
 
+
+
+    /**
+     * 得到用户信息RedisKeyPath
+     * 仅在web环境使用
+     *
+     * @param userCode 用户编码
+     * @return {@link String}
+     */
+    public static String getUserInfoKeyPath(String userCode) {
+        if (SUtil.isBlank(userCode)) {
+            return null;
+        }
+        return String.format(CacheConstant.FAST + CacheConstant.USER + getLoginAccountType() + ":" + CacheConstant.User.INFO, userCode);
+    }
 }
