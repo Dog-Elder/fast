@@ -1,6 +1,10 @@
 package com.fast.manage.config.security.secure;
 
 import com.fast.common.config.secure.BaseAuthUtil;
+import com.fast.common.constant.cache.CacheConstant;
+import com.fast.common.entity.base.User;
+import com.fast.core.common.context.ContextHolder;
+import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
 import com.fast.core.safe.constant.JwtConstant;
 import com.fast.core.safe.util.ManageUtil;
@@ -21,9 +25,25 @@ public class AuthManageUtil extends BaseAuthUtil {
      * 获取当前登录用户
      **/
     public static SysUser getUser() {
-        // TODO 作者:黄嘉浩
-//        CacheUtil.getCache()
-        return null;
+        User user = ContextHolder.get(User.class);
+        if (Util.isNotNull(user)) {
+            return (SysUser) user;
+        }
+        user = fastRedis.getObject(getUserInfoKeyPath(getUserCode()), User.class);
+        if (Util.isNull(user)) {
+            return null;
+        }
+        ContextHolder.put(User.class, user);
+        return (SysUser) user;
+    }
+
+    /**
+     * 获取当前登录用户表id
+     *
+     * @return {@link User#id}
+     **/
+    public static String getUserId() {
+        return (String)ManageUtil.getExtra(JwtConstant.USER_ID);
     }
 
     /**
@@ -32,7 +52,7 @@ public class AuthManageUtil extends BaseAuthUtil {
      * @return {@link SysUser#code}
      */
     public static String getUserCode() {
-        Object loginId = ManageUtil.getLoginId();
+        Object loginId = getLoginId();
         if (Util.isNotNull(loginId)) {
             return loginId.toString();
         }
@@ -47,4 +67,5 @@ public class AuthManageUtil extends BaseAuthUtil {
     public static boolean isAdministrator() {
         return (Boolean) ManageUtil.getExtra(JwtConstant.ADMINISTRATOR);
     }
+
 }

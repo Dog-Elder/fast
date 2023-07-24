@@ -38,11 +38,17 @@ public class CacheConstant {
      **/
     public static final String SYS = FAST + "sys:";
 
+
+    /**
+     * 系统配置前缀
+     **/
+    public static final String USER = FAST + "user:";
+
     /**
      * 用户
      **/
     public interface User {
-        String USER = "user:";
+        String INFO = "info::{}";
     }
 
     /**
