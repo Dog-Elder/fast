@@ -25,14 +25,18 @@ public class AuthManageUtil extends BaseAuthUtil {
      * 获取当前登录用户
      **/
     public static SysUser getUser() {
+        // 尝试从上下文中获取
         SysUser user = ContextHolder.get(SysUser.class);
         if (Util.isNotNull(user)) {
             return  user;
         }
+        // TODO 作者:黄嘉浩 封装到对应的服务中
+        // 从Redis中获取
         user = fastRedis.getObject(getUserInfoKeyPath(getUserCode()), SysUser.class);
         if (Util.isNull(user)) {
             return null;
         }
+        // 存放至上下文方便二次使用
         ContextHolder.put(SysUser.class, user);
         return user;
     }
