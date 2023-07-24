@@ -5,7 +5,6 @@ import com.fast.core.common.context.ContextHolder;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.log.model.RequestContext;
 import com.fast.core.safe.config.AccountManage;
-import com.fast.core.safe.util.ManageUtil;
 import com.fast.core.util.FastRedis;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ public class BaseAuthUtil {
     }
 
     @Value("${sa-token.token-name}")
-    public void setTOKEN_NAME(String tokenName) {
+    public void setTokenName(String tokenName) {
         TOKEN_NAME = tokenName;
     }
 
@@ -122,7 +121,6 @@ public class BaseAuthUtil {
     public static String getLoginAccountType() {
         return getLoginAccountType(getToken());
     }
-
 
 
     /**

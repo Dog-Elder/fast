@@ -25,16 +25,16 @@ public class AuthManageUtil extends BaseAuthUtil {
      * 获取当前登录用户
      **/
     public static SysUser getUser() {
-        User user = ContextHolder.get(User.class);
+        SysUser user = ContextHolder.get(SysUser.class);
         if (Util.isNotNull(user)) {
-            return (SysUser) user;
+            return  user;
         }
-        user = fastRedis.getObject(getUserInfoKeyPath(getUserCode()), User.class);
+        user = fastRedis.getObject(getUserInfoKeyPath(getUserCode()), SysUser.class);
         if (Util.isNull(user)) {
             return null;
         }
-        ContextHolder.put(User.class, user);
-        return (SysUser) user;
+        ContextHolder.put(SysUser.class, user);
+        return user;
     }
 
     /**
@@ -66,6 +66,20 @@ public class AuthManageUtil extends BaseAuthUtil {
      */
     public static boolean isAdministrator() {
         return (Boolean) ManageUtil.getExtra(JwtConstant.ADMINISTRATOR);
+    }
+
+    /**
+     * 得到用户信息RedisKeyPath
+     * 仅在web环境使用
+     *
+     * @param userCode 用户编码
+     * @return {@link String}
+     */
+    public static String getUserInfoKeyPath(String userCode) {
+        if (SUtil.isBlank(userCode)) {
+            return null;
+        }
+        return SUtil.format(CacheConstant.FAST + CacheConstant.USER + ManageUtil.TYPE + ":" + CacheConstant.User.INFO, userCode);
     }
 
 }

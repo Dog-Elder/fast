@@ -2,6 +2,7 @@ package com.fast.manage.controller;
 
 import com.fast.common.entity.verification.Qry;
 import com.fast.core.common.util.bean.BUtil;
+import com.fast.manage.config.security.secure.AuthManageUtil;
 import lombok.AllArgsConstructor;
 import com.fast.core.common.domain.domain.R;
 import com.fast.common.entity.verification.Save;
@@ -38,6 +39,7 @@ public class SysTestController extends WebBaseController{
     @ManageCheckPermission(value = "manage.test.page")
     public R<TableDataInfo<SysTestVO>> page(@Validated(Qry.class) SysTestQuery query){
         startPage();
+        System.out.println("AuthManageUtil.getUser() = " + AuthManageUtil.getUser());
         return R.success(getDataTable(sysTestService.list(query)));
     }
 

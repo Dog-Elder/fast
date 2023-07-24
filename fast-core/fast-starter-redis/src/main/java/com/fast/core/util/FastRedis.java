@@ -1,8 +1,7 @@
 package com.fast.core.util;
 
+import cn.hutool.json.JSONUtil;
 import com.fast.core.common.exception.ServiceException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -11,7 +10,6 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -25,8 +23,10 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class FastRedis {
 
     private final StringRedisTemplate redisTemplate;
+
     /**
      * 检查指定的键是否存在于 Redis 中
+     *
      * @param key 要检查的键
      * @return 如果键存在，则返回 true；否则返回 false
      */
@@ -61,10 +61,9 @@ public class FastRedis {
      * @param value Redis 值
      */
     public <T> void setObject(String key, T value) {
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            redisTemplate.opsForValue().set(key, mapper.writeValueAsString(value));
-        } catch (JsonProcessingException e) {
+            redisTemplate.opsForValue().set(key, JSONUtil.toJsonPrettyStr(value));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -82,10 +81,9 @@ public class FastRedis {
         if (jsonValue == null) {
             return null;
         }
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.readValue(jsonValue, clazz);
-        } catch (IOException e) {
+           return JSONUtil.toBean(jsonValue, clazz);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -141,10 +139,9 @@ public class FastRedis {
      * @param expire 过期时间，单位为秒
      */
     public <T> void setObject(String key, T value, long expire) {
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            redisTemplate.opsForValue().set(key, mapper.writeValueAsString(value), expire, SECONDS);
-        } catch (JsonProcessingException e) {
+            redisTemplate.opsForValue().set(key, JSONUtil.toJsonPrettyStr(value), expire, SECONDS);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -183,6 +180,7 @@ public class FastRedis {
 
     /**
      * 获取 Redis 哈希键的所有值并返回为 List<String> 类型
+     *
      * @param key Redis 哈希键
      * @return 包含所有值的 List<String>
      */
@@ -194,7 +192,8 @@ public class FastRedis {
 
     /**
      * 将指定键的值按指定增量增加，并返回增加后的结果
-     * @param key 指定的键
+     *
+     * @param key    指定的键
      * @param number 增量值
      * @return 增加后的结果
      */
@@ -204,7 +203,8 @@ public class FastRedis {
 
     /**
      * 将指定键的值按指定减量减少，并返回减少后的结果
-     * @param key 指定的键
+     *
+     * @param key    指定的键
      * @param number 减量值
      * @return 减少后的结果
      */
@@ -214,7 +214,8 @@ public class FastRedis {
 
     /**
      * 将指定键的值按指定增量增加或减量减少，并返回操作后的结果
-     * @param key 指定的键
+     *
+     * @param key    指定的键
      * @param number 增量或减量值
      * @return 操作后的结果
      */
