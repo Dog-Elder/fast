@@ -3,10 +3,10 @@ package com.fast.core.boot.interceptor;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.fast.core.common.context.ContextHolder;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.spring.RequestUtils;
 import com.fast.core.log.model.RequestContext;
-import com.fast.core.log.util.RequestContextHolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -35,7 +35,7 @@ public class RequestInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         // 组装请求模型
-        RequestContext context = RequestContextHolder.getContext();
+        RequestContext context = ContextHolder.get(RequestContext.class);
 
         //  打印请求路径和请求体
         StringBuilder beforeReqLog = new StringBuilder();

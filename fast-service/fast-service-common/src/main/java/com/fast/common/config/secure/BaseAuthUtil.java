@@ -1,8 +1,7 @@
 package com.fast.common.config.secure;
 
-import cn.hutool.core.util.ObjUtil;
-import com.fast.core.common.util.SUtil;
-import com.fast.core.log.util.RequestContextHolder;
+import com.fast.core.common.context.ContextHolder;
+import com.fast.core.log.model.RequestContext;
 import com.fast.core.safe.config.AccountManage;
 import com.fast.core.util.FastRedis;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +20,8 @@ import java.util.List;
 @Slf4j
 @Component
 public class BaseAuthUtil {
-    private static List<AccountManage> accountManages;
-    private static FastRedis fastRedis;
+    public static List<AccountManage> accountManages;
+    public static FastRedis fastRedis;
 
     /**
      * token令牌名称 (同时也是cookie名称)
@@ -63,8 +62,8 @@ public class BaseAuthUtil {
      */
     public static String getToken() {
         // 从上下文线程中获取参数
-        return RequestContextHolder
-                .getContext()
+        return ContextHolder
+                .get(RequestContext.class)
                 .getRequestHeaderJson()
                 .getStr(getLowerCaseTokenName());
     }
@@ -86,12 +85,12 @@ public class BaseAuthUtil {
     }
 
     /**
-     * 获取登录id根据tokenValue
+     * 获取登录id
      * 仅在web环境使用
      *
      * @return {@link Object}
      */
-    public static Object getLoginIdByToken() {
+    public static Object getLoginId() {
         return getLoginIdByToken(getToken());
     }
 
