@@ -27,7 +27,7 @@ public class R<T> implements Serializable{
         BAD_REQUEST(400, "错误的请求"),
         UNAUTHORIZED(401, "未经授权"),
         FORBIDDEN(403, "禁止访问"),
-        NOT_FOUND(404, "未找到"),
+        NOT_FOUND(404, "未找到资源"),
         SERVER_ERROR(500, "服务器错误"),
         USER_COMPULSION_LINE(1002, "该账号已已被强行下线"),
         USER_DISCONNECTED(1001, "该账号已在别处登录");

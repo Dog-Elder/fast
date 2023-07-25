@@ -1,6 +1,7 @@
 package com.fast.core.common.util;
 
 import cn.hutool.core.text.StrFormatter;
+import cn.hutool.core.util.StrUtil;
 import com.fast.core.common.exception.ServiceException;
 
 import java.util.*;
@@ -14,7 +15,7 @@ import static com.fast.core.common.constant.Constants._Y;
  *
  * @author Dog_Elder
  */
-public class SUtil extends org.apache.commons.lang3.StringUtils {
+public class SUtil extends StrUtil {
     /**
      * 空字符串
      */

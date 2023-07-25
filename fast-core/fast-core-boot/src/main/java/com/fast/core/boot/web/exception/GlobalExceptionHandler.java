@@ -3,8 +3,8 @@ package com.fast.core.boot.web.exception;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import com.fast.core.common.domain.domain.R;
+import com.fast.core.common.exception.ResourceNotFoundException;
 import com.fast.core.common.exception.ServiceException;
-import com.fast.core.common.util.Util;
 import com.fast.core.common.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.QueryTimeoutException;
@@ -75,10 +75,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ServiceException.class)
     public R businessException(ServiceException e) {
         runLog(e);
-        if (Util.isNotNull(e.getCode())) {
-            return R.error(e.getMessage());
-        }
         return R.error(e.getMessage());
+    }
+
+    /**
+     * 404异常
+     */
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public R resourceNotFoundException(ResourceNotFoundException e) {
+        runLog(e);
+        return R.error(R.Type.NOT_FOUND);
     }
 
     /**
