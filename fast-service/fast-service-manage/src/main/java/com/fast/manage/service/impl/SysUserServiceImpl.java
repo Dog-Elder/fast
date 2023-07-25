@@ -3,7 +3,9 @@ package com.fast.manage.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.fast.common.constant.cache.CacheConstant;
 import com.fast.common.entity.base.User;
+import com.fast.core.annotation.Cache;
 import com.fast.core.common.constant.Constants;
 import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.util.CUtil;
@@ -24,6 +26,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.fast.common.constant.cache.CacheConstant.MANAGE;
+import static com.fast.common.constant.cache.CacheConstant.MANAGE_USER;
 
 /**
  * 后台用户
@@ -100,4 +105,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
         return removeByIds(idList);
     }
 
+    @Override
+    @Cache(value = MANAGE_USER + "info@ttl=" + CacheConstant.EXRP_DAY)
+    public SysUser getUserByCode(String code) {
+
+        return null;
+    }
 }

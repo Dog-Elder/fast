@@ -22,4 +22,12 @@ public interface ISysUserService extends BaseService<SysUser> {
     boolean update(SysUserVO vo);
 
     boolean delete(List<String> idList);
+
+    /**
+     * 得到用户代码
+     *
+     * @param code 代码
+     * @return {@link SysUser}
+     */
+    SysUser getUserByCode(String code);
 }

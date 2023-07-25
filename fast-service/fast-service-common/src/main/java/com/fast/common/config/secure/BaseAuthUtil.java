@@ -121,19 +121,4 @@ public class BaseAuthUtil {
     public static String getLoginAccountType() {
         return getLoginAccountType(getToken());
     }
-
-
-    /**
-     * 得到用户信息RedisKeyPath
-     * 仅在web环境使用
-     *
-     * @param userCode 用户编码
-     * @return {@link String}
-     */
-    public static String getUserInfoKeyPath(String userCode) {
-        if (SUtil.isBlank(userCode)) {
-            return null;
-        }
-        return String.format(CacheConstant.FAST + CacheConstant.USER + getLoginAccountType() + ":" + CacheConstant.User.INFO, userCode);
-    }
 }

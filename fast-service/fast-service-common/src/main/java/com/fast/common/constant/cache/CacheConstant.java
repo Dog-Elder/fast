@@ -40,9 +40,9 @@ public class CacheConstant {
 
 
     /**
-     * 系统配置前缀
+     * 管理端用户前缀
      **/
-    public static final String USER = FAST + "user:";
+    public static final String MANAGE_USER = MANAGE + "user:";
 
     /**
      * 用户
