@@ -2,6 +2,7 @@ package com.fast.manage.config.security.provider;
 
 import cn.dev33.satoken.stp.SaLoginModel;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.fast.common.constant.cache.CacheConstant;
 import com.fast.common.entity.base.User;
 import com.fast.common.service.AuthenticationProvider;
 import com.fast.core.common.util.Md5Util;
@@ -50,7 +51,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
                     .setExtra(JwtConstant.LOGIC_TYPE, ManageUtil.TYPE)
                     .setExtra(JwtConstant.USER_ID, user.getId())
             );
-            fastRedis.setObject(AuthManageUtil.getUserInfoKeyPath(user.getCode()), user);
+            fastRedis.setObject(AuthManageUtil.getUserInfoKeyPath(user.getCode()), user, CacheConstant.EXRP_DAY);
         } else {
             //  认证失败
             throw new AuthenticationException("用户名或密码无效");

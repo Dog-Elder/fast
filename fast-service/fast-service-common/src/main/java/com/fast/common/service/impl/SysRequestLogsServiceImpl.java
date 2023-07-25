@@ -1,6 +1,8 @@
 package com.fast.common.service.impl;
 
+import cn.hutool.core.util.CharUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -63,14 +65,20 @@ public class SysRequestLogsServiceImpl extends BaseServiceImpl<SysRequestLogsDao
      * @param apiLogEvent api日志事件
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_UNCOMMITTED)
     public void recordingSave(ApiLogEvent apiLogEvent) {
         SysRequestLogs requestLogs = BUtil.copy(apiLogEvent, SysRequestLogs.class);
         requestLogs.setTake(apiLogEvent.getDuration());
 
         JSONObject headerJson = requestLogs.getRequestHeaderJson();
 
+        if (Util.isNull(headerJson)) {
+            super.save(requestLogs);
+            return;
+        }
+
         String tokenValue = headerJson.getStr(BaseAuthUtil.getLowerCaseTokenName());
-        if (SUtil.isBlank(tokenValue)) {
+        if (SUtil.isBlank(tokenValue) || !verifyToken(tokenValue)) {
             super.save(requestLogs);
             return;
         }
@@ -89,4 +97,19 @@ public class SysRequestLogsServiceImpl extends BaseServiceImpl<SysRequestLogsDao
 
         super.save(requestLogs);
     }
+
+    /**
+     * 将JWT字符串拆分为3部分，无加密算法则最后一部分是""
+     *
+     * @param token JWT Token
+     * @return boolean
+     */
+    private static boolean verifyToken(String token) {
+        final List<String> tokens = StrUtil.split(token, CharUtil.DOT);
+        if (3 != tokens.size()) {
+            return false;
+        }
+        return true;
+    }
+
 }

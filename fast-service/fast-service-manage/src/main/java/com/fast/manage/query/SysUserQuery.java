@@ -1,13 +1,11 @@
 package com.fast.manage.query;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fast.core.common.domain.page.Query;
 import com.fast.core.common.validate.annotation.Display;
 import lombok.Data;
-import com.fast.core.common.domain.page.Query;
 import lombok.EqualsAndHashCode;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
+import lombok.experimental.Accessors;
 
 /**
 * 后台用户查询
@@ -16,6 +14,7 @@ import java.time.LocalDateTime;
 * @since 1.0.0 2023-06-20
 */
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 public class SysUserQuery extends Query {
     /**

@@ -9,7 +9,10 @@ import com.fast.core.common.util.Util;
 import com.fast.core.safe.constant.JwtConstant;
 import com.fast.core.safe.util.ManageUtil;
 import com.fast.manage.entity.SysUser;
+import com.fast.manage.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 管理端授权工具类
@@ -19,7 +22,15 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2023-06-06 16:45
  **/
 @Slf4j
+@Component
 public class AuthManageUtil extends BaseAuthUtil {
+
+    private static ISysUserService sysUserService;
+
+    @Autowired
+    public void init(ISysUserService sysUserService) {
+        AuthManageUtil.sysUserService = sysUserService;
+    }
 
     /**
      * 获取当前登录用户
@@ -28,11 +39,9 @@ public class AuthManageUtil extends BaseAuthUtil {
         // 尝试从上下文中获取
         SysUser user = ContextHolder.get(SysUser.class);
         if (Util.isNotNull(user)) {
-            return  user;
+            return user;
         }
-        // TODO 作者:黄嘉浩 封装到对应的服务中
-        // 从Redis中获取
-        user = fastRedis.getObject(getUserInfoKeyPath(getUserCode()), SysUser.class);
+        user = sysUserService.getUserByCode(getUserCode());
         if (Util.isNull(user)) {
             return null;
         }
@@ -47,7 +56,7 @@ public class AuthManageUtil extends BaseAuthUtil {
      * @return {@link User#id}
      **/
     public static String getUserId() {
-        return (String)ManageUtil.getExtra(JwtConstant.USER_ID);
+        return (String) ManageUtil.getExtra(JwtConstant.USER_ID);
     }
 
     /**

@@ -1,13 +1,9 @@
 package com.fast.manage;
 
+import com.fast.core.boot.autoconfigure.FastApplication;
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * @program: fast
@@ -15,12 +11,9 @@ import org.springframework.context.annotation.ComponentScan;
  * @author: @黄嘉浩
  * @create: 2023-05-12 09:46
  **/
+@EnableAsync
 @Slf4j
-@EnableCaching
-@ServletComponentScan
-@MapperScan(value = {"com.fast.*.dao"})
-@ComponentScan(basePackages = {"com.fast"})
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@FastApplication
 public class ManageApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManageApplication.class, args);

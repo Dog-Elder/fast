@@ -1,8 +1,6 @@
 package com.fast.common.config.secure;
 
-import com.fast.common.constant.cache.CacheConstant;
 import com.fast.core.common.context.ContextHolder;
-import com.fast.core.common.util.SUtil;
 import com.fast.core.log.model.RequestContext;
 import com.fast.core.safe.config.AccountManage;
 import com.fast.core.util.FastRedis;

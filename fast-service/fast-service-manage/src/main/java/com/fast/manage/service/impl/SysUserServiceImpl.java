@@ -14,6 +14,8 @@ import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
+import com.fast.core.util.FastRedis;
+import com.fast.manage.config.security.secure.AuthManageUtil;
 import com.fast.manage.dao.SysUserDao;
 import com.fast.manage.entity.SysUser;
 import com.fast.manage.query.SysUserQuery;
@@ -26,8 +28,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
-import static com.fast.common.constant.cache.CacheConstant.MANAGE;
 import static com.fast.common.constant.cache.CacheConstant.MANAGE_USER;
 
 /**
@@ -40,8 +42,11 @@ import static com.fast.common.constant.cache.CacheConstant.MANAGE_USER;
 @RequiredArgsConstructor
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> implements ISysUserService {
 
+    private final FastRedis fastRedis;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = true)
+
     public List<SysUserVO> list(SysUserQuery query) {
         List<SysUser> entityList = list(getWrapper(query));
         return PageUtils.copy(entityList, SysUserVO.class);
@@ -108,7 +113,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
     @Override
     @Cache(value = MANAGE_USER + "info@ttl=" + CacheConstant.EXRP_DAY)
     public SysUser getUserByCode(String code) {
-
-        return null;
+        SysUser user = fastRedis.getObject(AuthManageUtil.getUserInfoKeyPath(code), SysUser.class);
+        return Optional.ofNullable(user).orElse(getOne(getWrapper(new SysUserQuery().setCode(code))));
     }
 }
