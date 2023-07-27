@@ -2,6 +2,7 @@ package com.fast.core.util;
 
 import cn.hutool.json.JSONUtil;
 import com.fast.core.common.exception.ServiceException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -23,6 +24,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class FastRedis {
 
     private final StringRedisTemplate redisTemplate;
+    private final ObjectMapper objectMapper;
 
     /**
      * 检查指定的键是否存在于 Redis 中
@@ -62,7 +64,7 @@ public class FastRedis {
      */
     public <T> void setObject(String key, T value) {
         try {
-            redisTemplate.opsForValue().set(key, JSONUtil.toJsonPrettyStr(value));
+            redisTemplate.opsForValue().set(key, objectMapper.writeValueAsString(value));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,7 +84,7 @@ public class FastRedis {
             return null;
         }
         try {
-           return JSONUtil.toBean(jsonValue, clazz);
+            return objectMapper.readValue(jsonValue, clazz);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -140,7 +142,7 @@ public class FastRedis {
      */
     public <T> void setObject(String key, T value, long expire) {
         try {
-            redisTemplate.opsForValue().set(key, JSONUtil.toJsonPrettyStr(value), expire, SECONDS);
+            redisTemplate.opsForValue().set(key, objectMapper.writeValueAsString(value), expire, SECONDS);
         } catch (Exception e) {
             e.printStackTrace();
         }
