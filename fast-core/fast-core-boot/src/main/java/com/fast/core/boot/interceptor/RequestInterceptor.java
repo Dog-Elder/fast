@@ -11,6 +11,8 @@ import com.fast.core.common.util.spring.RequestUtils;
 import com.fast.core.log.model.RequestContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -28,12 +30,6 @@ import java.util.*;
 @Component
 public class RequestInterceptor implements HandlerInterceptor {
 
-    private final ObjectMapper objectMapper;
-
-    public RequestInterceptor(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
@@ -45,7 +41,7 @@ public class RequestInterceptor implements HandlerInterceptor {
         }
 
         // 组装请求模型
-        RequestContext context = ContextHolder.get(RequestContext.class);
+        RequestContext context = Optional.ofNullable(ContextHolder.get(RequestContext.class)).orElse(new RequestContext());
 
         //  打印请求路径和请求体
         StringBuilder beforeReqLog = new StringBuilder();

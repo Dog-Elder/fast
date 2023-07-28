@@ -140,7 +140,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         }
         List<CustomSetValueVO> vos = new ArrayList<>();
         setCodes.forEach(ele -> {
-                vos.addAll(qryCacheDataList(new SysSetValueQuery().setSetCode(ele)));
+            vos.addAll(qryCacheDataList(new SysSetValueQuery().setSetCode(ele)));
         });
         Map<String, List<CustomSetValueVO>> byCodeGrouping = CUtil.toGrouping(vos, CustomSetValueVO::getSetCode);
         JSONObject jsonObject = JSONUtil.createObj();
@@ -302,7 +302,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         Collection<String> different = CUtil.getDiffByHashSet(setCodeList, CUtil.getPropertyList(list, SysSet::getSetCode));
         if (CUtil.isNotEmpty(different)) {
             StringBuilder sb = new StringBuilder();
-            sb.append("对应的值集编码:").append(SUtil.join(different, ",")).append("不存在");
+            sb.append("对应的值集编码:").append(SUtil.join(",", different)).append("不存在");
             throw new ServiceException(sb.toString());
         }
     }

@@ -1,8 +1,8 @@
 package com.fast.core.boot.config;
 
 
-// import com.fast.core.boot.interceptor.RequestInterceptor;
 
+import com.fast.core.boot.filter.ApiAccessFilter;
 import com.fast.core.boot.interceptor.RequestInterceptor;
 import com.fast.core.boot.interceptor.servlet.DispatcherServlet;
 import com.fast.core.common.util.FileUploader;
@@ -10,6 +10,7 @@ import com.fast.core.common.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -50,7 +51,18 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(requestInterceptor).addPathPatterns("/**");;
+        registry.addInterceptor(requestInterceptor)
+                .addPathPatterns("/**");
+        // TODO url访问404会自动跳转到/error访问Spring自带的路径 现无法解决 特殊处理 requestInterceptor中有404方法
+//                .excludePathPatterns("/error"); // 排除 /error 路径
+    }
+
+    @Bean
+    public FilterRegistrationBean<ApiAccessFilter> apiAccessFilter() {
+        FilterRegistrationBean<ApiAccessFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new ApiAccessFilter());
+        registrationBean.addUrlPatterns("/*");
+        return registrationBean;
     }
 
 }

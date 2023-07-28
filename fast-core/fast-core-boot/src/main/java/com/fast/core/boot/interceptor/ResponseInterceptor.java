@@ -37,7 +37,7 @@ public class ResponseInterceptor implements ResponseBodyAdvice<Object> {
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
                                   Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         // 组装请求模型
-        RequestContext context = Optional.of(ContextHolder.get(RequestContext.class)).orElse(new RequestContext());
+        RequestContext context = Optional.ofNullable(ContextHolder.get(RequestContext.class)).orElse(new RequestContext());
 
         StringBuilder afterReqLog = new StringBuilder();
         List<Object> afterReqArgs = new ArrayList<>();

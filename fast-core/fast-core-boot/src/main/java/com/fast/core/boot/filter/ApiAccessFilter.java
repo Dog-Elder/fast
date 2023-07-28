@@ -6,16 +6,12 @@ import com.fast.core.common.util.WebUtil;
 import com.fast.core.log.model.RequestContext;
 import com.fast.core.log.publisher.ApiLogPublisher;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j
-@Component
-@WebFilter(filterName = "ApiAccessFilter", urlPatterns = "/*")
 public class ApiAccessFilter implements Filter {
 
     @Override
@@ -35,7 +31,7 @@ public class ApiAccessFilter implements Filter {
         //  将请求上下文绑定到当前线程
         ContextHolder.put(RequestContext.class, requestContext);
 
-        log.info("[Api Access] start. id: {}, uri: {}, method: {}, client: {}", requestId,
+        log.debug("[Api Access] start. id: {}, uri: {}, method: {}, client: {}", requestId,
                 request.getRequestURI(), request.getMethod(), WebUtil.getIP(request));
 
         try {
@@ -48,7 +44,7 @@ public class ApiAccessFilter implements Filter {
             ContextHolder.remove(RequestContext.class);
         }
 
-        log.info("[Api Access] end. id: {}, duration: {}ms", requestId,
+        log.debug("[Api Access] end. id: {}, duration: {}ms", requestId,
                 System.currentTimeMillis() - start);
 
     }
