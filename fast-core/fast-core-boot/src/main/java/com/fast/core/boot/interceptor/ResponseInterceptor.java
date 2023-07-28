@@ -1,6 +1,7 @@
 package com.fast.core.boot.interceptor;
 
 import com.fast.core.common.context.ContextHolder;
+import com.fast.core.common.util.SUtil;
 import com.fast.core.log.model.RequestContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,9 @@ public class ResponseInterceptor implements ResponseBodyAdvice<Object> {
                                   Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         // 组装请求模型
         RequestContext context = Optional.ofNullable(ContextHolder.get(RequestContext.class)).orElse(new RequestContext());
-
+        if (SUtil.isBlank(context.getRequestManner())) {
+            context.fillingRequest(request);
+        }
         StringBuilder afterReqLog = new StringBuilder();
         List<Object> afterReqArgs = new ArrayList<>();
         afterReqLog.append("\n");

@@ -33,12 +33,6 @@ public class RequestInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        // 因为自定义了拦截器 导致 需要自己处理 映射不到的问题
-        if (response.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
-            // 这里可以对404错误进行自定义处理
-            response404(response);
-            return false;
-        }
 
         // 组装请求模型
         RequestContext context = Optional.ofNullable(ContextHolder.get(RequestContext.class)).orElse(new RequestContext());
@@ -125,19 +119,6 @@ public class RequestInterceptor implements HandlerInterceptor {
         beforeReqLog.append("===================请求id:" + context.getRequestId() + " End=================== \n");
         log.info(beforeReqLog.toString(), beforeReqArgs.toArray());
         return true;
-    }
-
-    private static void response404(HttpServletResponse response) throws IOException {
-        // 将JSON对象转换成字符串
-        Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("error", "Resource not found");
-
-        // 设置响应的内容类型为application/json
-        response.setContentType("application/json");
-        response.setCharacterEncoding(Constants.UTF8);
-        // 将JSON字符串写入响应输出流
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(response.getWriter(), R.error(R.Type.NOT_FOUND));
     }
 
 }

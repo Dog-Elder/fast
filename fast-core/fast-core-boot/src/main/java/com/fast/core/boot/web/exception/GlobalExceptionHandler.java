@@ -7,23 +7,26 @@ import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.QueryTimeoutException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.security.auth.login.AccountExpiredException;
 import java.util.List;
 
 /**
- * 全局异常处理器
+ * 全局异常处理程序
  *
  * @author 黄嘉浩
+ * @date 2023/07/28
  */
 @Slf4j
 @RestControllerAdvice
@@ -32,18 +35,36 @@ public class GlobalExceptionHandler {
 
     /**
      * 文件上传异常
+     *
+     * @param e e
+     * @return {@link R}
      */
     @ExceptionHandler(MultipartException.class)
-    public R handleBusinessException(MaxUploadSizeExceededException e) {
+    public R fileUploadException(MaxUploadSizeExceededException e) {
         runLog(e);
         return R.error("上传文件失败");
     }
 
     /**
+     * 未找到处理程序异常
+     *
+     * @param e e
+     * @return {@link R}
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public R noHandlerFoundException(NoHandlerFoundException e) {
+        runLog(e);
+        return R.error((R.Type.NOT_FOUND));
+    }
+
+    /**
      * 认证异常
-     **/
+     *
+     * @param e e
+     * @return {@link R}
+     */
     @ExceptionHandler(NotLoginException.class)
-    public R handlerException(NotLoginException e) {
+    public R authenticationAnomaly(NotLoginException e) {
         runLog(e);
         String type = e.getType();
         switch (type) {
@@ -61,26 +82,35 @@ public class GlobalExceptionHandler {
 
     /**
      * 未授权异常
-     **/
+     *
+     * @param e e
+     * @return {@link R}
+     */
     @ExceptionHandler(NotPermissionException.class)
-    public R handlerException(NotPermissionException e) {
+    public R unauthorizedException(NotPermissionException e) {
         runLog(e);
         return R.error(R.Type.FORBIDDEN);
     }
 
     /**
-     * 业务异常
+     * 服务异常
+     *
+     * @param e e
+     * @return {@link R}
      */
     @ExceptionHandler(ServiceException.class)
-    public R businessException(ServiceException e) {
+    public R serviceException(ServiceException e) {
         runLog(e);
         return R.error(e.getMessage());
     }
 
 
     /**
-     * 账户过期
-     **/
+     * 处理账户过期异常
+     *
+     * @param e e
+     * @return {@link R}
+     */
     @ExceptionHandler(AccountExpiredException.class)
     public R handleAccountExpiredException(AccountExpiredException e) {
         runLog(e);
@@ -89,8 +119,11 @@ public class GlobalExceptionHandler {
 
 
     /**
-     * 查询超时
-     **/
+     * 查询超时异常
+     *
+     * @param e e
+     * @return {@link R}
+     */
     @ExceptionHandler(QueryTimeoutException.class)
     public R queryTimeoutException(QueryTimeoutException e) {
         runLog(e);
@@ -98,8 +131,12 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * http消息不可读例外
      * 错误的请求
-     **/
+     *
+     * @param e e
+     * @return {@link R}
+     */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public R httpMessageNotReadableException(HttpMessageNotReadableException e) {
         runLog(e);
@@ -107,14 +144,23 @@ public class GlobalExceptionHandler {
     }
 
 
+    /**
+     * 系统异常
+     *
+     * @param e e
+     * @return {@link R}
+     */
     @ExceptionHandler(Exception.class)
-    public R handleException(Exception e) {
+    public R systemAbnormality(Exception e) {
         runLog(e);
         return R.error();
     }
 
     /**
-     * 自定义验证异常
+     * 验证绑定异常
+     *
+     * @param bindException 绑定异常
+     * @return {@link R}
      */
     @ExceptionHandler(BindException.class)
     public R validatedBindException(BindException bindException) {
@@ -125,7 +171,11 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 有效异常处理程序
      * 入参校验异常
+     *
+     * @param mde 身边
+     * @return {@link R}
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public R validExceptionHandler(MethodArgumentNotValidException mde) {
@@ -136,6 +186,11 @@ public class GlobalExceptionHandler {
         return WebUtil.dealError(target, fieldError);
     }
 
+    /**
+     * 运行日志
+     *
+     * @param e e
+     */
     public void runLog(Exception e) {
         StackTraceElement stackTraceElement = e.getStackTrace()[0];
         String className = stackTraceElement.getClassName();

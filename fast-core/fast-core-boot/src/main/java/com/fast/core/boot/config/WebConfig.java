@@ -1,7 +1,6 @@
 package com.fast.core.boot.config;
 
 
-
 import com.fast.core.boot.filter.ApiAccessFilter;
 import com.fast.core.boot.interceptor.RequestInterceptor;
 import com.fast.core.boot.interceptor.servlet.DispatcherServlet;
@@ -43,20 +42,36 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:" + profilePath + File.separator);
     }
 
+    /**
+     * 调度器servlet
+     *
+     * @return {@link DispatcherServlet}
+     */
     @Bean
     @Qualifier(DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
-    public org.springframework.web.servlet.DispatcherServlet dispatcherServlet() {
-        return new DispatcherServlet();
+    public DispatcherServlet dispatcherServlet() {
+        DispatcherServlet servlet = new DispatcherServlet();
+        // 如果找不到处理此请求的处理程序，是否引发NoHandlerFoundException？
+        servlet.setThrowExceptionIfNoHandlerFound(true);
+        return servlet;
     }
 
+    /**
+     * 添加拦截器
+     *
+     * @param registry 注册表
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(requestInterceptor)
                 .addPathPatterns("/**");
-        // TODO url访问404会自动跳转到/error访问Spring自带的路径 现无法解决 特殊处理 requestInterceptor中有404方法
-//                .excludePathPatterns("/error"); // 排除 /error 路径
     }
 
+    /**
+     * api访问过滤器
+     *
+     * @return {@link FilterRegistrationBean}<{@link ApiAccessFilter}>
+     */
     @Bean
     public FilterRegistrationBean<ApiAccessFilter> apiAccessFilter() {
         FilterRegistrationBean<ApiAccessFilter> registrationBean = new FilterRegistrationBean<>();
