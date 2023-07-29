@@ -107,15 +107,6 @@ spring:
           config:
             multi-statement-allow: true
 
-  # 服务模块
-  devtools:
-    restart:
-      # 热部署开关
-      enabled: true
-      additional-paths: src/main/java #重启目录
-      exclude: templates/** #classpath目录下的templates文件夹内容修改不重启
-
-
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:
@@ -143,8 +134,9 @@ sa-token:
 # 日志配置
 logging:
   level:
-    com.fast.manage.dao: info
-    com.fast.common.dao: info
+    com.fast.manage.dao: debug
+    com.fast.common.dao: debug
     org.springframework: info
+    com.fast.core.boot.filter: debug
   file:
     name: manage.log

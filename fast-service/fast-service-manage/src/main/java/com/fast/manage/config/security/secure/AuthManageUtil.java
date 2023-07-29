@@ -92,7 +92,7 @@ public class AuthManageUtil extends BaseAuthUtil {
         if (SUtil.isBlank(userCode)) {
             return null;
         }
-        return SUtil.format(CacheConstant.MANAGE_USER + ManageUtil.TYPE + ":" + CacheConstant.User.INFO, userCode);
+        return SUtil.format(CacheConstant.User.INFO, ManageUtil.TYPE, userCode);
     }
 
 }

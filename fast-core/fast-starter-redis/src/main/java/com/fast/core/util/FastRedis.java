@@ -84,6 +84,9 @@ public class FastRedis {
             return null;
         }
         try {
+            if (JSONUtil.isTypeJSONObject(jsonValue)) {
+                return JSONUtil.toBean(jsonValue, clazz);
+            }
             return objectMapper.readValue(jsonValue, clazz);
         } catch (Exception e) {
             e.printStackTrace();

@@ -4,7 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @summary 自定义 DispatcherServlet 来分派 XinHttpServletRequestWrapper
+ * 自定义 DispatcherServlet 来分派 XinHttpServletRequestWrapper
+ *
+ * @author 黄嘉浩
+ * @date 2023/07/28
  */
 public class DispatcherServlet extends org.springframework.web.servlet.DispatcherServlet {
 

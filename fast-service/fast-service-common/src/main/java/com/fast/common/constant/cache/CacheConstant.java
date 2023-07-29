@@ -48,7 +48,7 @@ public class CacheConstant {
      * 用户
      **/
     public interface User {
-        String INFO = "info::{}";
+        String INFO = MANAGE_USER + "{}:info::{}";
     }
 
     /**

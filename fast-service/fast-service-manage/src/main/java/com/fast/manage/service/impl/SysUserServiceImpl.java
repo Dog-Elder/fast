@@ -111,9 +111,15 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
     }
 
     @Override
-    @Cache(value = MANAGE_USER + "info@ttl=" + CacheConstant.EXRP_DAY)
     public SysUser getUserByCode(String code) {
         SysUser user = fastRedis.getObject(AuthManageUtil.getUserInfoKeyPath(code), SysUser.class);
-        return Optional.ofNullable(user).orElse(getOne(getWrapper(new SysUserQuery().setCode(code))));
+        if (Util.isNotNull(user)) {
+            return user;
+        }
+        // 缓存不存在则查库
+        user = getOne(getWrapper(new SysUserQuery().setCode(code)));
+        // 更新缓存
+        fastRedis.setObject(SUtil.format(CacheConstant.User.INFO, AuthManageUtil.getLoginAccountType(), user.getCode()), user, CacheConstant.EXRP_DAY);
+        return user;
     }
 }
