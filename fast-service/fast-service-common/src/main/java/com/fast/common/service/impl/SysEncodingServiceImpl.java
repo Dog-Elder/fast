@@ -258,6 +258,9 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
             List<SysEncodingSetRule> list = encodingSetRuleService.list(new LambdaQueryWrapper<SysEncodingSetRule>()
                     .eq(SUtil.isNotEmpty(req.getSysEncodingCode()), SysEncodingSetRule::getSysEncodingCode, req.getSysEncodingCode())
                     .eq(SUtil.isNotEmpty(req.getSysEncodingSetCode()), SysEncodingSetRule::getSysEncodingSetCode, req.getSysEncodingSetCode()));
+            if (CUtil.isEmpty(list)) {
+                throw new ServiceException("编码段不存在,请联系管理员!");
+            }
             list.forEach(ele -> {
                 // 针对缓存丢失清空 需要把原有的缓存序列更新为最新值 如果没有使用 则还用起始值
                 ele.setSysEncodingSetInitialValue(Optional.ofNullable(ele.getSysEncodingSetNowValue()).orElse(ele.getSysEncodingSetInitialValue()));
