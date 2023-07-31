@@ -132,4 +132,7 @@ public class SysRequestLogs extends BaseEntity {
     private String createByType;
 
 
+    @Display("状态码")
+    @TableField("response_code")
+    private String responseCode;
 }

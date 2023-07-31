@@ -4,6 +4,7 @@ import cn.hutool.core.util.CharUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.fast.common.config.secure.BaseAuthUtil;
@@ -78,7 +79,7 @@ public class SysRequestLogsServiceImpl extends BaseServiceImpl<SysRequestLogsDao
         }
 
         String tokenValue = headerJson.getStr(BaseAuthUtil.getLowerCaseTokenName());
-        if (SUtil.isBlank(tokenValue) || !verifyToken(tokenValue)) {
+        if (SUtil.isBlank(tokenValue) || !SysRequestLogsServiceImpl.verifyToken(tokenValue)) {
             super.save(requestLogs);
             return;
         }
@@ -94,6 +95,10 @@ public class SysRequestLogsServiceImpl extends BaseServiceImpl<SysRequestLogsDao
         String loginAccountType = BaseAuthUtil.getLoginAccountType(tokenValue);
         requestLogs.setCreateBy(loginId);
         requestLogs.setCreateByType(loginAccountType);
+        if (SUtil.isNotBlank(apiLogEvent.getResponderBody())) {
+            String code = JSONUtil.parseObj(apiLogEvent.getResponderBody()).getStr("code");
+            requestLogs.setResponseCode(code);
+        }
 
         super.save(requestLogs);
     }
