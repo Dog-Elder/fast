@@ -67,7 +67,7 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
             qry = qry.filter(ele -> SUtil.filterContains(ele.getSysEncodingSetRuleType(), query.getSysEncodingSetRuleType()));
             return PageUtils.createPage(qry, SysEncodingSetRuleVO.class);
         }
-        String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, query.getSysEncodingSetCode(), query.getSysEncodingSetCode());
+        String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, query.getSysEncodingCode(), query.getSysEncodingSetCode());
         // 存放Redis
         taskExecutor.execute(() -> {
             List<SysEncodingSetRule> list = list(new LambdaQueryWrapper<SysEncodingSetRule>()
@@ -143,7 +143,7 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
             throw new ServiceException("编码集版本不一致请重新提交");
         }
         // 存放Redis
-        String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, entity.getSysEncodingSetCode(), entity.getSysEncodingSetCode());
+        String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, entity.getSysEncodingCode(), entity.getSysEncodingSetCode());
         JSONObject ruleJsonObject = JSONUtil.parseObj(entity);
         redis.setHash(ruleIn, entity.getId(), ruleJsonObject.toString());
     }
@@ -151,7 +151,7 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
     // 从缓存中获取
     private List<SysEncodingSetRule> getCacheList(SysEncodingSetRule req) {
         // 从Redis中取
-        String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, req.getSysEncodingSetCode(), req.getSysEncodingSetCode());
+        String ruleIn = SUtil.format(CacheConstant.SysSetRule.CODE_RULE, req.getSysEncodingCode(), req.getSysEncodingSetCode());
         List<String> hvals = redis.getAllHashValues(ruleIn);
         return CUtil.jsonListStrToList(hvals, SysEncodingSetRule.class);
     }
@@ -160,7 +160,7 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
      * 查询编码集是否已经使用
      * 返回对象主要是防止并发,利用乐观锁重新更新一次
      **/
-    public SysEncodingSet checkToUse(SysEncodingSetRule sysEncodingSetRule) {
+    private SysEncodingSet checkToUse(SysEncodingSetRule sysEncodingSetRule) {
         // 查询编码集是否已经使用
         SysEncodingSet sysEncodingSet = encodingSetService.getOne(new QueryWrapper<SysEncodingSet>().lambda()
                 .eq(SysEncodingSet::getSysEncodingCode, sysEncodingSetRule.getSysEncodingCode())

@@ -13,7 +13,10 @@ import com.fast.common.service.ISysSetValueService;
 import com.fast.common.vo.SysSetVO;
 import com.fast.core.common.constant.Constants;
 import com.fast.core.common.exception.ServiceException;
-import com.fast.core.common.util.*;
+import com.fast.core.common.util.CUtil;
+import com.fast.core.common.util.PageUtils;
+import com.fast.core.common.util.SUtil;
+import com.fast.core.common.util.Util;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.core.util.FastRedis;
@@ -46,6 +49,12 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
     private ISysSetValueService sysSetValueService;
     private final FastRedis redis;
 
+    /**
+     * 列表
+     *
+     * @param query 查询
+     * @return {@link List}<{@link SysSetVO}>
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<SysSetVO> list(SysSetQuery query) {
@@ -53,6 +62,12 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
         return PageUtils.copy(entityList, SysSetVO.class);
     }
 
+    /**
+     * 得到包装
+     *
+     * @param query 查询
+     * @return {@link LambdaQueryWrapper}<{@link SysSet}>
+     */
     private LambdaQueryWrapper<SysSet> getWrapper(SysSetQuery query) {
         LambdaQueryWrapper<SysSet> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(Util.isNotNull(query.getId()) && SUtil.isNotEmpty(query.getId()), SysSet::getId, query.getId());
@@ -64,6 +79,12 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
         return wrapper;
     }
 
+    /**
+     * 保存
+     *
+     * @param vo 签证官
+     * @return {@link List}<{@link SysSetVO}>
+     */
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public List<SysSetVO> save(List<SysSetVO> vo) {
@@ -94,6 +115,12 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
         return BUtil.copyList(entityList, SysSetVO.class);
     }
 
+    /**
+     * 更新
+     *
+     * @param vo 签证官
+     * @return boolean
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean update(SysSetVO vo) {
@@ -112,11 +139,19 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
         });
         boolean outcome = updateById(entity);
         // 关闭值集需要删除值集状态缓存
-        if (outcome) setState(entity.getSetCode(), entity.getSetState());
+        if (outcome) {
+            setState(entity.getSetCode(), entity.getSetState());
+        }
         return outcome;
     }
 
 
+    /**
+     * 删除
+     *
+     * @param idList id列表
+     * @return boolean
+     */
     @Transactional
     @Override
     public boolean delete(List<String> idList) {
@@ -146,6 +181,12 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
         return removeSysSets;
     }
 
+    /**
+     * 是否启用
+     *
+     * @param setCode 设置代码
+     * @return {@link Boolean}
+     */
     @Override
     public Boolean isEnableBySetCode(String setCode) {
         Boolean value = redis.getObject(SUtil.format(CacheConstant.SetValue.SET_STATE, setCode), Boolean.class);
@@ -162,6 +203,7 @@ public class SysSetServiceImpl extends BaseServiceImpl<SysSetDao, SysSet> implem
     }
 
     /**
+     * 设置状态
      * 更新缓存 值集状态
      *
      * @param setCode:  值集编码

@@ -199,6 +199,12 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         return vos;
     }
 
+    /**
+     * 查询缓存数据列表
+     *
+     * @param req 要求事情
+     * @return {@link List}<{@link CustomSetValueVO}>
+     */
     @Override
     public List<CustomSetValueVO> qryCacheDataList(SysSetValueQuery req) {
         // 查询值集是否已经被删除或关闭
@@ -258,8 +264,10 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
                 .filter(ele -> valueKeys.contains(ele.getSetValueKey()))
                 .map(CustomSetValueVO::getSetValueValue)
                 .collect(Collectors.toList());
-        if (CUtil.isEmpty(values)) return null;
-        return String.join(",", values);
+        if (CUtil.isEmpty(values)) {
+            return null;
+        }
+        return SUtil.join(",", values);
     }
 
 
@@ -274,7 +282,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         Set<String> fields = new HashSet<>(setCodes);
         // 查询所有的
         getRelevanceSetCode(fields, setCodes);
-        log.info("清除值集值===要删除的key(SysSet.setCode):" + fields);
+        SysSetValueServiceImpl.log.info("清除值集值===要删除的key(SysSet.setCode):" + fields);
         fields.forEach(ele -> {
             redis.deleteHash(CacheConstant.SetValue.SET_VALUE, ele);
         });

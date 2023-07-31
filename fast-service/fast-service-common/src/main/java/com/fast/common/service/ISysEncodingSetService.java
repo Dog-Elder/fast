@@ -24,4 +24,6 @@ public interface ISysEncodingSetService extends BaseService<SysEncodingSet> {
     boolean delete(List<String> idList);
 
     void refreshCache(String id);
+
+    SysEncodingSet get(SysEncodingSetQuery query);
 }

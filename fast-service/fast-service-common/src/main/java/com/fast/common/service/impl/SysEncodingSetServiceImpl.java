@@ -178,4 +178,15 @@ public class SysEncodingSetServiceImpl extends ServiceImpl<SysEncodingSetDao, Sy
         Util.isNull(entity, "数据不存在!");
         updateState(entity);
     }
+
+    /**
+     * 得到
+     *
+     * @param query 查询
+     * @return {@link SysEncodingSet}
+     */
+    @Override
+    public SysEncodingSet get(SysEncodingSetQuery query) {
+        return getOne(getWrapper(query));
+    }
 }

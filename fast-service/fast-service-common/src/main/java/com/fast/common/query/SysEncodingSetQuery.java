@@ -2,14 +2,12 @@ package com.fast.common.query;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fast.common.entity.verification.Qry;
-import com.fast.common.entity.verification.Save;
-import com.fast.common.entity.verification.Update;
 import com.fast.core.common.domain.page.Query;
 import com.fast.core.common.util.Com;
 import com.fast.core.common.validate.annotation.Display;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 
@@ -21,6 +19,7 @@ import javax.validation.constraints.NotBlank;
 * @since 1.0.0 2023-06-12
 */
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 public class SysEncodingSetQuery extends Query {
     /**
