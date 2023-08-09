@@ -49,13 +49,6 @@ public class SysUserVO extends Vo implements Serializable {
     private String username;
 
     /**
-     * 密码
-     */
-    @Display("密码")
-    @NotBlank(message = Com.Require, groups = {Save.class})
-    private String password;
-
-    /**
      * 昵称
      */
     @Display("昵称")

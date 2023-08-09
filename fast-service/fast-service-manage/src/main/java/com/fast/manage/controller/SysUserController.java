@@ -3,7 +3,7 @@ package com.fast.manage.controller;
 import com.fast.common.controller.WebBaseController;
 import com.fast.common.entity.verification.Qry;
 import com.fast.common.entity.verification.Save;
-import com.fast.common.entity.verification.Update;
+import com.fast.common.vo.UserInfoVO;
 import com.fast.core.common.annotation.lov.AutoLov;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.domain.ValidList;
@@ -65,21 +65,26 @@ public class SysUserController extends WebBaseController {
     }
 
     /**
-     * 修改
+     * 修改密码
+     *
+     * @param vo 用户信息
+     * @return {@link R}
      */
-    @PutMapping
-    @ManageCheckPermission(value = "manage.user.update")
-    public R update(@RequestBody @Validated(Update.class) SysUserVO vo) {
-        return R.toVersion(sysUserService.update(vo));
+    @PostMapping("/update-password")
+    @ManageCheckPermission(value = "manage.user.updatePassword")
+    public R updatePassword(@RequestBody UserInfoVO vo) {
+        return R.toVersion(sysUserService.updateThePassword(vo));
     }
 
     /**
-     * 删除
+     * 更新用户信息
+     *
+     * @param vo 签证官
+     * @return {@link R}
      */
-    @DeleteMapping
-    @ManageCheckPermission(value = "manage.user.delete")
-    public R delete(@RequestBody List<String> idList) {
-        sysUserService.delete(idList);
-        return R.success();
+    @PostMapping("/update-info")
+    @ManageCheckPermission(value = "manage.user.updateInfo")
+    public R updateInfo(@RequestBody UserInfoVO vo) {
+        return R.toVersion(sysUserService.updateUserInfo(vo));
     }
 }

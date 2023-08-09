@@ -20,7 +20,6 @@ import java.util.stream.Stream;
 /**
  * 集合工具类
  */
-@SuppressWarnings("unchecked")
 public class CUtil {
     /**
      * 判断一个Collection是否为空， 包含List，Set，Queue
@@ -93,7 +92,7 @@ public class CUtil {
      * @return 随机选择的list
      */
     public static <T> List<T> random(List<T> list, int count) {
-        List<T> listRandom = new ArrayList<T>();
+        List<T> listRandom = new ArrayList<>();
         // 随机取出n条不重复的数据,这里我设置随机取 count 条数据
         for (int i = count; i >= 1; i--) {
             Random random = new Random();
@@ -151,7 +150,7 @@ public class CUtil {
 
 
     public static <T> Set<T> setOf(T... elements) {
-        return new HashSet<T>(ListUtil.of(elements));
+        return new HashSet<>(ListUtil.of(elements));
     }
 
 
@@ -175,7 +174,7 @@ public class CUtil {
      * @Date: 2022/4/20 23:14
      * @return: java.util.Map<R, T> <R属性值,T对象>
      **/
-    public static <T, R> Map<R, T> toMap(Stream<T> stream, Function<? super T, ? extends R> mapper) {
+    private static <T, R> Map<R, T> toMap(Stream<T> stream, Function<? super T, ? extends R> mapper) {
         return stream.collect(Collectors.toMap(mapper, Function.identity(), (k1, k2) -> k1));
     }
 
@@ -243,7 +242,7 @@ public class CUtil {
      * @Date: 2022/4/21 23:18
      * @return: java.util.List<T>
      **/
-    public static <T, U extends Comparable<? super U>> List<T> sort(Stream<T> stream, Function<? super T, ? extends U> mapper, boolean desc) {
+    private static <T, U extends Comparable<? super U>> List<T> sort(Stream<T> stream, Function<? super T, ? extends U> mapper, boolean desc) {
         if (desc) {
             return stream.sorted(Comparator.comparing(mapper).reversed()).collect(Collectors.toList());
         }
@@ -271,7 +270,7 @@ public class CUtil {
      * @param orderDirection 排序方向 asc升序，desc降序
      * @param orderField     排序字段
      **/
-    public static <T> List<T> sort(List<T> data, String orderField, String orderDirection) {
+    static <T> List<T> sort(List<T> data, String orderField, String orderDirection) {
 
         if (data.size() == 0 || StringUtils.isBlank(orderField) || StringUtils.isBlank(orderDirection)) {
             return data;
@@ -283,7 +282,7 @@ public class CUtil {
         }
 
         Class<?> clazz = data.get(0).getClass();
-        final Method getter = ReflectUtil.getMethod(clazz, "get"+ SUtil.upperCase(orderField));
+        final Method getter = ReflectUtil.getMethod(clazz, "get" + SUtil.capitalized(orderField));
         if (getter == null) {
             return data;
         }

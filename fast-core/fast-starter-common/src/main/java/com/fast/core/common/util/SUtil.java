@@ -1,8 +1,9 @@
 package com.fast.core.common.util;
 
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrFormatter;
-import cn.hutool.core.util.StrUtil;
 import com.fast.core.common.exception.ServiceException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -15,7 +16,7 @@ import static com.fast.core.common.constant.Constants._Y;
  *
  * @author Dog_Elder
  */
-public class SUtil extends StrUtil {
+public class SUtil extends StringUtils {
     /**
      * 空字符串
      */
@@ -44,7 +45,7 @@ public class SUtil extends StrUtil {
      * @return true：为空 false：非空
      */
     public static boolean isEmpty(String str) {
-        return com.fast.core.common.util.Util.isNull(str) || NULLSTR.equals(str.trim());
+        return com.fast.core.common.util.Util.isNull(str) || SUtil.NULLSTR.equals(str.trim());
     }
 
     /**
@@ -54,7 +55,7 @@ public class SUtil extends StrUtil {
      * @param msg String 返回的消息
      */
     public static void isEmpty(String str,String msg) {
-        if (com.fast.core.common.util.Util.isNull(str) || NULLSTR.equals(str.trim())) {
+        if (com.fast.core.common.util.Util.isNull(str) || SUtil.NULLSTR.equals(str.trim())) {
             throw new ServiceException(msg);
         }
     }
@@ -66,7 +67,7 @@ public class SUtil extends StrUtil {
      * @return true：非空串 false：空串
      */
     public static boolean isNotEmpty(String str) {
-        return !isEmpty(str);
+        return !SUtil.isEmpty(str);
     }
 
 
@@ -96,7 +97,7 @@ public class SUtil extends StrUtil {
      */
     public static String substring(final String str, int start) {
         if (str == null) {
-            return NULLSTR;
+            return SUtil.NULLSTR;
         }
 
         if (start < 0) {
@@ -107,7 +108,7 @@ public class SUtil extends StrUtil {
             start = 0;
         }
         if (start > str.length()) {
-            return NULLSTR;
+            return SUtil.NULLSTR;
         }
 
         return str.substring(start);
@@ -123,7 +124,7 @@ public class SUtil extends StrUtil {
      */
     public static String substring(final String str, int start, int end) {
         if (str == null) {
-            return NULLSTR;
+            return SUtil.NULLSTR;
         }
 
         if (end < 0) {
@@ -138,7 +139,7 @@ public class SUtil extends StrUtil {
         }
 
         if (start > end) {
-            return NULLSTR;
+            return SUtil.NULLSTR;
         }
 
         if (start < 0) {
@@ -165,7 +166,7 @@ public class SUtil extends StrUtil {
      * @return 格式化后的文本
      */
     public static String format(String template, Object... params) {
-        if (CUtil.isEmpty(params) || isEmpty(template)) {
+        if (CUtil.isEmpty(params) || SUtil.isEmpty(template)) {
             return template;
         }
         return StrFormatter.format(template, params);
@@ -179,18 +180,18 @@ public class SUtil extends StrUtil {
      * @return set集合
      */
     public static final Set<String> strToSet(String str, String sep) {
-        return new HashSet<>(strToList(str, sep, true, true));
+        return new HashSet<>(SUtil.strToList(str, sep, true, true));
     }
 
     /**
-     * 字符串转set
+     * 字符串转List
      *
      * @param str 字符串
      * @param sep 分隔符
      * @return set集合
      */
     public static final List<String> strToList(String str, String sep) {
-        return strToList(str, sep, true, true);
+        return SUtil.strToList(str, sep, true, true);
     }
 
     /**
@@ -202,8 +203,8 @@ public class SUtil extends StrUtil {
      * @param trim        去掉首尾空白
      * @return list集合
      */
-    public static final List<String> strToList(String str, String sep, boolean filterBlank, boolean trim) {
-        List<String> list = new ArrayList<String>();
+    private static final List<String> strToList(String str, String sep, boolean filterBlank, boolean trim) {
+        List<String> list = new ArrayList<>();
         if (SUtil.isEmpty(str)) {
             return list;
         }
@@ -255,9 +256,9 @@ public class SUtil extends StrUtil {
             }
 
             if (preCharIsUpperCase && curreCharIsUpperCase && !nexteCharIsUpperCase) {
-                sb.append(SEPARATOR);
+                sb.append(SUtil.SEPARATOR);
             } else if ((i != 0 && !preCharIsUpperCase) && curreCharIsUpperCase) {
-                sb.append(SEPARATOR);
+                sb.append(SUtil.SEPARATOR);
             }
             sb.append(Character.toLowerCase(c));
         }
@@ -272,10 +273,10 @@ public class SUtil extends StrUtil {
      * @param strs 字符串组
      * @return 包含返回true
      */
-    public static boolean inStringIgnoreCase(String str, String... strs) {
+    static boolean inStringIgnoreCase(String str, String... strs) {
         if (str != null && strs != null) {
             for (String s : strs) {
-                if (str.equalsIgnoreCase(trim(s))) {
+                if (str.equalsIgnoreCase(SUtil.trim(s))) {
                     return true;
                 }
             }
@@ -326,7 +327,7 @@ public class SUtil extends StrUtil {
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
 
-            if (c == SEPARATOR) {
+            if (c == SUtil.SEPARATOR) {
                 upperCase = true;
             } else if (upperCase) {
                 sb.append(Character.toUpperCase(c));
@@ -338,7 +339,6 @@ public class SUtil extends StrUtil {
         return sb.toString();
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> T cast(Object obj) {
         return (T) obj;
     }
@@ -373,13 +373,13 @@ public class SUtil extends StrUtil {
      * 3、用原生containsIgnoreCase判断
      */
     public static boolean contains(String target, String search) {
-        if (isBlank(target)) {
-            return isBlank(search);
+        if (CharSequenceUtil.isBlank(target)) {
+            return CharSequenceUtil.isBlank(search);
         } else {
-            if (isBlank(search)) {
+            if (CharSequenceUtil.isBlank(search)) {
                 return true;
             }
-            return containsIgnoreCase(target, search);
+            return CharSequenceUtil.containsIgnoreCase(target, search);
         }
     }
 
@@ -389,10 +389,10 @@ public class SUtil extends StrUtil {
      * 二.判断target是否包含search  忽略大小写
      */
     public static boolean filterContains(String target, String search) {
-        if (isBlank(search)) {
+        if (CharSequenceUtil.isBlank(search)) {
             return true;
         }
-        return contains(target, search);
+        return SUtil.contains(target, search);
     }
 
     /**
@@ -412,7 +412,7 @@ public class SUtil extends StrUtil {
     /**
      * 首字母大写
      **/
-    public static String upperCase(String str) {
+    static String capitalized(String str) {
         char[] ch = str.toCharArray();
         if (ch[0] >= 'a' && ch[0] <= 'z') {
             ch[0] = (char) (ch[0] - 32);

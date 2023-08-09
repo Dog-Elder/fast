@@ -91,7 +91,10 @@ public class SysRequestLogsServiceImpl extends BaseServiceImpl<SysRequestLogsDao
             return;
         }
 
-        String loginId = loginIdByToken.toString();
+        String loginId = null;
+        if (loginIdByToken != null) {
+            loginId = loginIdByToken.toString();
+        }
         String loginAccountType = BaseAuthUtil.getLoginAccountType(tokenValue);
         requestLogs.setCreateBy(loginId);
         requestLogs.setCreateByType(loginAccountType);

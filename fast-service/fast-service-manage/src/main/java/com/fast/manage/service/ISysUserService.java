@@ -1,6 +1,6 @@
 package com.fast.manage.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.fast.common.vo.UserInfoVO;
 import com.fast.core.mybatis.service.BaseService;
 import com.fast.manage.entity.SysUser;
 import com.fast.manage.query.SysUserQuery;
@@ -21,13 +21,36 @@ public interface ISysUserService extends BaseService<SysUser> {
 
     boolean update(SysUserVO vo);
 
-    boolean delete(List<String> idList);
-
     /**
-     * 得到用户代码
+     * 更加用户编码获取用户
      *
      * @param code 代码
      * @return {@link SysUser}
      */
     SysUser getUserByCode(String code);
+
+    /**
+     * 初始化密码
+     *
+     * @param vo
+     * @return boolean
+     */
+    boolean initializePassword(UserInfoVO vo);
+
+    /**
+     * 更新密码
+     *
+     * @param vo
+     * @return boolean
+     */
+    boolean updateThePassword(UserInfoVO vo);
+
+    /**
+     * 更新用户信息
+     *
+     * @param vo 签证官
+     * @return boolean
+     */
+    boolean updateUserInfo(UserInfoVO vo);
+
 }

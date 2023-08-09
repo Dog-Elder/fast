@@ -1,17 +1,12 @@
 package com.fast.manage.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.fast.common.constant.cache.CacheConstant;
 import com.fast.common.entity.base.User;
-import com.fast.core.annotation.Cache;
-import com.fast.core.common.constant.Constants;
+import com.fast.common.vo.UserInfoVO;
 import com.fast.core.common.exception.ServiceException;
-import com.fast.core.common.util.CUtil;
-import com.fast.core.common.util.PageUtils;
-import com.fast.core.common.util.SUtil;
-import com.fast.core.common.util.Util;
+import com.fast.core.common.util.*;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.core.util.FastRedis;
@@ -28,9 +23,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-
-import static com.fast.common.constant.cache.CacheConstant.MANAGE_USER;
 
 /**
  * 后台用户
@@ -97,20 +89,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean delete(List<String> idList) {
-        // 判断是否删除系统管理员
-        LambdaQueryWrapper<SysUser> lambdaQuery = Wrappers.<SysUser>lambdaQuery()
-                .in(SysUser::getId, idList)
-                .eq(SysUser::getAdministrator, Constants.Y);
-        SysUser adminUser = getOne(lambdaQuery);
-        if (ObjectUtils.isNotEmpty(adminUser)) {
-            throw new ServiceException("不能删除系统管理员");
-        }
-        return removeByIds(idList);
-    }
-
-    @Override
     public SysUser getUserByCode(String code) {
         SysUser user = fastRedis.getObject(AuthManageUtil.getUserInfoKeyPath(code), SysUser.class);
         if (Util.isNotNull(user)) {
@@ -121,5 +99,44 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
         // 更新缓存
         fastRedis.setObject(SUtil.format(CacheConstant.User.INFO, AuthManageUtil.getLoginAccountType(), user.getCode()), user, CacheConstant.EXRP_DAY);
         return user;
+    }
+
+    /**
+     * 初始化密码
+     **/
+    @Override
+    public boolean initializePassword(UserInfoVO vo) {
+        //TODO 作者:黄嘉浩 初始化密码
+        return false;
+    }
+
+    /**
+     * 更新密码
+     *
+     * @param vo 签证官
+     * @return boolean
+     */
+    @Override
+    public boolean updateThePassword(UserInfoVO vo) {
+        String oldPassword = vo.getPassword();
+        SysUser user = getById(vo.getId());
+        // 校验密码
+        if (!Md5Util.verifyPassword(oldPassword, user.getPassword())) {
+            throw new ServiceException("原密码错误!");
+        }
+        updateUserInfo(vo);
+        return false;
+    }
+
+    /**
+     * 更新用户信息
+     *
+     * @param vo 签证官
+     * @return boolean
+     */
+    @Override
+    public boolean updateUserInfo(UserInfoVO vo) {
+        SysUser user = BUtil.copy(vo, SysUser.class);
+        return updateById(user);
     }
 }
