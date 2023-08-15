@@ -1,5 +1,6 @@
 package com.fast.core.annotation;
 
+import com.fast.core.cache.MethodKeyGenerator;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.annotation.AliasFor;
 
@@ -27,9 +28,16 @@ public @interface Cache {
 
     String key() default "";
 
-    String keyGenerator() default "methodKeyGenerator";
+    /**
+     * 可选方法key生成器
+     * 最好是高频不重要的数据可采用这种方式,因为生成的逻辑稍微复杂导致不好删除
+     * 一定要增加过期时间
+     *
+     * @see MethodKeyGenerator
+     **/
+    String keyGenerator() default "";
 
-    String cacheManager() default "";
+    String cacheManager() default "cacheManager";
 
     String cacheResolver() default "";
 

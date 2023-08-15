@@ -17,6 +17,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableCaching
 public class CacheConfig extends CachingConfigurerSupport {
 
+    /**
+     * Redis缓存配置
+     *
+     * @return {@link RedisCacheConfiguration}
+     */
     @Bean
     public RedisCacheConfiguration redisCacheConfiguration() {
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
@@ -29,12 +34,18 @@ public class CacheConfig extends CachingConfigurerSupport {
         return cacheConfiguration;
     }
 
+    /**
+     * 缓存管理器
+     *
+     * @param connectionFactory  连接工厂
+     * @param cacheConfiguration 缓存配置 {@link CacheConfig#redisCacheConfiguration()}
+     * @return {@link CacheManager}
+     */
     @Bean
-    public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+    public CacheManager cacheManager(RedisConnectionFactory connectionFactory, RedisCacheConfiguration cacheConfiguration) {
         RedisCacheWriter cacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory);
-        RedisCacheConfiguration defaultCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig();
-        return new com.fast.core.cache.CacheManager(cacheWriter, defaultCacheConfiguration);
+        com.fast.core.cache.CacheManager cacheManager = new com.fast.core.cache.CacheManager(cacheWriter, cacheConfiguration);
+        return cacheManager;
     }
 
-    //  其他配置...
 }
