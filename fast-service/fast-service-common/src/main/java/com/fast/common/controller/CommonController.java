@@ -4,6 +4,7 @@ import cn.hutool.json.JSONObject;
 import com.fast.common.dto.SysCreateCode;
 import com.fast.common.entity.verification.Qry;
 import com.fast.common.query.SysSetValueQuery;
+import com.fast.common.service.ISysConfigService;
 import com.fast.common.service.ISysEncodingService;
 import com.fast.common.service.ISysSetValueService;
 import com.fast.common.vo.CustomSetValueVO;
@@ -27,6 +28,7 @@ import java.util.Map;
 public class CommonController extends WebBaseController{
     private final ISysSetValueService sysSetValueService;
     private final ISysEncodingService sysEncodingService;
+    private final ISysConfigService sysConfigService;
 
     /**
      * 定制查询多值集值列表(不分页)
@@ -64,9 +66,20 @@ public class CommonController extends WebBaseController{
      * @return: java.lang.String 编码
      **/
     @GetMapping("/get-code")
-    @ResponseBody
     public R<String> createCode(@Validated(Qry.class) SysCreateCode req) {
         String code = sysEncodingService.createCode(req);
         return R.success(code);
+    }
+
+    /**
+     * 根据Key获得系统配置值
+     *
+     * @param paramKey 关键参数
+     * @return {@link R}<{@link String}>
+     * @folder 公共服务/系统参数
+     */
+    @GetMapping("/config/paramValue/{paramKey}")
+    public R<String> getParamValueByParamKey(@PathVariable("paramKey") String paramKey) {
+        return R.success(sysConfigService.getParamValueByParamKey(paramKey));
     }
 }
