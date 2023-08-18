@@ -2,10 +2,14 @@ package com.fast.manage.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.fast.common.constant.cache.CacheConstant;
+import com.fast.core.annotation.Cache;
+import com.fast.core.common.util.CUtil;
 import com.fast.core.common.util.PageUtils;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
 import com.fast.core.common.util.bean.BUtil;
+import com.fast.core.common.util.tree.forest.ForestMerger;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.manage.dao.SysMenuDao;
 import com.fast.manage.entity.SysMenu;
@@ -13,6 +17,7 @@ import com.fast.manage.query.SysMenuQuery;
 import com.fast.manage.service.ISysMenuService;
 import com.fast.manage.vo.SysMenuVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -53,6 +58,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenu> imp
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = CacheConstant.SysMenu.ALL, allEntries = true)
     public List<SysMenuVO> save(List<SysMenuVO> vo) {
         List<SysMenu> entityList = BUtil.copyList(vo,SysMenu.class);
         saveBatch(entityList);
@@ -61,15 +67,29 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenu> imp
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = CacheConstant.SysMenu.ALL, allEntries = true)
     public boolean update(SysMenuVO vo) {
-        SysMenu entity = BUtil.copy(vo,SysMenu.class);
+        SysMenu entity = BUtil.copy(vo, SysMenu.class);
         return updateById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = CacheConstant.SysMenu.ALL, allEntries = true)
     public boolean delete(List<String> idList) {
         return removeByIds(idList);
+    }
+
+    @Cache(value = CacheConstant.SysMenu.ALL, unless = CacheConstant.UNLESS_RESULT_EQ_NULL_OR_ZERO)
+    @Override
+    public List<SysMenu> listMenuAll() {
+        return list();
+    }
+
+    @Override
+    @Cache(cacheNames = CacheConstant.SysMenu.tree, unless = CacheConstant.UNLESS_RESULT_EQ_NULL_OR_ZERO)
+    public List<SysMenuVO> tree(SysMenuQuery query) {
+        return ForestMerger.merge(CUtil.sort(list(query), SysMenuVO::getNodeOrder, true));
     }
 
 }

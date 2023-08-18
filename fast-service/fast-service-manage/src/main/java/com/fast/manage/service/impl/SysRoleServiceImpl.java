@@ -2,11 +2,11 @@ package com.fast.manage.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.fast.common.constant.cache.CacheConstant;
 import com.fast.core.annotation.Cache;
-import com.fast.core.mybatis.service.impl.BaseServiceImpl;
-import com.fast.core.util.FastRedis;
-import com.fast.manage.dao.SysRoleDao;
 import com.fast.core.common.util.SUtil;
+import com.fast.core.mybatis.service.impl.BaseServiceImpl;
+import com.fast.manage.dao.SysRoleDao;
 import com.fast.manage.entity.SysMenu;
 import com.fast.manage.entity.SysRole;
 import com.fast.manage.entity.SysRoleMenu;
@@ -23,8 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.fast.common.constant.cache.CacheConstant.MANAGE;
 
 /**
  * 角色Service业务层处理
@@ -125,42 +123,31 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
     @Override
     public List<String> qryPermsById(String userId) {
         // 获取用户所有对应角色
-        List<SysUserRole> sysUserRoles = listUserRoleAll();
+        List<SysUserRole> sysUserRoles = userRoleService.listUserRoleAll();
         Set<String> roleIds = sysUserRoles.stream().filter(ele -> userId.equals(ele.getUserId())).map(SysUserRole::getRoleId).collect(Collectors.toSet());
         // 获取角色对应权限
-        List<SysRoleMenu> sysRoleMenus = listRoleMenuAll();
+        List<SysRoleMenu> sysRoleMenus = roleMenuService.listRoleMenuAll();
         Set<String> menuIds = sysRoleMenus.stream().filter(ele -> roleIds.contains(ele.getRoleId())).map(SysRoleMenu::getMenuId).collect(Collectors.toSet());
         // 获取菜单权限
-        List<SysMenu> menus = listMenuAll();
+        List<SysMenu> menus = menuService.listMenuAll();
         return menus.stream().filter(ele -> menuIds.contains(ele.getId())).map(SysMenu::getPerms).collect(Collectors.toList());
     }
 
     @Override
     public List<String> qryRoleById(String userId) {
         // 获取用户所有对应角色
-        List<SysUserRole> sysUserRoles = listUserRoleAll();
+        List<SysUserRole> sysUserRoles = userRoleService.listUserRoleAll();
         Set<String> roleIds = sysUserRoles.stream().filter(ele -> userId.equals(ele.getUserId())).map(SysUserRole::getRoleId).collect(Collectors.toSet());
         // 获取角色对应权限
         List<SysRole> roles = listRoleAll();
         return roles.stream().filter(ele -> roleIds.contains(ele.getId())).map(SysRole::getKey).collect(Collectors.toList());
     }
 
-    @Cache(MANAGE + "role")
+    //TODO 作者:黄嘉浩 删除缓存!
+    @Cache(value = CacheConstant.Role.ALL, unless = CacheConstant.UNLESS_RESULT_EQ_NULL_OR_ZERO)
     List<SysRole> listRoleAll() {
         return super.list();
     }
 
-    @Cache(MANAGE + "user_role")
-    List<SysUserRole> listUserRoleAll() {
-        return userRoleService.list();
-    }
-    @Cache(MANAGE + "role_menu")
-    List<SysRoleMenu> listRoleMenuAll() {
-        return roleMenuService.list();
-    }
-    @Cache(MANAGE + "menu")
-    List<SysMenu> listMenuAll() {
-        return menuService.list();
-    }
 
 }

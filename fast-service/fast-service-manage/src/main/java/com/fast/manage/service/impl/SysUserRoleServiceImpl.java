@@ -1,12 +1,15 @@
 package com.fast.manage.service.impl;
 
 import cn.hutool.core.convert.Convert;
+import com.fast.common.constant.cache.CacheConstant;
+import com.fast.core.annotation.Cache;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.manage.dao.SysUserRoleDao;
 import com.fast.manage.entity.SysUserRole;
 import com.fast.manage.service.ISysUserRoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +60,7 @@ public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleDao, SysU
      */
     @Transactional
     @Override
+    @CacheEvict(value = CacheConstant.UserRole.USER_ROLE_ALL)
     public boolean update(SysUserRole sysUserRole)
     {
         return updateById(sysUserRole);
@@ -70,6 +74,7 @@ public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleDao, SysU
      */
     @Transactional
     @Override
+    @CacheEvict(value = CacheConstant.UserRole.USER_ROLE_ALL)
     public int deleteByIds(String ids)
     {
         return baseMapper.deleteSysUserRoleByIds(Convert.toStrArray(ids));
@@ -82,6 +87,7 @@ public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleDao, SysU
      * @return 结果
      */
     @Override
+    @CacheEvict(value = CacheConstant.UserRole.USER_ROLE_ALL)
     public int deleteSysUserRoleById(Long userId)
     {
         return baseMapper.deleteSysUserRoleById(userId);
@@ -94,8 +100,20 @@ public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleDao, SysU
      * @return 结果
      */
     @Override
+    @CacheEvict(value = CacheConstant.UserRole.USER_ROLE_ALL)
     public boolean logicRemove(String ids) {
         return removeByIds(SUtil.splitToStrList(ids));
+    }
+
+    /**
+     * 查询全部用户角色
+     *
+     * @return {@link List}<{@link SysUserRole}>
+     */
+    @Override
+    @Cache(value = CacheConstant.UserRole.USER_ROLE_ALL, unless = CacheConstant.UNLESS_RESULT_EQ_NULL_OR_ZERO)
+    public List<SysUserRole> listUserRoleAll() {
+        return list();
     }
 
 }

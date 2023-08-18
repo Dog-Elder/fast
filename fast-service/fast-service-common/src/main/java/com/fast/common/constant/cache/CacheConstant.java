@@ -1,27 +1,15 @@
 package com.fast.common.constant.cache;
 
 
+import com.fast.core.annotation.Cache;
+
 /**
- * @Description:常量
+ * 缓存常量
+ *
  * @Author: 黄嘉浩
  * @Date: 2018/9/3 16:03
  **/
 public class CacheConstant {
-
-    /**
-     * Redis
-     **/
-    // redis过期时间，以秒为单位，一分钟
-    public final static int EXRP_MINUTE = 60;
-
-    // key过渡时间，以秒为单位,10秒
-    public final static int EXRP_SECOND = 10;
-
-    // redis过期时间，以秒为单位，一小时
-    public final static int EXRP_HOUR = 60 * 60;
-
-    //  redis过期时间，以秒为单位，一天
-    public final static int EXRP_DAY = 60 * 60 * 24;
 
     /**
      * 框架统一前缀
@@ -34,35 +22,113 @@ public class CacheConstant {
     public static final String MANAGE = CacheConstant.FAST + "manage:";
 
     /**
-     * 系统配置前缀
+     * 系统前缀
      **/
     static final String SYS = CacheConstant.FAST + "sys:";
 
+    /**
+     * 除非结果为空
+     **/
+    public final static String UNLESS_RESULT_EQ_NULL = "#result == null";
 
     /**
-     * 管理端用户前缀
+     * 除非结果为空或空集合
      **/
-    public static final String MANAGE_USER = CacheConstant.MANAGE + "user:";
+    public final static String UNLESS_RESULT_EQ_NULL_OR_ZERO = "#result == null || #result.size()==0";
+
+    /**
+     * 时间 (秒)
+     **/
+    final static int ONE_MINUTE = 60;
+    final static int TEN_SECONDS = 10;
+    final static int ONE_HOUR = 60 * 60;
+    public final static int ONE_DAY = 60 * 60 * 24;
+
+    /**
+     * 常用于注解 {@link Cache#value()}使用
+     **/
+    public interface TTL {
+        String TTL = "@ttl=";
+        // 一分钟
+        String ONE_MINUTE = TTL + CacheConstant.ONE_MINUTE;
+        // 10秒
+        String TEN_SECONDS = TTL + CacheConstant.TEN_SECONDS;
+        // 一小时
+        String ONE_HOUR = TTL + CacheConstant.ONE_HOUR;
+        // 一天
+        String ONE_DAY = TTL + CacheConstant.ONE_DAY;
+    }
+
+
+    /**
+     * 参数配置
+     **/
+    public interface Config {
+        String CONFIG = "config:";
+        String MANAGE_CONFIG = MANAGE + CONFIG;
+        // 通过Config key获取value
+        String VALUE = MANAGE_CONFIG + "value" + TTL.ONE_MINUTE;
+    }
+
+    /**
+     * 系统菜单
+     **/
+    public interface SysMenu {
+        String MENU = "menu:";
+        String MANAGE_MENU = MANAGE + MENU;
+        String ALL = MANAGE_MENU + "all";
+        String tree = MANAGE_MENU + "tree";
+    }
 
     /**
      * 用户
      **/
     public interface User {
-        String INFO = CacheConstant.MANAGE_USER + "{}:info::{}";
+        String USER = "user:";
+        String MANAGE_USER = MANAGE + USER;
+        String INFO = MANAGE_USER + "{}:info::{}";
     }
 
     /**
-     * 对应值集相关缓存常量
+     * 角色
+     **/
+    public interface Role {
+        String ROLE = "role:";
+        String MANAGE_ROLE = MANAGE + ROLE;
+        String ALL = MANAGE_ROLE + "all";
+    }
+
+    /**
+     * 角色与菜单
+     **/
+    public interface RoleMenu {
+        String ROLE_MENU = "role_menu:";
+        String MANAGE_ROLE_MENU = MANAGE + ROLE_MENU;
+        String ROLE_MENU_ALL = MANAGE_ROLE_MENU + "all";
+    }
+
+
+    /**
+     * 用户与角色
+     **/
+    public interface UserRole {
+        String USER_ROLE = "user_role:";
+        String MANAGE_USER_ROLE = MANAGE + USER_ROLE;
+        String USER_ROLE_ALL = MANAGE_USER_ROLE + "all";
+    }
+
+
+    /**
+     * 值集
      **/
     public interface SetValue {
         // 列表
         String SET_VALUE = CacheConstant.SYS + "set:value";
         String SET_STATE = CacheConstant.SYS + "set:state::{}";
-
     }
 
     /**
-     * 锁前缀
+     * 分布式锁
      **/
     public interface SysLock {
         // 编码锁前缀
@@ -70,7 +136,7 @@ public class CacheConstant {
     }
 
     /**
-     * 对应编码缓存常量
+     * 编码
      **/
     public interface SysSetRule {
         String CODE = "code:";

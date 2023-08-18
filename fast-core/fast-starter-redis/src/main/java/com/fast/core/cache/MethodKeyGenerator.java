@@ -1,7 +1,6 @@
 package com.fast.core.cache;
 
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
@@ -11,7 +10,6 @@ import java.lang.reflect.Method;
  *
  * @author 黄嘉浩
  */
-@Component
 public class MethodKeyGenerator implements KeyGenerator {
 
     @Override

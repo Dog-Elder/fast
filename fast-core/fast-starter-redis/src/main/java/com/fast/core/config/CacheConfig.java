@@ -1,4 +1,4 @@
-package com.fast.core.cache;
+package com.fast.core.config;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -13,23 +13,29 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * 缓存配置
+ *
+ * @author 黄嘉浩
+ * @date 2023/08/18
+ */
 @Configuration
 @EnableCaching
 public class CacheConfig extends CachingConfigurerSupport {
 
     /**
+     * 复述,缓存配置
      * Redis缓存配置
      *
      * @return {@link RedisCacheConfiguration}
      */
     @Bean
-    public RedisCacheConfiguration redisCacheConfiguration() {
+    public RedisCacheConfiguration redisCacheConfiguration(Jackson2JsonRedisSerializer jsonRedisSerializer) {
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-        RedisSerializer<Object> jsonSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
 
         RedisCacheConfiguration cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(stringSerializer))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jsonSerializer));
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jsonRedisSerializer));
 
         return cacheConfiguration;
     }

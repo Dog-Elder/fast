@@ -1,6 +1,8 @@
 package com.fast.manage.service.impl;
 
 import cn.hutool.core.convert.Convert;
+import com.fast.common.constant.cache.CacheConstant;
+import com.fast.core.annotation.Cache;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.manage.dao.SysRoleMenuDao;
@@ -10,15 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 角色和菜单关联Service业务层处理
- * 
+ *
  * @author 黄嘉浩
  * @date 2021-06-29
  */
 @Service
-public class SysRoleMenuServiceImpl extends BaseServiceImpl<SysRoleMenuDao, SysRoleMenu> implements ISysRoleMenuService
-{
+public class SysRoleMenuServiceImpl extends BaseServiceImpl<SysRoleMenuDao, SysRoleMenu> implements ISysRoleMenuService {
     @Autowired
     private SysRoleMenuDao sysRoleMenuMapper;
 
@@ -82,6 +85,12 @@ public class SysRoleMenuServiceImpl extends BaseServiceImpl<SysRoleMenuDao, SysR
     @Override
     public boolean logicRemove(String ids) {
         return removeByIds(SUtil.splitToStrList(ids));
+    }
+
+    @Override
+    @Cache(value = CacheConstant.RoleMenu.ROLE_MENU_ALL, unless = CacheConstant.UNLESS_RESULT_EQ_NULL_OR_ZERO)
+    public List<SysRoleMenu> listRoleMenuAll() {
+        return list();
     }
 
 }

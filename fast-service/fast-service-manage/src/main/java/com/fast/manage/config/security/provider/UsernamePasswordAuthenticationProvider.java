@@ -11,7 +11,7 @@ import com.fast.core.common.util.Util;
 import com.fast.core.safe.constant.JwtConstant;
 import com.fast.core.safe.entity.Authentication;
 import com.fast.core.safe.util.ManageUtil;
-import com.fast.core.util.FastRedis;
+import com.fast.core.util.CacheUtil;
 import com.fast.manage.config.security.authentication.UserPasswordAuthentication;
 import com.fast.manage.config.security.secure.AuthManageUtil;
 import com.fast.manage.entity.SysUser;
@@ -21,19 +21,38 @@ import org.springframework.stereotype.Component;
 
 import javax.naming.AuthenticationException;
 
-//  用户名密码认证提供者
+/**
+ * 用户名密码身份验证提供者
+ *
+ * @author 黄嘉浩
+ * @date 2023/08/17
+ */
 @Component
 @RequiredArgsConstructor
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
+    /**
+     * 用户服务
+     */
     private final ISysUserService userService;
-    private final FastRedis fastRedis;
 
+    /**
+     * 支持
+     *
+     * @param authenticationType 验证类型
+     * @return boolean
+     */
     @Override
     public boolean supports(Class<?> authenticationType) {
         return UserPasswordAuthentication.class.isAssignableFrom(authenticationType);
     }
 
+    /**
+     * 进行身份验证
+     *
+     * @param request 请求
+     * @throws AuthenticationException 身份验证异常
+     */
     @Override
     public void authenticate(Authentication request) throws AuthenticationException {
         UserPasswordAuthentication voucher = (UserPasswordAuthentication) request;
@@ -51,7 +70,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
                     .setExtra(JwtConstant.LOGIC_TYPE, ManageUtil.TYPE)
                     .setExtra(JwtConstant.USER_ID, user.getId())
             );
-            fastRedis.setObject(AuthManageUtil.getUserInfoKeyPath(user.getCode()), user, CacheConstant.EXRP_DAY);
+            CacheUtil.put(AuthManageUtil.getUserInfoKeyPath(user.getCode()), user, CacheConstant.ONE_DAY);
         } else {
             //  认证失败
             throw new AuthenticationException("用户名或密码无效");

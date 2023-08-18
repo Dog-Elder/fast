@@ -97,7 +97,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
         // 缓存不存在则查库
         user = getOne(getWrapper(new SysUserQuery().setCode(code)));
         // 更新缓存
-        fastRedis.setObject(SUtil.format(CacheConstant.User.INFO, AuthManageUtil.getLoginAccountType(), user.getCode()), user, CacheConstant.EXRP_DAY);
+        fastRedis.setObject(SUtil.format(CacheConstant.User.INFO, AuthManageUtil.getLoginAccountType(), user.getCode()), user, CacheConstant.ONE_DAY);
         return user;
     }
 
