@@ -2,6 +2,7 @@ package com.fast.core.util;
 
 import cn.hutool.json.JSONUtil;
 import com.fast.core.common.exception.ServiceException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
@@ -88,6 +89,27 @@ public class FastRedis {
                 return JSONUtil.toBean(jsonValue, clazz);
             }
             return objectMapper.readValue(jsonValue, clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 获取集合
+     *
+     * @param key         关键
+     * @param elementType 元素类型
+     * @return {@link List}<{@link T}>
+     */
+    public <T> List<T> getList(String key, Class<T> elementType) {
+        String jsonValue = getString(key);
+        if (jsonValue == null) {
+            return null;
+        }
+        try {
+            JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, elementType);
+            return objectMapper.readValue(jsonValue, type);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

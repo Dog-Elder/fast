@@ -77,7 +77,7 @@ public class CacheConstant {
         String MENU = "menu:";
         String MANAGE_MENU = MANAGE + MENU;
         String ALL = MANAGE_MENU + "all";
-        String tree = MANAGE_MENU + "tree";
+        String TREE = MANAGE_MENU + "tree";
     }
 
     /**

@@ -267,7 +267,7 @@ public class SysSetValueServiceImpl extends BaseServiceImpl<SysSetValueDao, SysS
         if (CUtil.isEmpty(values)) {
             return null;
         }
-        return SUtil.join(",", values);
+        return SUtil.join(values.toArray(), ",");
     }
 
 

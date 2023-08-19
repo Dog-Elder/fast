@@ -2,6 +2,8 @@ package com.fast.core.util;
 
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * 基于Redis的缓存
  *
@@ -46,6 +48,18 @@ public class CacheUtil {
      */
     public static <T> T get(String key, Class<T> clazz) {
         return redis.getObject(key, clazz);
+    }
+
+
+    /**
+     * 获取缓存
+     *
+     * @param key   关键
+     * @param clazz clazz
+     * @return {@link T}
+     */
+    public static <T> List<T> getList(String key, Class<T> clazz) {
+        return redis.getList(key, clazz);
     }
 
     /**
