@@ -4,13 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.fast.common.constant.cache.CacheConstant;
 import com.fast.core.annotation.Cache;
-import com.fast.core.common.util.CUtil;
-import com.fast.core.common.util.PageUtils;
-import com.fast.core.common.util.SUtil;
-import com.fast.core.common.util.Util;
+import com.fast.core.common.util.*;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.common.util.tree.forest.ForestMerger;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
+import com.fast.core.util.CacheUtil;
 import com.fast.manage.dao.SysMenuDao;
 import com.fast.manage.entity.SysMenu;
 import com.fast.manage.query.SysMenuQuery;
@@ -24,6 +22,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 菜单权限Service业务层处理
@@ -75,7 +74,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenu> imp
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = CacheConstant.SysMenu.ALL, allEntries = true)
+    @CacheEvict(value = {CacheConstant.SysMenu.ALL, CacheConstant.SysMenu.TREE}, allEntries = true)
     public boolean delete(List<String> idList) {
         return removeByIds(idList);
     }
@@ -86,10 +85,24 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenu> imp
         return list();
     }
 
+    private List<SysMenuVO> listAll() {
+        // 需要清除缓存
+        List<SysMenuVO> list = CacheUtil.getList(CacheConstant.SysMenu.ALL, SysMenuVO.class);
+        if (CUtil.isEmpty(list)) {
+            list = list(new SysMenuQuery());
+        }
+        return list;
+    }
+
     @Override
-    @Cache(cacheNames = CacheConstant.SysMenu.tree, unless = CacheConstant.UNLESS_RESULT_EQ_NULL_OR_ZERO)
     public List<SysMenuVO> tree(SysMenuQuery query) {
-        return ForestMerger.merge(CUtil.sort(list(query), SysMenuVO::getNodeOrder, true));
+        List<SysMenuVO> all = listAll();
+        List<SysMenuVO> list = all.stream()
+                .filter(ele -> FilterUtil.contains(ele.getName(), query.getName()))
+                .filter(ele -> FilterUtil.eq(ele.getVisible(), query.getVisible()))
+                .filter(ele -> FilterUtil.contains(ele.getPerms(), query.getPerms()))
+                .collect(Collectors.toList());
+        return ForestMerger.merge(CUtil.sort(list, SysMenuVO::getNodeOrder, true));
     }
 
 }

@@ -3,6 +3,7 @@ package com.fast.manage.controller;
 import com.fast.common.controller.WebBaseController;
 import com.fast.common.entity.verification.Qry;
 import com.fast.common.entity.verification.Save;
+import com.fast.core.common.annotation.lov.AutoLov;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.domain.ValidList;
 import com.fast.core.common.domain.page.TableDataInfo;
@@ -44,6 +45,7 @@ public class SysMenuController extends WebBaseController {
     /**
      * 树
      */
+    @AutoLov
     @GetMapping("/tree")
     @ManageCheckPermission(value = "manage.menu.tree")
     public R<List<SysMenuVO>> tree(@Validated(Qry.class) SysMenuQuery query) {
