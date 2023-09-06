@@ -339,6 +339,30 @@ public class SUtil extends StringUtils {
         return sb.toString();
     }
 
+
+    /**
+     * 语句驼峰式大小写
+     *
+     * @param input 输入
+     * @return {@link String}
+     */
+    public static String statementToCamelCase(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        String[] words = input.split(" ");
+        StringBuilder result = new StringBuilder(words[0].toLowerCase());
+
+        for (int i = 1; i < words.length; i++) {
+            result.append(Character.toUpperCase(words[i].charAt(0)))
+                    .append(words[i].substring(1).toLowerCase());
+        }
+
+        return result.toString();
+    }
+
+
     public static <T> T cast(Object obj) {
         return (T) obj;
     }
