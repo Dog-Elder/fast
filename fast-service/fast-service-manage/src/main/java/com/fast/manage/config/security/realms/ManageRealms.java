@@ -1,9 +1,9 @@
 package com.fast.manage.config.security.realms;
 
 import cn.hutool.core.collection.ListUtil;
+import com.fast.common.service.AuthenticationProvider;
 import com.fast.core.safe.constant.JwtConstant;
 import com.fast.core.safe.entity.Authentication;
-import com.fast.common.service.AuthenticationProvider;
 import com.fast.core.safe.service.SecurityManagerService;
 import com.fast.core.safe.util.ManageUtil;
 import com.fast.manage.service.ISysRoleService;
@@ -21,7 +21,7 @@ import java.util.List;
 @Component
 public class ManageRealms implements SecurityManagerService {
 
-    private List<AuthenticationProvider> authenticationProviders;
+    private final List<AuthenticationProvider> authenticationProviders;
     private final ISysRoleService roleService;
 
     public ManageRealms(List<AuthenticationProvider> authenticationProviders, ISysRoleService roleService) {

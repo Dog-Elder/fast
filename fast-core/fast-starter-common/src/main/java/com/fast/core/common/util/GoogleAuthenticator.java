@@ -27,7 +27,14 @@ public class GoogleAuthenticator {
     /**
      * 种子
      */
-    private static final String SEED = "g8GjEvTbW5oVSV7avL47357438readsadaASDsadsasdSADsAdASdfsafdsafZAFDSADSADsaDsad124ewdsadSdasyetredLDVKs2m0QN7vxRs2im5MDaNCWGmcD2rvcZx";
+    private static final String SEED = "ZzhHakV2VGJXNW9WU1Y3YXZMNDczNTc0MzhyZXlocmV5dXJ5ZXRyZWRMRFZLczJtMFFON3Z4UnMyaW01TURhTkNXR21jRDJydmNaeA";
+
+//    public static void main(String[] args) {
+//        String s = "g8GjEvTbW5oVSV7avL47357438reyhreyuryetredLDVKs2m0QN7vxRs2im5MDaNCWGmcD2rvcZx";
+//        byte[] bytes = Base64.encodeBase64(s.getBytes(), true, true, 120);
+//        System.out.println(new String(bytes, StandardCharsets.UTF_8));
+//    }
+//
     /**
      * 随机数算法
      */
