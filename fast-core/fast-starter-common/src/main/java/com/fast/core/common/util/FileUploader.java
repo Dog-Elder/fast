@@ -84,6 +84,7 @@ public class FileUploader {
         String profilePath = Util.isWin ? PROFILE_WIN : PROFILE_LINUX;
         StringBuilder uploadPath = new StringBuilder();
         uploadPath.append(profilePath);
+        uploadPath.append("/").append(APPLY_NAME);
 
         // 判断桶是否在缓存里
         uploadPath.append("/").append(bucketName);
@@ -135,7 +136,7 @@ public class FileUploader {
             assert oldName != null;
             String fileName = oldName.substring(0, oldName.lastIndexOf("."));
             String suffix = oldName.substring(oldName.lastIndexOf("."));
-            String newName = fileName + "_" + UUID.randomUUID().toString() + suffix;
+            String newName = fileName + "_" + UUID.randomUUID() + suffix;
             try {
                 file.transferTo(new File(uploadPath.toString(), newName));
                 bo.add(new AttachBO()
