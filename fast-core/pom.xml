@@ -22,6 +22,7 @@
         <module>fast-starter-redis</module>
         <module>fast-starter-datasource</module>
         <module>fast-starter-sa-token</module>
+        <module>fast-starter-netty</module>
     </modules>
 
 </project>
