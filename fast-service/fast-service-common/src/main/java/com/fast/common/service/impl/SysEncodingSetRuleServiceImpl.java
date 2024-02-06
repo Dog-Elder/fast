@@ -50,7 +50,7 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
     @Lazy
     @Resource
     private ISysEncodingSetService encodingSetService;
-    @Resource(name = "taskExecutor")
+    @Resource
     private ThreadPoolTaskExecutor taskExecutor;
 
     @Override

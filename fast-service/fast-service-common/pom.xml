@@ -45,5 +45,10 @@
             <artifactId>fast-starter-sa-token</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.fast</groupId>
+            <artifactId>fast-starter-netty</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>

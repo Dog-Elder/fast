@@ -15,7 +15,7 @@ public class WebUtil {
      * 入参验证
      **/
     public static R dealError(Object target, FieldError fieldError) {
-        String message = fieldError == null ? com.fast.core.common.util.Com.UnknownErr : fieldError.getDefaultMessage();
+        String message = fieldError == null ? Com.UnknownErr : fieldError.getDefaultMessage();
         if (StringUtils.isNotBlank(message) && message.contains("{display}")) {
             if (target == null) {
                 return R.error(Com.UnknownErr);
