@@ -12,10 +12,7 @@ import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoC
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -78,6 +75,15 @@ public class WebConfig implements WebMvcConfigurer {
         registrationBean.setFilter(new ApiAccessFilter());
         registrationBean.addUrlPatterns("/*");
         return registrationBean;
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*") // 允许的域名，可以设置为实际的域名或通配符 *
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 允许的请求方法
+                .allowedHeaders("Content-Type", "Authorization") // 允许的请求头
+        ; // 是否允许发送 Cookie
     }
 
 }
