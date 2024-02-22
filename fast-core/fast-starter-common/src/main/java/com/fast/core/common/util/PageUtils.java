@@ -68,7 +68,7 @@ public class PageUtils extends PageHelper {
             page.addAll(CUtil.copy(sourceList, targetClazz));
             return page;
         } else {
-            if (com.fast.core.common.util.Util.isNull(sourceList)) {
+            if (Util.isNull(sourceList)) {
                 return new ArrayList<>();
             }
             return CUtil.copy(sourceList, targetClazz);
