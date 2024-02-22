@@ -122,6 +122,12 @@ public class BaseLambdaQueryWrapper<T> extends LambdaQueryWrapper<T> {
     }
 
     @Override
+    public BaseLambdaQueryWrapper<T> orderByAsc(SFunction<T, ?> column) {
+        super.orderByAsc(true, column);
+        return this;
+    }
+
+    @Override
     public BaseLambdaQueryWrapper<T> last(String lastSql) {
         super.last(lastSql);
         return this;
@@ -130,6 +136,14 @@ public class BaseLambdaQueryWrapper<T> extends LambdaQueryWrapper<T> {
     @Override
     public BaseLambdaQueryWrapper<T> in(SFunction<T, ?> column, Collection<?> coll) {
         super.in(column, coll);
+        return this;
+    }
+
+    /**
+     * 设置只返回最后一条
+     */
+    public BaseLambdaQueryWrapper<T> limitN(int n) {
+        super.last("LIMIT " + n);
         return this;
     }
 
