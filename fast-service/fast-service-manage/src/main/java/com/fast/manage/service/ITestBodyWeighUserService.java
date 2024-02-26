@@ -1,9 +1,9 @@
 package com.fast.manage.service;
 
 import com.fast.core.mybatis.service.BaseService;
-import com.fast.manage.vo.TestBodyWeighUserVO;
-import com.fast.manage.query.TestBodyWeighUserQuery;
 import com.fast.manage.entity.TestBodyWeighUser;
+import com.fast.manage.query.TestBodyWeighUserQuery;
+import com.fast.manage.vo.TestBodyWeighUserVO;
 
 import java.util.List;
 
@@ -22,4 +22,6 @@ public interface ITestBodyWeighUserService extends BaseService<TestBodyWeighUser
     boolean update(TestBodyWeighUserVO vo);
 
     boolean delete(List<String> idList);
+
+    TestBodyWeighUser getInfo(String id);
 }

@@ -44,17 +44,27 @@ public class TestBodyWeighUserController extends WebBaseController{
      * 信息
      */
     @GetMapping("{id}")
-    public R<TestBodyWeighUserVO> get(@PathVariable("id") String id){
+    public R<TestBodyWeighUserVO> get(@PathVariable("id") String id) {
         TestBodyWeighUser entity = testBodyWeighUserService.getById(id);
-        return R.success(BUtil.copy(entity,TestBodyWeighUserVO.class));
+        return R.success(BUtil.copy(entity, TestBodyWeighUserVO.class));
     }
+
+    /**
+     * 信息
+     */
+    @GetMapping("/info/{id}")
+    public R<TestBodyWeighUserVO> getInfo(@PathVariable("id") String id) {
+        TestBodyWeighUser entity = testBodyWeighUserService.getInfo(id);
+        return R.success(BUtil.copy(entity, TestBodyWeighUserVO.class));
+    }
+
 
     /**
      * 保存
      */
     @PostMapping
     @ManageCheckPermission(value = "manage.weighUser.save")
-    public R<List<TestBodyWeighUserVO>> save(@RequestBody @Validated(Save.class) ValidList<TestBodyWeighUserVO> vo){
+    public R<List<TestBodyWeighUserVO>> save(@RequestBody @Validated(Save.class) ValidList<TestBodyWeighUserVO> vo) {
         return R.success(testBodyWeighUserService.save(vo));
     }
 

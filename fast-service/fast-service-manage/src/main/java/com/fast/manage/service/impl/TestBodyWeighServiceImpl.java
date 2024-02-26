@@ -4,7 +4,6 @@ import cn.hutool.core.collection.ListUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.fast.core.common.util.CUtil;
 import com.fast.core.common.util.PageUtils;
-import com.fast.core.common.util.Util;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.mybatis.query.BaseLambdaQueryWrapper;
 import com.fast.core.mybatis.service.impl.BaseServiceImpl;
@@ -43,24 +42,38 @@ public class TestBodyWeighServiceImpl extends BaseServiceImpl<TestBodyWeighDao, 
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = true)
-    public List<TestBodyWeighVO> list(TestBodyWeighQuery query) {
-        List<TestBodyWeighUserVO> list = weighUserService.list(new TestBodyWeighUserQuery().setName(query.getName()));
-        if (CUtil.isEmpty(list)) {
+    public List<TestBodyWeighVO> page(TestBodyWeighQuery query) {
+        List<TestBodyWeighUserVO> userList = weighUserService.list(new TestBodyWeighUserQuery().setName(query.getName()));
+        if (CUtil.isEmpty(userList)) {
             return ListUtil.empty();
         }
+
         PageUtils.startPage();
-        List<TestBodyWeigh> entityList = list(getWrapper(query).in(TestBodyWeigh::getTestBodyWeighUserId, CUtil.getPropertySet(list, TestBodyWeighUserVO::getId)));
-        Map<String, TestBodyWeighUserVO> map = CUtil.toMap(list, TestBodyWeighUserVO::getId);
+
+        List<TestBodyWeigh> entityList = list(getWrapper(query).in(TestBodyWeigh::getTestBodyWeighUserId, CUtil.getPropertySet(userList, TestBodyWeighUserVO::getId)));
+        if (CUtil.isEmpty(entityList)) {
+            return ListUtil.empty();
+        }
+
+        Map<String, TestBodyWeighUserVO> userMap = CUtil.toMap(userList, TestBodyWeighUserVO::getId);
         List<TestBodyWeighVO> vos = PageUtils.copy(entityList, TestBodyWeighVO.class);
-        vos.forEach(ele -> {
-            TestBodyWeighUserVO userVO = Optional.ofNullable(map.get(ele.getTestBodyWeighUserId())).orElse(new TestBodyWeighUserVO());
-            ele.setName(userVO.getName());
+
+        vos.forEach(vo -> {
+            TestBodyWeighUserVO userVO = userMap.getOrDefault(vo.getTestBodyWeighUserId(), new TestBodyWeighUserVO());
+            vo.setName(userVO.getName());
         });
+
         return vos;
+    }
+
+    @Override
+    public List<TestBodyWeighVO> list(TestBodyWeighQuery query) {
+        return PageUtils.copy(list(getWrapper(query)), TestBodyWeighVO.class);
     }
 
     private BaseLambdaQueryWrapper<TestBodyWeigh> getWrapper(TestBodyWeighQuery query) {
         BaseLambdaQueryWrapper<TestBodyWeigh> wrapper = new BaseLambdaQueryWrapper<>();
+        wrapper.eqIfPresent(TestBodyWeigh::getTestBodyWeighUserId, query.getTestBodyWeighUserId());
         return wrapper;
     }
 
@@ -90,6 +103,7 @@ public class TestBodyWeighServiceImpl extends BaseServiceImpl<TestBodyWeighDao, 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TestBodyWeighVO saveOne(TestBodyWeighVO vo) {
         // 获取当前时间
         LocalDate today = LocalDate.now();
@@ -107,42 +121,26 @@ public class TestBodyWeighServiceImpl extends BaseServiceImpl<TestBodyWeighDao, 
         saveOrUpdate(testBodyWeigh);
 
         // 处理用户数据
-        processingOfUserData(vo);
+        processingOfUserData(testBodyWeigh);
         return BUtil.copy(testBodyWeigh, TestBodyWeighVO.class);
     }
 
-    private void processingOfUserData(TestBodyWeighVO vo) {
-        TestBodyWeighUser user = weighUserService.getById(vo.getTestBodyWeighUserId());
-        user.setLatestBodyWeight(vo.getBodyWeight());
+    private void processingOfUserData(TestBodyWeigh bodyWeigh) {
+        TestBodyWeighUser user = weighUserService.getById(bodyWeigh.getTestBodyWeighUserId());
+        user.setLatestBodyWeight(bodyWeigh.getBodyWeight());
         TestBodyWeigh maximum = getOne(getWrapper()
-                .eq(TestBodyWeigh::getTestBodyWeighUserId, vo.getTestBodyWeighUserId())
+                .eq(TestBodyWeigh::getTestBodyWeighUserId, bodyWeigh.getTestBodyWeighUserId())
                 .orderByDesc(TestBodyWeigh::getBodyWeight)
                 .limitN(1)
         );
 
         TestBodyWeigh smallest = getOne(getWrapper()
-                .eq(TestBodyWeigh::getTestBodyWeighUserId, vo.getTestBodyWeighUserId())
+                .eq(TestBodyWeigh::getTestBodyWeighUserId, bodyWeigh.getTestBodyWeighUserId())
                 .orderByAsc(TestBodyWeigh::getBodyWeight)
                 .limitN(1)
         );
         user.setSupremeBodyWeight(maximum.getBodyWeight());
         user.setMinimumBodyWeight(smallest.getBodyWeight());
-        // 获取昨天的日期
-        LocalDate yesterday = LocalDate.now().minusDays(1);
-        // 获取昨天的起始时间和结束时间
-        LocalDateTime startOfYesterday = yesterday.atStartOfDay();
-        LocalDateTime endOfYesterday = yesterday.atStartOfDay().plusDays(1).minusNanos(1);
-
-        // 查询昨天数据
-        TestBodyWeigh testBodyWeigh = getOne(Wrappers.<TestBodyWeigh>lambdaQuery()
-                .eq(TestBodyWeigh::getTestBodyWeighUserId, vo.getTestBodyWeighUserId())
-                .between(TestBodyWeigh::getCreateTime, startOfYesterday, endOfYesterday)
-        );
-
-        if (Util.isNotNull(testBodyWeigh) || user.getContinuousRecording().equals(0)) {
-            user.setContinuousRecording(user.getContinuousRecording() + 1);
-        }
-
         weighUserService.updateById(user);
     }
 }

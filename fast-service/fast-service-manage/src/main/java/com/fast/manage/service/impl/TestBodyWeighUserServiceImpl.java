@@ -55,7 +55,7 @@ public class TestBodyWeighUserServiceImpl extends BaseServiceImpl<TestBodyWeighU
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean update(TestBodyWeighUserVO vo) {
-        TestBodyWeighUser entity = BUtil.copy(vo,TestBodyWeighUser.class);
+        TestBodyWeighUser entity = BUtil.copy(vo, TestBodyWeighUser.class);
         return updateById(entity);
     }
 
@@ -63,6 +63,12 @@ public class TestBodyWeighUserServiceImpl extends BaseServiceImpl<TestBodyWeighU
     @Transactional(rollbackFor = Exception.class)
     public boolean delete(List<String> idList) {
         return removeByIds(idList);
+    }
+
+    @Override
+    public TestBodyWeighUser getInfo(String id) {
+        TestBodyWeighUser user = getById(id);
+        return null;
     }
 
 }

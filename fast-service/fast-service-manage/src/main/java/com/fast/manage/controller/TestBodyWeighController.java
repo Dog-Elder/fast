@@ -28,24 +28,32 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/manage-api/weigh")
-public class TestBodyWeighController extends WebBaseController{
+public class TestBodyWeighController extends WebBaseController {
     private final ITestBodyWeighService testBodyWeighService;
 
     /**
      * 分页
      */
     @GetMapping("/page")
-    public R<TableDataInfo<TestBodyWeighVO>> page(@Validated(Qry.class) TestBodyWeighQuery query){
-        return R.success(getDataTable(testBodyWeighService.list(query)));
+    public R<TableDataInfo<TestBodyWeighVO>> page(@Validated(Qry.class) TestBodyWeighQuery query) {
+        return R.success(getDataTable(testBodyWeighService.page(query)));
+    }
+
+    /**
+     * 列表
+     */
+    @GetMapping("/list")
+    public R<List<TestBodyWeighVO>> list(@Validated(Qry.class) TestBodyWeighQuery query) {
+        return R.success(testBodyWeighService.list(query));
     }
 
     /**
      * 信息
      */
     @GetMapping("{id}")
-    public R<TestBodyWeighVO> get(@PathVariable("id") String id){
+    public R<TestBodyWeighVO> get(@PathVariable("id") String id) {
         TestBodyWeigh entity = testBodyWeighService.getById(id);
-        return R.success(BUtil.copy(entity,TestBodyWeighVO.class));
+        return R.success(BUtil.copy(entity, TestBodyWeighVO.class));
     }
 
     /**

@@ -15,6 +15,8 @@ import java.util.List;
  */
 public interface ITestBodyWeighService extends BaseService<TestBodyWeigh> {
 
+    List<TestBodyWeighVO> page(TestBodyWeighQuery query);
+
     List<TestBodyWeighVO> list(TestBodyWeighQuery query);
 
     List<TestBodyWeighVO> save(List<TestBodyWeighVO> vo);
