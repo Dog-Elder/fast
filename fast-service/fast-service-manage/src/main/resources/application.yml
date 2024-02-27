@@ -21,9 +21,13 @@ server:
     max-http-form-post-size: 20MB
 
 fast:
+  # 应用名
   apply-name: manage
+  # 附件上传地址
   attach:
+    # win上传路径
     profile-win: D:/fast
+    # linux上传路径
     profile-linux: /doc/fast
 
 
@@ -95,7 +99,7 @@ spring:
         url-pattern: /druid/*
         # 控制台管理用户名和密码
         login-username: manage
-        login-password: 123456
+        login-password: 27ac1ca76c1037366c17852e01a24bb7432ef4c
       filter:
         stat:
           enabled: true
