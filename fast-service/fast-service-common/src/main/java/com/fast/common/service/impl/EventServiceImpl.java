@@ -1,6 +1,6 @@
 package com.fast.common.service.impl;
 
-import com.fast.common.dto.SysCreateCode;
+import com.fast.common.dto.SysCreateCodeDTO;
 import com.fast.common.service.ISysEncodingService;
 import com.fast.core.common.annotation.encode.Code;
 import com.fast.core.common.util.RUtil;
@@ -32,7 +32,7 @@ public class EventServiceImpl<T> implements IEventService<T> {
             String encode = autoCode.encode();
             //  执行自定义业务逻辑，并返回对应的数据
             //  例如，根据注解中的值查询数据库，然后返回结果填充到属性中
-            return sysEncodingService.createCode(new SysCreateCode()
+            return sysEncodingService.createCode(new SysCreateCodeDTO()
                     .setSysEncodingCode(rules)
                     .setSysEncodingSetCode(encode));
         });

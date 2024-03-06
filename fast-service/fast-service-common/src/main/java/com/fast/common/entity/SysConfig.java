@@ -62,13 +62,6 @@ public class SysConfig extends BaseVersionEntity {
 	@TableField("state")
 	private String state;
 
-
-
-
-
-
-
-
 	/**
 	 * 操作权限（0代表不可操作 1代表管理员可操作 2代表所有人可操作）
 	 */

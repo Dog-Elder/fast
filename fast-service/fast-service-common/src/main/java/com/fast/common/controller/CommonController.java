@@ -1,7 +1,7 @@
 package com.fast.common.controller;
 
 import cn.hutool.json.JSONObject;
-import com.fast.common.dto.SysCreateCode;
+import com.fast.common.dto.SysCreateCodeDTO;
 import com.fast.common.entity.verification.Qry;
 import com.fast.common.query.SysSetValueQuery;
 import com.fast.common.service.ISysConfigService;
@@ -60,13 +60,14 @@ public class CommonController extends WebBaseController{
 
     /**
      * 获取编码
-     * @folder 公共服务/编码
+     *
      * @param req: 生成编码请求对象
+     * @folder 公共服务/编码
      * @Date: 2022/9/25 22:23
      * @return: java.lang.String 编码
      **/
     @GetMapping("/get-code")
-    public R<String> createCode(@Validated(Qry.class) SysCreateCode req) {
+    public R<String> createCode(@Validated(Qry.class) SysCreateCodeDTO req) {
         String code = sysEncodingService.createCode(req);
         return R.success(code);
     }

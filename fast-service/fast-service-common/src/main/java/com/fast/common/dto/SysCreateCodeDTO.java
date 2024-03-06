@@ -15,12 +15,12 @@ import javax.validation.constraints.NotBlank;
  **/
 @Data
 @Accessors(chain = true)
-public class SysCreateCode {
+public class SysCreateCodeDTO {
     @Display("规则代码")
-    @NotBlank(message = Com.Require,groups = {Qry.class})
+    @NotBlank(message = Com.Require, groups = {Qry.class})
     private String sysEncodingCode;
 
     @Display("编码值")
-    @NotBlank(message = Com.Require,groups = {Qry.class})
+    @NotBlank(message = Com.Require, groups = {Qry.class})
     private String sysEncodingSetCode;
 }

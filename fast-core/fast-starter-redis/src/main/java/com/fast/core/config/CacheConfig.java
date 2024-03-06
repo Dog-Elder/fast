@@ -50,7 +50,7 @@ public class CacheConfig extends CachingConfigurerSupport {
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory connectionFactory, RedisCacheConfiguration cacheConfiguration) {
         RedisCacheWriter cacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory);
-        com.fast.core.cache.CacheManager cacheManager = new com.fast.core.cache.CacheManager(cacheWriter, cacheConfiguration);
+        CacheManager cacheManager = new com.fast.core.cache.CacheManager(cacheWriter, cacheConfiguration);
         return cacheManager;
     }
 
