@@ -139,7 +139,7 @@ public class RUtil {
                     Enum<?> en = (Enum<?>) val;
                     val = en.ordinal();
                 }
-                ret.put((item != null && item.isPresent()) ? item.get() : field.getName(), val);
+                ret.put(item.orElseGet(field::getName), val);
             }
         });
 

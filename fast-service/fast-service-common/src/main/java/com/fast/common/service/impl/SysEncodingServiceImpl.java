@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fast.common.constant.cache.CacheConstant;
 import com.fast.common.dao.SysEncodingDao;
-import com.fast.common.dto.SysCreateCode;
+import com.fast.common.dto.SysCreateCodeDTO;
 import com.fast.common.entity.sys.SysEncoding;
 import com.fast.common.entity.sys.SysEncodingSet;
 import com.fast.common.entity.sys.SysEncodingSetRule;
@@ -116,7 +116,7 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
 
     @Override
     public String createCode(String encodingCode, String encodingSetCode) {
-        return createCode(new SysCreateCode().setSysEncodingCode(encodingCode).setSysEncodingSetCode(encodingSetCode));
+        return createCode(new SysCreateCodeDTO().setSysEncodingCode(encodingCode).setSysEncodingSetCode(encodingSetCode));
     }
 
     /**
@@ -127,7 +127,7 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
      * @return: java.lang.String 编码
      **/
     @Override
-    public String createCode(SysCreateCode req) {
+    public String createCode(SysCreateCodeDTO req) {
         // 使用分布式锁 避免脏数据
         String uuid = IdUtil.simpleUUID();
         String lockKey = SUtil.format(CacheConstant.SysLock.LOCK_CODE, req.getSysEncodingCode(), req.getSysEncodingSetCode());
@@ -182,7 +182,7 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
      *
      * @param req 要求事情
      */
-    private void checkTheEncodingSetStatus(SysCreateCode req) {
+    private void checkTheEncodingSetStatus(SysCreateCodeDTO req) {
         // 查询编码集状态是否关闭
         String ruleStatusIn = SUtil.format(CacheConstant.SysSetRule.CODE_STATUS, req.getSysEncodingCode(), req.getSysEncodingSetCode());
         String ruleStatus = redis.getString(ruleStatusIn);
@@ -218,13 +218,13 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
      *
      * @param req 要求事情
      */
-    private static void encodingException(SysCreateCode req) {
+    private static void encodingException(SysCreateCodeDTO req) {
         SysEncodingServiceImpl.log.error("获取编码异常,编码集状态已关闭! 规则代码:{} 编码值:{}", req.getSysEncodingCode(), req.getSysEncodingSetCode());
         throw new ServiceException("编码集已关闭,请联系管理员!");
     }
 
     // 获取规则 处理规则
-    private void disposeRule(StringBuilder codeStr, SysCreateCode req) {
+    private void disposeRule(StringBuilder codeStr, SysCreateCodeDTO req) {
         SysEncodingSetRule sysEncodingSetRuleDTO = new SysEncodingSetRule()
                 .setSysEncodingCode(req.getSysEncodingCode())
                 .setSysEncodingSetCode(req.getSysEncodingSetCode());
@@ -273,7 +273,7 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
     }
 
     // 匹配规则 生成编码
-    private void matchGenerateCode(StringBuilder codeStr, SysCreateCode req, SysEncodingSetRule ele) {
+    private void matchGenerateCode(StringBuilder codeStr, SysCreateCodeDTO req, SysEncodingSetRule ele) {
         switch (ele.getSysEncodingSetRuleType()) {
             // 常量
             case "CONSTANT":

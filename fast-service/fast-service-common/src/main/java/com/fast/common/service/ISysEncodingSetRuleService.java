@@ -1,6 +1,5 @@
 package com.fast.common.service;
 
-import com.fast.common.dto.SysCreateCode;
 import com.fast.common.entity.sys.SysEncodingSetRule;
 import com.fast.common.query.SysEncodingSetRuleQuery;
 import com.fast.common.vo.SysEncodingSetRuleVO;
