@@ -115,7 +115,9 @@ spring:
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:
   # token名称 (同时也是cookie名称)
-  token-name: Fast-Token
+  token-name: Fast-Auth
+  # token前缀
+  # token-prefix: Bearer
   # token有效期，单位s 默认30天, -1代表永不过期
   timeout: 2592000
   # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
@@ -133,7 +135,7 @@ sa-token:
   # 不答应启动LOGO
   isPrint: false
   # jwt秘钥
-  jwt-secret-key: aaaaaaaaaaasdadasda
+  jwt-secret-key: $!Q%%2t@FcBfs5@x9e2J7$^28tJPQR9K
 
 # 日志配置
 logging:
@@ -143,4 +145,4 @@ logging:
     org.springframework: info
     com.fast.core.boot.filter: debug
   file:
-    name: manage.log
+    name: logs/manage.log

@@ -1,11 +1,15 @@
 package com.fast.core.config;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -23,35 +27,28 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableCaching
 public class CacheConfig extends CachingConfigurerSupport {
 
-    /**
-     * 复述,缓存配置
-     * Redis缓存配置
-     *
-     * @return {@link RedisCacheConfiguration}
-     */
     @Bean
-    public RedisCacheConfiguration redisCacheConfiguration(Jackson2JsonRedisSerializer jsonRedisSerializer) {
+    public RedisCacheConfiguration redisCacheConfiguration() {
+        Jackson2JsonRedisSerializer<Object> jsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        ObjectMapper om = new ObjectMapper();
+        // 注意这里的配置，它将在序列化时包括类型信息
+        om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+        jsonRedisSerializer.setObjectMapper(om);
+
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
 
-        RedisCacheConfiguration cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+        return RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(stringSerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jsonRedisSerializer));
-
-        return cacheConfiguration;
     }
 
-    /**
-     * 缓存管理器
-     *
-     * @param connectionFactory  连接工厂
-     * @param cacheConfiguration 缓存配置 {@link CacheConfig#redisCacheConfiguration()}
-     * @return {@link CacheManager}
-     */
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory connectionFactory, RedisCacheConfiguration cacheConfiguration) {
         RedisCacheWriter cacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory);
-        CacheManager cacheManager = new com.fast.core.cache.CacheManager(cacheWriter, cacheConfiguration);
-        return cacheManager;
+        // 注意这里是原生的RedisCacheManager
+        return RedisCacheManager.builder(connectionFactory)
+                .cacheDefaults(cacheConfiguration)
+                .build();
     }
 
 }

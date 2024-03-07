@@ -21,16 +21,16 @@ public class R<T> implements Serializable{
     private T data;
 
     public enum Type {
-        SUCCESS(200, "成功"),
-        CREATED(201, "已创建"),
-        ACCEPTED(202, "已接受"),
-        BAD_REQUEST(400, "错误的请求"),
-        UNAUTHORIZED(401, "未经授权"),
-        FORBIDDEN(403, "禁止访问"),
-        NOT_FOUND(404, "未找到资源"),
-        SERVER_ERROR(500, "服务器错误"),
-        USER_COMPULSION_LINE(1002, "该账号已已被强行下线"),
-        USER_DISCONNECTED(1001, "该账号已在别处登录");
+        SUCCESS(200, "请求成功完成"),
+        CREATED(201, "资源已成功创建"),
+        ACCEPTED(202, "请求已被接受处理"),
+        BAD_REQUEST(400, "请求格式错误"),
+        UNAUTHORIZED(401, "请求未授权"),
+        FORBIDDEN(403, "访问被禁止"),
+        NOT_FOUND(404, "资源未找到"),
+        SERVER_ERROR(500, "服务器内部错误"),
+        USER_COMPULSION_LINE(1002, "账号被强制下线"),
+        USER_DISCONNECTED(1001, "账号在其他地方登录");
 
         private final int value;
         private final String description;

@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.FatalBeanException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
@@ -17,31 +16,25 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 使用BeanUtils.copyProperties有一个问题就是当src对象的键值为Null时就会把target对象的对应键值覆盖成空，这不科学，本实现类在继承BeanUtils
  * 的基础上对此做了扩展
  * 增加 获取Baen对象
  */
-@SuppressWarnings("ALL")
 @Component
 @RequiredArgsConstructor
 public class BUtil extends BeanUtils {
 
-    private static ApplicationContext applicationContext;
-
-
-    @Autowired
-    public void setApplicationContext(ApplicationContext context) {
-        applicationContext = context;
-    }
+    private final ApplicationContext applicationContext;
 
     /**
      * 浅拷贝
      * 创建一个targetClazz的实例（利用其默认构造），然后将source的非null的属性复制到target上的同名属性
      */
     public static <S, T> T copy(S source, Class<T> targetClazz) {
-        if (ObjectUtils.isEmpty(source)||ObjectUtils.isEmpty(targetClazz)) {
+        if (ObjectUtils.isEmpty(source) || ObjectUtils.isEmpty(targetClazz)) {
             return null;
         }
         Class<?> sourceClass = source.getClass();
@@ -55,14 +48,7 @@ public class BUtil extends BeanUtils {
         }
     }
     // 浅拷贝
-    public static <S, T> List<T> copyList(List<S> sources, Class<T> targetClazz) {
-        List<T> targets = new ArrayList<>();
-        for (S source : sources) {
-            T target = copy(source, targetClazz);
-            targets.add(target);
-        }
-        return targets;
-    }
+
 
     public static <S> S copy(S source) {
         return (S) copy(source, source.getClass());
@@ -104,7 +90,9 @@ public class BUtil extends BeanUtils {
                             readMethod.setAccessible(true);
                         }
                         Object value = readMethod.invoke(source);
-                        if (ignoreNull && value == null) return; //  忽略掉值为null的
+                        if (ignoreNull && value == null) {
+                            return; //  忽略掉值为null的
+                        }
                         if (!Modifier.isPublic(writeMethod.getDeclaringClass().getModifiers())) {
                             writeMethod.setAccessible(true);
                         }
@@ -123,13 +111,7 @@ public class BUtil extends BeanUtils {
      * 拷贝转List
      */
     public static <S, T> List<T> copyList(Collection<S> sources, Class<T> targetClazz) {
-        List<T> targets = new ArrayList<>();
-        try {
-            sources.stream().forEach(ele -> targets.add(copy(ele, targetClazz)));
-            return targets;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return sources.stream().map(source -> copy(source, targetClazz)).collect(Collectors.toList());
     }
 
     // 以下是深拷贝 ------------
@@ -160,7 +142,7 @@ public class BUtil extends BeanUtils {
      */
     public static <T> List<T> cloneList(List<?> object, Class<T> destclas) {
         if (object == null) {
-            return new ArrayList<T>();
+            return new ArrayList<>();
         }
         String json = JSON.toJSONString(object);
         return JSON.parseArray(json, destclas);
@@ -168,13 +150,12 @@ public class BUtil extends BeanUtils {
 
 
     /**
-     * @Description: 获取Bean对象
-     * @Author: 黄嘉浩
-     * @Date: 2023/5/16 15:13
-     * @param clazz:
-     * @return: T
-     **/
-    public static <T> T getBean(Class<T> clazz) {
+     * 获取 Bean
+     *
+     * @param clazz 类
+     * @return {@link T}
+     */
+    public <T> T getBean(Class<T> clazz) {
         return applicationContext.getBean(clazz);
     }
 }
