@@ -13,6 +13,7 @@ import com.fast.common.entity.sys.SysRequestLogs;
 import com.fast.common.query.SysRequestLogsQuery;
 import com.fast.common.service.ISysRequestLogsService;
 import com.fast.common.vo.SysRequestLogsVO;
+import com.fast.core.common.constant.StringPool;
 import com.fast.core.common.util.PageUtils;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.Util;
@@ -69,9 +70,16 @@ public class SysRequestLogsServiceImpl extends BaseServiceImpl<SysRequestLogsDao
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_UNCOMMITTED)
     public void recordingSave(ApiLogEvent apiLogEvent) {
         SysRequestLogs requestLogs = BUtil.copy(apiLogEvent, SysRequestLogs.class);
+
         requestLogs.setTake(apiLogEvent.getDuration());
 
         JSONObject headerJson = requestLogs.getRequestHeaderJson();
+
+        // 状态码
+        if (SUtil.isNotBlank(apiLogEvent.getResponderBody())) {
+            String code = JSONUtil.parseObj(apiLogEvent.getResponderBody()).getStr(StringPool.CODE);
+            requestLogs.setResponseCode(code);
+        }
 
         if (Util.isNull(headerJson)) {
             super.save(requestLogs);
@@ -98,10 +106,6 @@ public class SysRequestLogsServiceImpl extends BaseServiceImpl<SysRequestLogsDao
         String loginAccountType = BaseAuthUtil.getLoginAccountType(tokenValue);
         requestLogs.setCreateBy(loginId);
         requestLogs.setCreateByType(loginAccountType);
-        if (SUtil.isNotBlank(apiLogEvent.getResponderBody())) {
-            String code = JSONUtil.parseObj(apiLogEvent.getResponderBody()).getStr("code");
-            requestLogs.setResponseCode(code);
-        }
 
         super.save(requestLogs);
     }

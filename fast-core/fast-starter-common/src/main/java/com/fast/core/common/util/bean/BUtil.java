@@ -34,9 +34,13 @@ public class BUtil extends BeanUtils {
      * 创建一个targetClazz的实例（利用其默认构造），然后将source的非null的属性复制到target上的同名属性
      */
     public static <S, T> T copy(S source, Class<T> targetClazz) {
-        if (ObjectUtils.isEmpty(source) || ObjectUtils.isEmpty(targetClazz)) {
-            return null;
+        if (ObjectUtils.isEmpty(source)) {
+            throw new IllegalArgumentException("Source object must not be null");
         }
+        if (ObjectUtils.isEmpty(targetClazz)) {
+            throw new IllegalArgumentException("Target class must not be null");
+        }
+
         Class<?> sourceClass = source.getClass();
         HashMap<PropertyDescriptor, PropertyDescriptor> pdMap = getPropertyDescriptorsMap(sourceClass, targetClazz);
         try {
@@ -46,6 +50,36 @@ public class BUtil extends BeanUtils {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 浅拷贝或创建空
+     * 创建一个targetClazz的实例（利用其默认构造），然后将source的非null的属性复制到target上的同名属性
+     *
+     * @param source      源
+     * @param targetClazz 目标 Clazz
+     * @return {@link T}
+     */
+    public static <S, T> T copyOrCreateEmpty(S source, Class<T> targetClazz) {
+        if (ObjectUtils.isEmpty(targetClazz)) {
+            throw new IllegalArgumentException("Target class must not be null");
+        }
+
+        T target;
+        try {
+            // 即使 source 为 null，也创建 targetClazz 的一个实例
+            target = targetClazz.getDeclaredConstructor().newInstance();
+
+            if (!ObjectUtils.isEmpty(source)) {
+                Class<?> sourceClass = source.getClass();
+                HashMap<PropertyDescriptor, PropertyDescriptor> pdMap = getPropertyDescriptorsMap(sourceClass, targetClazz);
+                copy(source, target, pdMap, true);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Could not create instance of class: " + targetClazz.getName(), e);
+        }
+
+        return target;
     }
     // 浅拷贝
 
