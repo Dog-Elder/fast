@@ -23,6 +23,10 @@ server:
 fast:
   # 应用名
   apply-name: manage
+  # Api前缀
+  api-prefix:
+    common: /api-dev
+    manage: /manage-api-dev
   # 附件上传地址
   attach:
     # win上传路径

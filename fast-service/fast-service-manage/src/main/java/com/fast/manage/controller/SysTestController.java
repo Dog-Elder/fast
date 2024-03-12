@@ -28,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/manage-api/test")
+@RequestMapping("${fast.api-prefix.manage}/test")
 public class SysTestController extends WebBaseController {
     private final ISysTestService sysTestService;
 

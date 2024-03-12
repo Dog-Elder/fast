@@ -33,7 +33,7 @@ import java.util.List;
 */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/manage-api/set-value")
+@RequestMapping("${fast.api-prefix.manage}/set-value")
 public class SysSetController extends WebBaseController {
     private final ISysSetService sysSetService;
     private final ISysSetValueService sysSetValueService;

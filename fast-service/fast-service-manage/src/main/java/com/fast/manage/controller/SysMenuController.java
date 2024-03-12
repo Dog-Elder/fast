@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/manage-api/menu")
+@RequestMapping("${fast.api-prefix.manage}/menu")
 public class SysMenuController extends WebBaseController {
 
     private final ISysMenuService sysMenuService;

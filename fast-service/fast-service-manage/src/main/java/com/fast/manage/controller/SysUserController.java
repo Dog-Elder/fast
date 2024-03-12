@@ -28,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/manage-api/user")
+@RequestMapping("${fast.api-prefix.manage}/user")
 public class SysUserController extends WebBaseController {
     private final ISysUserService sysUserService;
 

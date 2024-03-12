@@ -36,7 +36,7 @@ import java.util.List;
 */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/manage-api/encoding")
+@RequestMapping("${fast.api-prefix.manage}/encoding")
 public class SysEncodingController extends WebBaseController{
     private final ISysEncodingService sysEncodingService;
     private final ISysEncodingSetService sysEncodingSetService;
