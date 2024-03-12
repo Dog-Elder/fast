@@ -23,8 +23,6 @@ import java.util.function.Function;
  */
 @Slf4j
 public class RUtil {
-    //  缓存对象的运行时类
-    private static final Map<Object, Class<?>> classCache = new ConcurrentHashMap<>();
     //  缓存类的注解
     private static final Map<Class<?>, Map<Class<? extends Annotation>, Annotation>> annotationCache = new HashMap<>();
     //  缓存类的字段
@@ -325,9 +323,8 @@ public class RUtil {
      * @return 包含所有字段的列表
      */
     private static List<Field> getFields(Object object) {
-        Class<?> clazz = getClass(object);
-        List<Field> fields = getAllFields(clazz);
-        return fields;
+        Class<?> clazz = object.getClass();
+        return getAllFields(clazz);
     }
 
     /**
@@ -371,20 +368,6 @@ public class RUtil {
         return getAnnotation(clazz, annotation) != null;
     }
 
-    /**
-     * 获取类的运行时类型
-     *
-     * @param object 实例对象
-     * @return 运行时类型
-     */
-    public static Class<?> getClass(Object object) {
-        Class<?> clazz = classCache.get(object);
-        if (clazz == null) {
-            clazz = object.getClass();
-            classCache.put(object, clazz);
-        }
-        return clazz;
-    }
 
     /**
      * 处理对象的字段上指定注解的逻辑，并根据提供的业务逻辑执行器执行相应操作。
