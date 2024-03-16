@@ -1,5 +1,7 @@
 package com.fast.common.config.secure;
 
+import cn.dev33.satoken.stp.StpLogic;
+import cn.dev33.satoken.util.SaFoxUtil;
 import com.fast.core.common.context.ContextHolder;
 import com.fast.core.log.model.RequestContext;
 import com.fast.core.safe.config.AccountManage;
@@ -22,6 +24,7 @@ import java.util.List;
 public class BaseAuthUtil {
     public static List<AccountManage> accountManages;
     public static FastRedis fastRedis;
+    public static StpLogic stpLogic;
 
     /**
      * token令牌名称 (同时也是cookie名称)
@@ -32,9 +35,10 @@ public class BaseAuthUtil {
      * 使用@PostConstruct注解，在初始化完成后进行一次性的依赖注入
      */
     @Autowired
-    public void init(List<AccountManage> accountManages, FastRedis fastRedis) {
+    public void init(List<AccountManage> accountManages, FastRedis fastRedis, StpLogic stpLogic) {
         BaseAuthUtil.accountManages = accountManages;
         BaseAuthUtil.fastRedis = fastRedis;
+        BaseAuthUtil.stpLogic = stpLogic;
     }
 
     @Value("${sa-token.token-name}")
@@ -62,10 +66,33 @@ public class BaseAuthUtil {
      */
     public static String getToken() {
         // 从上下文线程中获取参数
-        return ContextHolder
+        String tokenValue = ContextHolder
                 .get(RequestContext.class)
                 .getRequestHeaderJson()
                 .getStr(getLowerCaseTokenName());
+        return getToken(tokenValue);
+    }
+
+    /**
+     * 根据 Token 值获取真实的 Token 内容。
+     * 非web环境获取不到真的的token
+     *
+     * @param tokenValue Token 值(Header中的参数，或者cookie中的参数)
+     * @return 真实的 Token 内容，如果 Token 值不符合要求或为空，则返回 null
+     */
+    public static String getToken(String tokenValue) {
+        // 配置文件中是否配置了 Token前缀
+        String tokenPrefix = stpLogic.getConfigOrGlobal().getTokenPrefix();
+        if (SaFoxUtil.isNotEmpty(tokenPrefix)) {
+            if (SaFoxUtil.isEmpty(tokenValue)) {
+                tokenValue = null;
+            } else if (!tokenValue.startsWith(tokenPrefix + " ")) {
+                tokenValue = null;
+            } else {
+                tokenValue = tokenValue.substring(tokenPrefix.length() + " ".length());
+            }
+        }
+        return tokenValue;
     }
 
     /**
