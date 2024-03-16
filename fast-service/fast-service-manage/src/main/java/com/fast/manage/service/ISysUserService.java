@@ -1,7 +1,8 @@
 package com.fast.manage.service;
 
-import com.fast.common.vo.UserInfoVO;
 import com.fast.core.mybatis.service.BaseService;
+import com.fast.manage.dto.user.SysUserDTO;
+import com.fast.manage.dto.user.SysUserPasswordDTO;
 import com.fast.manage.entity.SysUser;
 import com.fast.manage.query.SysUserQuery;
 import com.fast.manage.vo.SysUserVO;
@@ -19,7 +20,7 @@ public interface ISysUserService extends BaseService<SysUser> {
 
     List<SysUserVO> save(List<SysUserVO> vo);
 
-    boolean update(SysUserVO vo);
+    boolean update(SysUserDTO dto);
 
     /**
      * 更加用户编码获取用户
@@ -32,25 +33,17 @@ public interface ISysUserService extends BaseService<SysUser> {
     /**
      * 初始化密码
      *
-     * @param vo
+     * @param dto 用户密码DTO
      * @return boolean
      */
-    boolean initializePassword(UserInfoVO vo);
+    boolean initializePassword(SysUserPasswordDTO dto);
 
     /**
      * 更新密码
      *
-     * @param vo
+     * @param dto
      * @return boolean
      */
-    boolean updateThePassword(UserInfoVO vo);
-
-    /**
-     * 更新用户信息
-     *
-     * @param vo 签证官
-     * @return boolean
-     */
-    boolean updateUserInfo(UserInfoVO vo);
+    boolean updateThePassword(SysUserPasswordDTO dto);
 
 }

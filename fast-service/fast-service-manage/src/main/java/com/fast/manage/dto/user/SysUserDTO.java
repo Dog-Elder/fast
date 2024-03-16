@@ -1,10 +1,11 @@
-package com.fast.manage.dto;
+package com.fast.manage.dto.user;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fast.core.common.validate.annotation.Display;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import java.io.Serializable;
+import lombok.experimental.Accessors;
+
 import java.time.LocalDateTime;
 
 /**
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
  * @since 1.0.0 2024-03-02
  */
 @Data
+@Accessors(chain = true)
 public class SysUserDTO {
 
 	/**

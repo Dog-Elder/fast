@@ -3,13 +3,14 @@ package com.fast.manage.controller;
 import com.fast.common.controller.WebBaseController;
 import com.fast.common.entity.verification.Qry;
 import com.fast.common.entity.verification.Save;
-import com.fast.common.vo.UserInfoVO;
 import com.fast.core.common.annotation.lov.AutoLov;
 import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.domain.domain.ValidList;
 import com.fast.core.common.domain.page.TableDataInfo;
 import com.fast.core.common.util.bean.BUtil;
 import com.fast.core.safe.annotation.manage.ManageCheckPermission;
+import com.fast.manage.dto.user.SysUserDTO;
+import com.fast.manage.dto.user.SysUserPasswordDTO;
 import com.fast.manage.entity.SysUser;
 import com.fast.manage.query.SysUserQuery;
 import com.fast.manage.service.ISysUserService;
@@ -67,24 +68,36 @@ public class SysUserController extends WebBaseController {
     /**
      * 修改密码
      *
-     * @param vo 用户信息
+     * @param dto {@link SysUserPasswordDTO }
      * @return {@link R}
      */
     @PostMapping("/update-password")
     @ManageCheckPermission(value = "manage.user.updatePassword")
-    public R updatePassword(@RequestBody UserInfoVO vo) {
-        return R.toVersion(sysUserService.updateThePassword(vo));
+    public R updatePassword(@Validated @RequestBody SysUserPasswordDTO dto) {
+        return R.toVersion(sysUserService.updateThePassword(dto));
+    }
+
+    /**
+     * 初始化密码
+     *
+     * @param dto {@link SysUserPasswordDTO }
+     * @return {@link R}
+     */
+    @PostMapping("/initialize-password")
+    @ManageCheckPermission(value = "manage.user.initializePassword")
+    public R initializePassword(@Validated @RequestBody SysUserPasswordDTO dto) {
+        return R.toVersion(sysUserService.initializePassword(dto));
     }
 
     /**
      * 更新用户信息
      *
-     * @param vo 签证官
+     * @param dto 签证官
      * @return {@link R}
      */
-    @PostMapping("/update-info")
+    @PutMapping("/update-info")
     @ManageCheckPermission(value = "manage.user.updateInfo")
-    public R updateInfo(@RequestBody UserInfoVO vo) {
-        return R.toVersion(sysUserService.updateUserInfo(vo));
+    public R updateInfo(@RequestBody SysUserDTO dto) {
+        return R.toVersion(sysUserService.update(dto));
     }
 }
