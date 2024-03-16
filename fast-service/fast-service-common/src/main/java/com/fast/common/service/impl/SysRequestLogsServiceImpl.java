@@ -86,7 +86,7 @@ public class SysRequestLogsServiceImpl extends BaseServiceImpl<SysRequestLogsDao
             return;
         }
 
-        String tokenValue = headerJson.getStr(BaseAuthUtil.getLowerCaseTokenName());
+        String tokenValue = BaseAuthUtil.getToken(headerJson.getStr(BaseAuthUtil.getLowerCaseTokenName()));
         if (SUtil.isBlank(tokenValue) || !SysRequestLogsServiceImpl.verifyToken(tokenValue)) {
             super.save(requestLogs);
             return;
