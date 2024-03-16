@@ -22,12 +22,6 @@ import javax.validation.constraints.NotBlank;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 public class SysEncodingSetRuleQuery extends Query {
-    /**
-     * id
-     */
-    @Display("id")
-    @TableField("id")
-    private String id;
 
     /**
      * 规则代码

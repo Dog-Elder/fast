@@ -18,12 +18,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 public class SysUserAuthenticationQuery extends Query {
-    /**
-     * id
-     */
-    @Display("id")
-    @TableField("id")
-    private String id;
 
     /**
      * 用户编码

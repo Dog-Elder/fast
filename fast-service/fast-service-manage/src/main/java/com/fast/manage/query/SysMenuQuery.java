@@ -15,12 +15,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SysMenuQuery extends Query {
-    /**
-     * 菜单ID
-     */
-    @Display("菜单ID")
-    @TableField("id")
-    private String id;
 
     /**
      * 菜单名称

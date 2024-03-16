@@ -21,7 +21,7 @@ public class R<T> implements Serializable{
     private T data;
 
     public enum Type {
-        SUCCESS(200, "请求成功完成"),
+        SUCCESS(200, "请求成功"),
         CREATED(201, "资源已成功创建"),
         ACCEPTED(202, "请求已被接受处理"),
         BAD_REQUEST(400, "请求格式错误"),

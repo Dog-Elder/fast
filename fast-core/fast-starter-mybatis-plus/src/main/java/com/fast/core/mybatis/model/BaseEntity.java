@@ -1,10 +1,8 @@
 package com.fast.core.mybatis.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fast.core.common.validate.annotation.Display;
 import com.fast.core.mybatis.annotation.AutoFill;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,6 +27,12 @@ import java.util.Map;
 public class BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * id
+     **/
+    @TableId
+    @Display("id")
+    private String id;
 
     /**
      * 创建者
@@ -138,5 +142,13 @@ public class BaseEntity implements Serializable {
 
     public void setParams(Map<String, Object> params) {
         this.params = params;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

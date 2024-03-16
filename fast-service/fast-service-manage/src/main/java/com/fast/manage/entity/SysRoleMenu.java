@@ -1,6 +1,5 @@
 package com.fast.manage.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fast.core.mybatis.constant.PublicFieldConstant;
 import com.fast.core.mybatis.model.BaseVersionEntity;
@@ -26,11 +25,6 @@ import lombok.experimental.Accessors;
 @TableName(value = "sys_role_menu", excludeProperty = {PublicFieldConstant.ID})
 public class SysRoleMenu extends BaseVersionEntity {
 
-    /**
-     * ID
-     */
-    @TableId
-    private String id;
 
     /**
      * 角色ID

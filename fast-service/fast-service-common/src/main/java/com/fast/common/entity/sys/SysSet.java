@@ -24,7 +24,6 @@ import javax.validation.constraints.NotBlank;
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
 public class SysSet extends BaseVersionEntity {
 
-    private String id;
 
     /** 值集编码 */
     @NotBlank(message = "值集编码不能为空")

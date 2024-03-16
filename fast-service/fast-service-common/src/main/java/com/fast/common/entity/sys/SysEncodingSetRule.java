@@ -1,7 +1,6 @@
 package com.fast.common.entity.sys;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fast.core.common.validate.annotation.Display;
 import com.fast.core.mybatis.model.BaseVersionEntity;
@@ -28,12 +27,7 @@ import java.time.LocalDateTime;
 @ToString(callSuper = true)
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
 public class SysEncodingSetRule extends BaseVersionEntity {
-	/**
-	 * id
-	 */
-	@TableId
-	@Display("id")
-	private String id;
+
 
 	/**
 	 * 规则代码

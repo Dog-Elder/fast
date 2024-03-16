@@ -18,12 +18,6 @@ import lombok.experimental.Accessors;
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
 public class Attach extends BaseEntity {
 
-
-    /** id */
-    @Display("id")
-    @TableField("`id`")
-    private Long id;
-
     /** 附件CODE */
     @Display("附件CODE")
     @TableField("`attach_code`")

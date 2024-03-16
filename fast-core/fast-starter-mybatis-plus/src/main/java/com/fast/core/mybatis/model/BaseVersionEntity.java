@@ -8,16 +8,17 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
- * @description: 安全基类
- * 之所以叫安全基类是因为继承公共类库中
- * 安全基类了需要维护version便于实现乐观锁
- * @AutoFill defaultVersion 默认为false ,设置为true时可以在便于添加操作时自动维护version=1
+ * 安全基类
+ * 要维护了version实现乐观锁
+ * {@link  com.fast.core.mybatis.annotation.AutoFill} defaultVersion 默认为false ,设置为true时可以在便于添加操作时自动维护version=1
+ *
+ * @author 黄嘉浩
  **/
 @Data
 @AutoFill(defaultVersion = true)
 @ToString(callSuper = true)
 public class BaseVersionEntity extends BaseEntity {
     @Version
-    @TableField(value="`version`",fill = FieldFill.INSERT)
+    @TableField(value = "`version`", fill = FieldFill.INSERT)
     private Integer version;
 }

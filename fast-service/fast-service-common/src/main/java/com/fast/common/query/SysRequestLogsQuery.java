@@ -1,13 +1,10 @@
 package com.fast.common.query;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fast.core.common.domain.page.Query;
 import com.fast.core.common.validate.annotation.Display;
 import lombok.Data;
-import com.fast.core.common.domain.page.Query;
 import lombok.EqualsAndHashCode;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
 
 /**
 * 接口请求日志查询
@@ -18,12 +15,6 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SysRequestLogsQuery extends Query {
-    /**
-     * id
-     */
-    @Display("id")
-    @TableField("id")
-    private String id;
 
     /**
      * 来源ip

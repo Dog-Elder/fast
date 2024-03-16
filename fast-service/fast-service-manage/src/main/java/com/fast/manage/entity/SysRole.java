@@ -1,7 +1,6 @@
 package com.fast.manage.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fast.core.mybatis.model.BaseVersionEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -25,11 +24,6 @@ import lombok.experimental.Accessors;
 public class SysRole extends BaseVersionEntity {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 角色ID
-     */
-    @TableId
-    private String id;
     /**
      * 角色名称
      */
