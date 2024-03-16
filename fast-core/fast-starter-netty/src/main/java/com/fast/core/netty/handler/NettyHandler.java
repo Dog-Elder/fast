@@ -15,8 +15,7 @@ public class NettyHandler extends SimpleChannelInboundHandler {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof ByteBuf) {
-            ByteBuf byteBuf = (ByteBuf) msg;
+        if (msg instanceof ByteBuf byteBuf) {
             String text = byteBuf.toString(CharsetUtil.UTF_8); // 将ByteBuf转换为字符串
             log.info("Netty接收到的消息: {}", text);
             // 在这里处理文本消息

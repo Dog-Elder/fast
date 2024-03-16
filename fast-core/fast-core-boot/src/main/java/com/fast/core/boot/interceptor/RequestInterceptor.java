@@ -3,16 +3,11 @@ package com.fast.core.boot.interceptor;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.fast.core.common.constant.Constants;
 import com.fast.core.common.context.ContextHolder;
-import com.fast.core.common.domain.domain.R;
 import com.fast.core.common.util.SUtil;
 import com.fast.core.common.util.spring.RequestUtils;
 import com.fast.core.log.model.RequestContext;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -20,7 +15,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -51,8 +45,7 @@ public class RequestInterceptor implements HandlerInterceptor {
         context.setRequestManner(request.getMethod());
         context.setRequestPath(request.getRequestURI());
 
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
+        if (handler instanceof HandlerMethod handlerMethod) {
             beforeReqLog.append("===>请求方法 {}\n");
             beforeReqArgs.add(handlerMethod);
 

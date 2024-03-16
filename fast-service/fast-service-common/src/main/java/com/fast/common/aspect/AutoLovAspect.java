@@ -26,6 +26,7 @@ import java.util.Objects;
 
 /**
  * 值集切面，用于解析值集注解并进行翻译
+ *
  * @author 黄嘉浩
  **/
 @Slf4j
@@ -57,22 +58,18 @@ public class AutoLovAspect {
      */
     private void parseLovText(Object proceed) {
 
-        if (proceed instanceof R) {
-            R r = (R) proceed;
-            if (r.isSuccess()) {
-                Object data = r.getData();
-                //  分页数据
-                if (data instanceof TableDataInfo) {
-                    List<?> rows = ((TableDataInfo) data).getRows();
-                    convertList(rows);
-                }
-                //  常规数据
-                else if (data instanceof List) {
-                    List<?> list = (List<?>) data;
-                    convertList(list);
-                } else if (data != null) {
-                    convertList(Collections.singletonList(data));
-                }
+        if (proceed instanceof R<?> r && r.isSuccess()) {
+            Object data = r.getData();
+            //  分页数据
+            if (data instanceof TableDataInfo) {
+                List<?> rows = ((TableDataInfo<?>) data).getRows();
+                convertList(rows);
+            }
+            //  常规数据
+            else if (data instanceof List<?> list) {
+                convertList(list);
+            } else if (data != null) {
+                convertList(Collections.singletonList(data));
             }
         }
     }
@@ -140,7 +137,7 @@ public class AutoLovAspect {
             } catch (IllegalAccessException | InvocationTargetException e) {
                 log.error("尝试放入lovMap失败", e);
             } catch (NoSuchMethodException e) {
-                log.error("尝试放入lovMap失败!类:{}中putLovMap方法不存在!",aClass.getName());
+                log.error("尝试放入lovMap失败!类:{}中putLovMap方法不存在!", aClass.getName());
             }
         }
     }
@@ -156,7 +153,7 @@ public class AutoLovAspect {
         } catch (IllegalAccessException | InvocationTargetException e) {
             log.error("尝试放入lovMap失败", e);
         } catch (NoSuchMethodException e) {
-            log.error("尝试放入lovMap失败!类:{}中putLovMap方法不存在!",aClass.getName());
+            log.error("尝试放入lovMap失败!类:{}中putLovMap方法不存在!", aClass.getName());
         }
     }
 

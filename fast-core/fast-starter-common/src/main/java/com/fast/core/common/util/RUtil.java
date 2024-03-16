@@ -83,8 +83,7 @@ public class RUtil {
                     val = BigDecimal.ZERO;
                 }
             }
-            if (val instanceof Enum<?>) { //  枚举对象取ordinal值
-                Enum<?> en = (Enum<?>) val;
+            if (val instanceof Enum<?> en) { //  枚举对象取ordinal值
                 val = en.ordinal();
             }
             ret.put(field.getName(), val);
@@ -133,8 +132,7 @@ public class RUtil {
                         return;
                     }
                 }
-                if (val instanceof Enum<?>) { //  枚举对象取ordinal值
-                    Enum<?> en = (Enum<?>) val;
+                if (val instanceof Enum<?> en) { //  枚举对象取ordinal值
                     val = en.ordinal();
                 }
                 ret.put(item.orElseGet(field::getName), val);

@@ -58,8 +58,7 @@ public class PageUtils extends PageHelper {
      * 避免出现返回数据不一致
      **/
     public static <S, T> List<T> copy(List<S> sourceList, Class<T> targetClazz) {
-        if (sourceList instanceof Page) {
-            Page pageList = (Page) sourceList;
+        if (sourceList instanceof Page<?> pageList) {
             Page<T> page = new Page<>();
             page.setTotal(pageList.getTotal());
             page.setPageNum(pageList.getPageNum());
