@@ -15,12 +15,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SysAttachQuery extends Query {
-    /**
-     * id
-     */
-    @Display("id")
-    @TableField("id")
-    private String id;
 
     /**
      * 附件CODE

@@ -27,7 +27,7 @@ import java.util.List;
 */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/manage-api/config")
+@RequestMapping("${fast.api-prefix.manage}/config")
 public class SysConfigController extends WebBaseController{
     private final ISysConfigService sysConfigService;
 

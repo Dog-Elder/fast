@@ -2,7 +2,6 @@ package com.fast.common.entity.sys;
 
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fast.core.common.validate.annotation.Display;
 import com.fast.core.mybatis.annotation.AutoFill;
@@ -32,13 +31,6 @@ import static com.fast.core.mybatis.constant.PublicFieldConstant.UPDATE_TIME;
 @AutoFill(createBy = false, updateBy = false, updateTime = false)
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class SysRequestLogs extends BaseEntity {
-    /**
-     * id
-     */
-    @TableId
-    @Display("id")
-    @TableField("id")
-    private String id;
 
     /**
      * 请求标识

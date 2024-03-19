@@ -276,48 +276,41 @@ public class SysEncodingServiceImpl extends ServiceImpl<SysEncodingDao, SysEncod
     private void matchGenerateCode(StringBuilder codeStr, SysCreateCodeDTO req, SysEncodingSetRule ele) {
         switch (ele.getSysEncodingSetRuleType()) {
             // 常量
-            case "CONSTANT":
-                codeStr.append(ele.getSysEncodingSetRuleSectionCode());
-                break;
+            case "CONSTANT" -> codeStr.append(ele.getSysEncodingSetRuleSectionCode());
+
             // 序列
-            case "NUMBER":
+            case "NUMBER" -> {
                 String ruleNumberIn = SUtil.format(CacheConstant.SysSetRule.CODE_NUMBER, req.getSysEncodingCode(), req.getSysEncodingSetCode());
                 long number = getNumber(ruleNumberIn, ele);
                 // 根据位数前置前置补零
                 codeStr.append(SUtil.zeroPr(number, ele.getSysEncodingSetRuleDigit()));
                 ele.setSysEncodingSetNowValue(number);
-                break;
+            }
+
             // UUID(8位数)
-            case "UUID_8":
-                codeStr.append(UUIDDigitUtil.generateString(8));
-                break;
+            case "UUID_8" -> codeStr.append(UUIDDigitUtil.generateString(8));
+
             // UUID(16位数)
-            case "UUID_16":
-                codeStr.append(UUIDDigitUtil.generateString(16));
-                break;
+            case "UUID_16" -> codeStr.append(UUIDDigitUtil.generateString(16));
+
             // UUID(22位数)
-            case "UUID_22":
-                codeStr.append(UUIDDigitUtil.generateString(22));
-                break;
+            case "UUID_22" -> codeStr.append(UUIDDigitUtil.generateString(22));
+
             // UUID(32位数)
-            case "UUID_32":
-                codeStr.append(UUIDDigitUtil.generateString(32));
-                break;
+            case "UUID_32" -> codeStr.append(UUIDDigitUtil.generateString(32));
+
             // 日期(yyyyMMdd)
-            case "DATE_yyyyMMdd":
-                codeStr.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
-                break;
+            case "DATE_yyyyMMdd" -> codeStr.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+
             // 日期(yyyyMM)
-            case "DATE_yyyyMM":
-                codeStr.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
-                break;
+            case "DATE_yyyyMM" -> codeStr.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
+
             // 日期(yyyy)
-            case "DATE_yyyy":
-                codeStr.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy")));
-                break;
-            default:
+            case "DATE_yyyy" -> codeStr.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy")));
+            default -> {
                 SysEncodingServiceImpl.log.error("获取编码异常,未匹配到对应的规则段类型! 规则代码:{} 编码值:{}", req.getSysEncodingCode(), req.getSysEncodingSetCode());
                 throw new ServiceException("未匹配到对应的规则段类型!");
+            }
         }
     }
 

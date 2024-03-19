@@ -1,7 +1,6 @@
 package com.fast.manage.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fast.core.common.validate.annotation.Display;
 import com.fast.core.mybatis.model.BaseVersionEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -25,13 +24,6 @@ import lombok.experimental.Accessors;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class SysMenu extends BaseVersionEntity {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 菜单ID
-     */
-    @TableId
-    @Display("菜单ID")
-    private String id;
 
     /**
      * 菜单名称

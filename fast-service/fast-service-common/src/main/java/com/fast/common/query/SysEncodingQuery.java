@@ -16,12 +16,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SysEncodingQuery extends Query {
-    /**
-     * id
-     */
-    @Display("id")
-    @TableField("id")
-    private String id;
 
     /**
      * 规则代码

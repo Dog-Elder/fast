@@ -7,14 +7,13 @@ import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.QueryTimeoutException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -67,17 +66,11 @@ public class GlobalExceptionHandler {
     public R authenticationAnomaly(NotLoginException e) {
         runLog(e);
         String type = e.getType();
-        switch (type) {
-            case NotLoginException.NOT_TOKEN:
-            case NotLoginException.INVALID_TOKEN:
-            case NotLoginException.TOKEN_TIMEOUT:
-                return R.error(R.Type.UNAUTHORIZED);
-            case NotLoginException.BE_REPLACED:
-                return R.error(R.Type.USER_DISCONNECTED);
-            case NotLoginException.KICK_OUT:
-                return R.error(R.Type.USER_COMPULSION_LINE);
-        }
-        return R.error(R.Type.UNAUTHORIZED);
+        return switch (type) {
+            case NotLoginException.BE_REPLACED -> R.error(R.Type.USER_DISCONNECTED);
+            case NotLoginException.KICK_OUT -> R.error(R.Type.USER_COMPULSION_LINE);
+            default -> R.error(R.Type.UNAUTHORIZED);
+        };
     }
 
     /**

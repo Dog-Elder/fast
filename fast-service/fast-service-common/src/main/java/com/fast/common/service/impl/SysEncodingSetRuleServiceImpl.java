@@ -176,43 +176,32 @@ public class SysEncodingSetRuleServiceImpl extends ServiceImpl<SysEncodingSetRul
     private void matchingRule(SysEncodingSetRule rule) {
         switch (rule.getSysEncodingSetRuleType()) {
             // 常量
-            case "CONSTANT":
-                checkConstant(rule);
-                break;
+            case "CONSTANT" -> checkConstant(rule);
+
             // 序列
-            case "NUMBER":
-                disposeNumber(rule);
-                break;
+            case "NUMBER" -> disposeNumber(rule);
+
             // UUID(8位数)
-            case "UUID_8":
-                rule.setSysEncodingSetRuleDigit(8);
-                break;
+            case "UUID_8" -> rule.setSysEncodingSetRuleDigit(8);
+
             // UUID(16位数)
-            case "UUID_16":
-                rule.setSysEncodingSetRuleDigit(16);
-                break;
+            case "UUID_16" -> rule.setSysEncodingSetRuleDigit(16);
+
             // UUID(22位数)
-            case "UUID_22":
-                rule.setSysEncodingSetRuleDigit(22);
-                break;
+            case "UUID_22" -> rule.setSysEncodingSetRuleDigit(22);
+
             // UUID(32位数)
-            case "UUID_32":
-                rule.setSysEncodingSetRuleDigit(32);
-                break;
+            case "UUID_32" -> rule.setSysEncodingSetRuleDigit(32);
+
             // 日期(yyyyMMdd)
-            case "DATE_yyyyMMdd":
-                rule.setSysEncodingSetRuleDateMask("yyyyMMdd");
-                break;
+            case "DATE_yyyyMMdd" -> rule.setSysEncodingSetRuleDateMask("yyyyMMdd");
+
             // 日期(yyyyMM)
-            case "DATE_yyyyMM":
-                rule.setSysEncodingSetRuleDateMask("yyyyMM");
-                break;
+            case "DATE_yyyyMM" -> rule.setSysEncodingSetRuleDateMask("yyyyMM");
+
             // 日期(yyyy)
-            case "DATE_yyyy":
-                rule.setSysEncodingSetRuleDateMask("yyyy");
-                break;
-            default:
-                throw new ServiceException("未匹配到对应的规则段类型!");
+            case "DATE_yyyy" -> rule.setSysEncodingSetRuleDateMask("yyyy");
+            default -> throw new ServiceException("未匹配到对应的规则段类型!");
         }
     }
     // 处理序列规则

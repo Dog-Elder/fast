@@ -18,12 +18,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 public class SysConfigQuery extends Query {
-    /**
-     * id
-     */
-    @Display("id")
-    @TableField("id")
-    private String id;
 
     /**
      * 参数名

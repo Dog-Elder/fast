@@ -1,8 +1,8 @@
 package com.fast.manage.controller;
 
 import cn.hutool.json.JSONUtil;
-import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.domain.domain.R;
+import com.fast.core.common.exception.ServiceException;
 import com.fast.core.safe.service.SecurityManagerService;
 import com.fast.core.safe.util.ManageUtil;
 import com.fast.manage.config.security.authentication.UserPasswordAuthentication;
@@ -23,7 +23,7 @@ import javax.naming.AuthenticationException;
  * @Create: 2023-06-03 01:31
  **/
 @RestController
-@RequestMapping("/manage-api")
+@RequestMapping("${fast.api-prefix.manage}")
 @RequiredArgsConstructor
 public class SysTokenController {
     private final SecurityManagerService service;

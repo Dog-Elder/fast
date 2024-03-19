@@ -1,7 +1,6 @@
 package com.fast.manage.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fast.core.common.validate.annotation.Display;
 import com.fast.core.mybatis.model.BaseEntity;
@@ -26,13 +25,6 @@ import lombok.experimental.Accessors;
 @ToString(callSuper = true)
 @JsonInclude(value=JsonInclude.Include.NON_NULL)
 public class SysAttach extends BaseEntity {
-
-	/**
-	 * id
-	 */
-	@TableId
-	@Display("id")
-	private String id;
 
 	/**
 	 * 附件CODE

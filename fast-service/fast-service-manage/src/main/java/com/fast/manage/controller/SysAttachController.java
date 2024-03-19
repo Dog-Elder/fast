@@ -26,7 +26,7 @@ import java.util.List;
 */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/manage-api/sys-attach")
+@RequestMapping("${fast.api-prefix.manage}/sys-attach")
 public class SysAttachController extends WebBaseController{
     private final ISysAttachService sysAttachService;
 

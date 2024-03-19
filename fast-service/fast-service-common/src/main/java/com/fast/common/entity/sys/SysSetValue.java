@@ -13,7 +13,6 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
@@ -31,14 +30,6 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 public class SysSetValue extends BaseVersionEntity {
     private static final long serialVersionUID = 1L;
-
-
-    /**
-     * id
-     */
-    @Display("id")
-    @NotNull(message = Com.Require, groups = {Update.class})
-    private String id;
 
     /**
      * 值集编码

@@ -13,6 +13,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import java.net.InetSocketAddress;
 
@@ -49,6 +50,7 @@ public class NettyService {
     /**
      * 停止服务
      */
+    @PreDestroy
     public void close() {
         log.info("Shutdown Netty Server...");
         if (cf != null && cf.channel() != null) {

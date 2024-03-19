@@ -19,10 +19,6 @@ import lombok.experimental.Accessors;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class User extends BaseVersionEntity {
     /**
-     * id
-     */
-    private String id;
-    /**
      * 用户编码
      **/
     private String code;

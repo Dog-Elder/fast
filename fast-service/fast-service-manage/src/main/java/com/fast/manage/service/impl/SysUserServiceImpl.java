@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.fast.common.constant.cache.CacheConstant;
 import com.fast.common.entity.base.User;
-import com.fast.common.vo.UserInfoVO;
 import com.fast.core.common.exception.ServiceException;
 import com.fast.core.common.util.*;
 import com.fast.core.common.util.bean.BUtil;
@@ -12,6 +11,8 @@ import com.fast.core.mybatis.service.impl.BaseServiceImpl;
 import com.fast.core.util.FastRedis;
 import com.fast.manage.config.security.secure.AuthManageUtil;
 import com.fast.manage.dao.SysUserDao;
+import com.fast.manage.dto.user.SysUserDTO;
+import com.fast.manage.dto.user.SysUserPasswordDTO;
 import com.fast.manage.entity.SysUser;
 import com.fast.manage.query.SysUserQuery;
 import com.fast.manage.service.ISysUserService;
@@ -83,8 +84,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean update(SysUserVO vo) {
-        SysUser entity = BUtil.copy(vo, SysUser.class);
+    public boolean update(SysUserDTO dto) {
+        SysUser entity = BUtil.copy(dto, SysUser.class);
         return updateById(entity);
     }
 
@@ -105,7 +106,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
      * 初始化密码
      **/
     @Override
-    public boolean initializePassword(UserInfoVO vo) {
+    @Transactional(rollbackFor = Exception.class)
+    public boolean initializePassword(SysUserPasswordDTO vo) {
         //TODO 作者:黄嘉浩 初始化密码
         return false;
     }
@@ -113,30 +115,22 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
     /**
      * 更新密码
      *
-     * @param vo 签证官
+     * @param dto SysUserPasswordChangeDTO
      * @return boolean
      */
     @Override
-    public boolean updateThePassword(UserInfoVO vo) {
-        String oldPassword = vo.getPassword();
-        SysUser user = getById(vo.getId());
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateThePassword(SysUserPasswordDTO dto) {
+        String oldPassword = dto.getOldPassword();
+        SysUser user = getById(dto.getId());
         // 校验密码
-        if (!Md5Util.verifyPassword(oldPassword, user.getPassword())) {
-            throw new ServiceException("原密码错误!");
+        if (Util.isNull(user) || !Md5Util.verifyPassword(oldPassword, user.getPassword())) {
+            throw new ServiceException("用户不存在或身份验证失败");
         }
-        updateUserInfo(vo);
-        return false;
+        return update(new SysUserDTO()
+                .setId(dto.getId())
+                .setVersion(user.getVersion())
+                .setPassword(Md5Util.generatePassWord(dto.getNewPassword())));
     }
 
-    /**
-     * 更新用户信息
-     *
-     * @param vo 签证官
-     * @return boolean
-     */
-    @Override
-    public boolean updateUserInfo(UserInfoVO vo) {
-        SysUser user = BUtil.copy(vo, SysUser.class);
-        return updateById(user);
-    }
 }
